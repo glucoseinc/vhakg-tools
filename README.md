@@ -3,7 +3,7 @@
 <img src="https://img.shields.io/badge/-Jupyter-FFF.svg?logo=jupyter&style=flat">
 <img src="https://img.shields.io/badge/-React-555.svg?logo=react&style=flat">
 <img src="https://img.shields.io/badge/-Docker-EEE.svg?logo=docker&style=flat">
-<img src="http://img.shields.io/badge/license-MIT-blue.svg?style=flat">
+<img src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat">
 </p>
 
 # VHAKG tools
@@ -52,4 +52,4 @@
 #### Environment
 
 - Run `pyenv install  miniforge3-4.14.0-2`
-- Run `pyenv virtualenv miniforge3-4.14.0-2 virtualhome_MMKG_search`
+- Run `pyenv virtualenv miniforge3-4.14.0-2 vhakg-tools`
