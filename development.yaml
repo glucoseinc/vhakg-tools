@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  app-dev:
+    image: node:20
+    depends_on:
+      - graphdb
+      - react
+    ports:
+      - 5051:3000
+    volumes:
+      - ./app:/app
+    command: sh -c "cd /app && yarn && yarn start"

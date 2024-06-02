@@ -1,0 +1,11 @@
+ffmpeg-python==0.2.0
+future==1.0.0
+isodate==0.6.1
+numpy==1.26.4
+opencv-python==4.9.0.80
+pyparsing==3.1.2
+rdflib==7.0.0
+setuptools==69.5.1
+six==1.16.0
+SPARQLWrapper==2.0.0
+wheel==0.43.0
