@@ -1,3 +1,9 @@
+<img src="https://img.shields.io/badge/-Python-F9DC3E.svg?logo=python&style=flat">
+<img src="https://img.shields.io/badge/-Jupyter-FFF.svg?logo=jupyter&style=flat">
+<img src="https://img.shields.io/badge/-React-555.svg?logo=react&style=flat">
+<img src="https://img.shields.io/badge/-Docker-EEE.svg?logo=docker&style=flat">
+<img src="http://img.shields.io/badge/license-MIT-blue.svg?style=flat">
+
 # VHAKG tools
 
 
