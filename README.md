@@ -53,3 +53,15 @@
 
 - Run `pyenv install  miniforge3-4.14.0-2`
 - Run `pyenv virtualenv miniforge3-4.14.0-2 vhakg-tools`
+
+## Experiments
+
+An experimental example of dataset creation and LVLM evaluation using VHAKG  
+
+### Dataset creation
+- Run `pip install notebook`
+- Run `create_benchmark_dataset.ipynb`
+
+### Evaluation
+- Run `pip install openai`
+- Run `python evaluate_lvlm.py`
