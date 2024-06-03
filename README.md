@@ -60,8 +60,20 @@ An experimental example of dataset creation and LVLM evaluation using VHAKG
 
 ### Dataset creation
 - Run `pip install notebook`
-- Run `create_benchmark_dataset.ipynb`
+- Run `jupyter notebook`
+- Open&amp;Run `create_benchmark_dataset.ipynb`
 
 ### Evaluation
+#### GPT-4V
 - Run `pip install openai`
-- Run `python evaluate_lvlm.py`
+- Open&amp;Run `jupyter notebook`
+- Run `evaluate_lvlm.ipynb` with your OpenAI API key
+
+#### LLaVa
+- Our set up
+    - NVIDIA A100 (1 core)
+    - Python 3.10
+    - cuda 12.1
+
+- Install [LLaVa (llava-v1.5-7b)](https://github.com/haotian-liu/LLaVA/tree/main)
+- Run `python evaluate_llava.py`
