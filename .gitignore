@@ -1,2 +1,3 @@
 .graphdb-data
 RDF/**/*.ttl
+.DS_Store

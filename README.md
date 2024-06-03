@@ -33,6 +33,10 @@
 
 ### GUI
 
+<img src="img/gui.png" width="270px">
+<img src="img/gui.gif">
+  
+
 - Run `mkdir RDF` only for the first time
 - Place RDF Data on RDF/ only for the first time
 - Run `chmod +x entrypoint.sh` only for the first time
