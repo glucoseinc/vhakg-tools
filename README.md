@@ -21,6 +21,10 @@
 - Wait for data to be loaded until the Docker GraphDB container displays the log `[main] INFO com.ontotext.graphdb.importrdf.Preload - Finished`.
 - Open http://localhost:5050
 
+<p align="center">
+    <img src="img/gui.gif" alt="gif" width="50%">
+</p>
+
 ### CLI
 
 - Perform the same steps as in GUI
@@ -32,10 +36,6 @@
 ## How to develop
 
 ### GUI
-
-<img src="img/gui.png" width="270px">
-<img src="img/gui.gif">
-  
 
 - Run `mkdir RDF` only for the first time
 - Place RDF Data on RDF/ only for the first time
