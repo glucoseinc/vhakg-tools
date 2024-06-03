@@ -66,8 +66,8 @@ An experimental example of dataset creation and LVLM evaluation using VHAKG
 ### Evaluation
 #### GPT-4V
 - Run `pip install openai`
-- Open&amp;Run `jupyter notebook`
-- Run `evaluate_lvlm.ipynb` with your OpenAI API key
+- Run `jupyter notebook`
+- Open&amp;Run `evaluate_lvlm.ipynb` with your OpenAI API key
 
 #### LLaVa
 - Our set up
