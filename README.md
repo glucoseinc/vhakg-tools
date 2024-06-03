@@ -20,6 +20,7 @@
     - **If you use anything besides Apple Silicon, change the [GraphDB image](https://github.com/aistairc/vhakg-tools/blob/9ff62e2607846627abd75cfd53376d2b12b8bd23/compose.yaml#L21C5-L21C41) from `ontotext/graphdb:10.4.4-arm64` to `ontotext/graphdb:10.4.4`**
 - Wait for data to be loaded until the Docker GraphDB container displays the log `[main] INFO com.ontotext.graphdb.importrdf.Preload - Finished`.
 - Open http://localhost:5050
+    - Please wait a moment when you first click on the select box, as the back-end system needs to load the activity data.
 
 <p align="center">
     <img src="img/gui.gif" alt="gif" width="50%">
