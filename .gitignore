@@ -1,3 +1,10 @@
 .graphdb-data
 RDF/**/*.ttl
 .DS_Store
+experiments/test/*
+experiments/tmp/*
+experiments/.ipynb_checkpoints/
+experiments/_test/*
+experiments/test_10_100/*
+experiments/*.tar.gz
+experiments/test_5_100/*
