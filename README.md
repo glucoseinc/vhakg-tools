@@ -17,7 +17,7 @@
 - Place RDF Data on `RDF/` only for the first time
 - Run `chmod +x entrypoint.sh` only for the first time
 - Run `docker compose up --build -d`
-    - **Important:** If you are not using Apple Silicon, you must change the [GraphDB image](https://github.com/aistairc/vhakg-tools/blob/9ff62e2607846627abd75cfd53376d2b12b8bd23/compose.yaml#L21C5-L21C41) from `ontotext/graphdb:10.4.4-arm64` to `ontotext/graphdb:10.4.4`
+    - **Important:** If you are not using Apple Silicon, you must change the [GraphDB image in compose.yaml](https://github.com/aistairc/vhakg-tools/blob/9ff62e2607846627abd75cfd53376d2b12b8bd23/compose.yaml#L21C5-L21C41) from `ontotext/graphdb:10.4.4-arm64` to `ontotext/graphdb:10.4.4`
     - **Important:** Please do not place any files other than .ttl under the `RDF` directory. Please delete `.DS_Store` if it exists.
 - Wait for data to be loaded until the Docker GraphDB container displays the log `[main] INFO com.ontotext.graphdb.importrdf.Preload - Finished`.
 - Open http://localhost:5050
