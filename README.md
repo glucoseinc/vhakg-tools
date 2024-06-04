@@ -43,6 +43,10 @@ This repository provides a set of tools for searching and extracting videos from
 - Run `python mmkg-search.py -h` if you want to know command arguments
 - Run `python mmkg-search.py args`
 
+### SPARQL
+
+- Users familiar with SPARQL can use the GraphDB SPARQL endpoint at [localhost:7200/sparql](http://localhost:7200/sparql).
+
 ## How to develop
 
 ### GUI
