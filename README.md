@@ -43,6 +43,13 @@ This repository provides a set of tools for searching and extracting videos from
 - Run `python mmkg-search.py -h` if you want to know command arguments
 - Run `python mmkg-search.py args`
 
+#### Example
+
+Extract the video segment of the "grab" part from the camera4’s video of "clean_kitchentable1" in scene1.
+```shell
+python mmkg-search.py clean_kitchentable1 scene1 camera4 . -a grab
+```
+
 ### SPARQL
 
 - Users familiar with SPARQL can use the GraphDB SPARQL endpoint at [localhost:7200/sparql](http://localhost:7200/sparql).

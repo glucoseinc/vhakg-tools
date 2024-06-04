@@ -8,3 +8,5 @@ experiments/_test/*
 experiments/test_10_100/*
 experiments/*.tar.gz
 experiments/test_5_100/*
+cli/__pycache__/
+cli/clean_kitchentable1_scene1_camera4/
