@@ -25,7 +25,7 @@ select DISTINCT ?segment ?start_frame ?end_frame where {
 
     bindings = results["results"]["bindings"]
     for result in bindings:
-        segment = result["segment"]["value"].replace(PREFIX_EX, "ex:")
+        segment = result["segment"]["value"].replace(PREFIX_EX, "")
         frame_list[segment] = {'start_frame': int(result["start_frame"]["value"]), 'end_frame': int(result["end_frame"]["value"])}
 
     return frame_list
@@ -56,7 +56,7 @@ select DISTINCT ?segment ?start_frame ?end_frame where {
 
     bindings = results["results"]["bindings"]
     for result in bindings:
-        segment = result["segment"]["value"].replace(PREFIX_EX, "ex:")
+        segment = result["segment"]["value"].replace(PREFIX_EX, "")
         frame_list[segment] = {'start_frame': int(result["start_frame"]["value"]), 'end_frame': int(result["end_frame"]["value"])}
 
     return frame_list
@@ -94,7 +94,7 @@ select DISTINCT ?segment ?frame_number where {
     frames = {}
 
     for result in bindings:
-        segment = result["segment"]["value"].replace("http://kgrc4si.home.kg/virtualhome2kg/instance/", "ex:")
+        segment = result["segment"]["value"].replace(PREFIX_EX, "")
         frame_number = int(result["frame_number"]["value"])
         if segment not in frames:
             frames[segment] = [frame_number]
@@ -141,7 +141,7 @@ PREFIX vh2kg: <http://kgrc4si.home.kg/virtualhome2kg/ontology/>
 PREFIX mssn: <http://mssn.sigappfr.org/mssn/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 select DISTINCT ?descriptor ?frame_number ?split_width ?image_id ?image where {
-    """ + segment + """ mssn:hasMediaDescriptor ?descriptor .
+    ex:""" + segment + """ mssn:hasMediaDescriptor ?descriptor .
     ?descriptor vh2kg:frameNumber ?frame_number ;
                 vh2kg:splitWidth ?split_width ;
                 vh2kg:image ?split_image .
@@ -166,7 +166,7 @@ select DISTINCT ?descriptor ?frame_number ?split_width ?image_id ?image where {
         if frame_number < start_frame or end_frame < frame_number:
             continue
 
-        descriptor = result["descriptor"]["value"].replace(PREFIX_EX, "ex:")
+        descriptor = result["descriptor"]["value"].replace(PREFIX_EX, "")
         split_width = int(result["split_width"]["value"])
         image_id = result["image_id"]["value"]
         base64_data = result["image"]["value"]
@@ -198,7 +198,7 @@ PREFIX ex: <http://kgrc4si.home.kg/virtualhome2kg/instance/>
 PREFIX vh2kg: <http://kgrc4si.home.kg/virtualhome2kg/ontology/>
 PREFIX mssn: <http://mssn.sigappfr.org/mssn/>
 select DISTINCT ?frame_number ?object ?2dbbox  where {
-    """ + segment + """ mssn:hasMediaDescriptor ?descriptor .
+    ex:""" + segment + """ mssn:hasMediaDescriptor ?descriptor .
     ?descriptor mssn:hasMediaDescriptor ?descriptor_object ;
                      vh2kg:frameNumber ?frame_number .
     ?descriptor_object vh2kg:bbox-2d-value ?2dbbox ;
@@ -242,7 +242,7 @@ PREFIX ex: <http://kgrc4si.home.kg/virtualhome2kg/instance/>
 PREFIX vh2kg: <http://kgrc4si.home.kg/virtualhome2kg/ontology/>
 PREFIX mssn: <http://mssn.sigappfr.org/mssn/>
 select DISTINCT ?action ?main_object ?target_object  where {
-    """ + segment + """ vh2kg:isVideoSegmentOf ?event .
+    ex:""" + segment + """ vh2kg:isVideoSegmentOf ?event .
     ?event vh2kg:action ?action ;
            vh2kg:mainObject ?main_object .
     OPTIONAL{?event vh2kg:targetObject ?target_object} .
