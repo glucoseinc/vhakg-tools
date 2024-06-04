@@ -8,17 +8,25 @@
 
 # VHAKG tools
 
+This repository provides a set of tools for searching and extracting videos from [VHAKG](https://doi.org/10.5281/zenodo.11438499), a Multi-modal Knowledge Graph of everyday life videos.
 
 ## How to use
+
+### Prerequisites
+
+- Install [Docker](https://docs.docker.com/engine/install/)
+-  Download [VHAKG](https://doi.org/10.5281/zenodo.11438499)  
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11438499.svg)](https://doi.org/10.5281/zenodo.11438499)
 
 ### GUI
 
 - Run `mkdir RDF`.
-- Place RDF Data on `RDF/` only for the first time
+- Place VHAKG's `.ttl` files on `RDF/` only for the first time
+    - **Important:** Please do not place any files other than `.ttl` under the `RDF/`. Please delete `.DS_Store` if it exists.
 - Run `chmod +x entrypoint.sh` only for the first time
 - Run `docker compose up --build -d`
     - **Important:** If you are not using Apple Silicon, you must change the [GraphDB image in compose.yaml](https://github.com/aistairc/vhakg-tools/blob/9ff62e2607846627abd75cfd53376d2b12b8bd23/compose.yaml#L21C5-L21C41) from `ontotext/graphdb:10.4.4-arm64` to `ontotext/graphdb:10.4.4`
-    - **Important:** Please do not place any files other than .ttl under the `RDF` directory. Please delete `.DS_Store` if it exists.
+    
 - Wait for data to be loaded until the Docker GraphDB container displays the log `[main] INFO com.ontotext.graphdb.importrdf.Preload - Finished`.
 - Open http://localhost:5050
     - Please wait a moment when you open first time, as the back-end system needs to load the activity data.
