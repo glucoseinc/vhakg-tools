@@ -13,14 +13,15 @@
 
 ### GUI
 
-- Run `mkdir RDF` only for the first time
-- Place RDF Data on RDF/ only for the first time
+- Run `mkdir RDF`.
+- Place RDF Data on `RDF/` only for the first time
 - Run `chmod +x entrypoint.sh` only for the first time
 - Run `docker compose up --build -d`
-    - **If you use anything besides Apple Silicon, change the [GraphDB image](https://github.com/aistairc/vhakg-tools/blob/9ff62e2607846627abd75cfd53376d2b12b8bd23/compose.yaml#L21C5-L21C41) from `ontotext/graphdb:10.4.4-arm64` to `ontotext/graphdb:10.4.4`**
+    - **Important:** If you are not using Apple Silicon, you must change the [GraphDB image](https://github.com/aistairc/vhakg-tools/blob/9ff62e2607846627abd75cfd53376d2b12b8bd23/compose.yaml#L21C5-L21C41) from `ontotext/graphdb:10.4.4-arm64` to `ontotext/graphdb:10.4.4`
+    - **Important:** Please do not place any files other than .ttl under the `RDF` directory. Please delete `.DS_Store` if it exists.
 - Wait for data to be loaded until the Docker GraphDB container displays the log `[main] INFO com.ontotext.graphdb.importrdf.Preload - Finished`.
 - Open http://localhost:5050
-    - Please wait a moment when you first click on the select box, as the back-end system needs to load the activity data.
+    - Please wait a moment when you open first time, as the back-end system needs to load the activity data.
 
 <p align="center">
     <img src="img/gui.gif" alt="gif" width="50%">
@@ -74,12 +75,3 @@ An experimental example of dataset creation and LVLM evaluation using VHAKG
 - Run `pip install openai`
 - Run `jupyter notebook`
 - Open&amp;Run `evaluate_lvlm.ipynb` with your OpenAI API key
-
-#### LLaVa
-- Our set up
-    - NVIDIA A100 (1 core)
-    - Python 3.10
-    - cuda 12.1
-
-- Install [LLaVa (llava-v1.5-7b)](https://github.com/haotian-liu/LLaVA/tree/main)
-- Run `python evaluate_llava.py`
