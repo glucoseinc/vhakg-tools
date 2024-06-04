@@ -83,7 +83,7 @@ An experimental example of dataset creation and LVLM evaluation using VHAKG
 - Open&amp;Run [create_benchmark_dataset.ipynb](./experiments/create_benchmark_dataset.ipynb)
 
 ### Evaluation
-#### GPT-4V
+#### GPT-4o and GPT-4V
 - Run `pip install openai`
 - Run `jupyter notebook`
 - Open&amp;Run [evaluate_lvlm.ipynb](./experiments/evaluate_lvlm.ipynb) with your OpenAI API key
