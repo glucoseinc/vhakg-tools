@@ -8,7 +8,7 @@
 
 # VHAKG tools
 
-This repository provides a set of tools for searching and extracting videos from [VHAKG](https://doi.org/10.5281/zenodo.11438499), a multi-modal knowledge graph (MMKG) of multi-view videos of daily activities.
+This repository provides a set of tools for searching and extracting videos from [VHAKG](https://github.com/aistairc/vhakg), a multi-modal knowledge graph (MMKG) of multi-view videos of daily activities.
 
 ## Contents
 - [How to use](#how-to-use)
