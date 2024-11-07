@@ -14,7 +14,7 @@ import { SelectCamera } from './comporents/SelectCamera';
 import { SelectMedia } from './comporents/SelectMedia';
 import { ResultVideo } from './comporents/ResultVideo';
 import { ResultImage } from './comporents/ResultImage';
-import FloatingNavigationButton from './comporents/FloatingNavigationButton';
+import FloatingNavigationLink from './comporents/FloatingNavigationLink';
 
 function App() {
   const [activityList, setActivityList] = useState<Map<string, string[]>>(
@@ -60,7 +60,7 @@ function App() {
 
   return (
     <ChakraProvider>
-      <FloatingNavigationButton
+      <FloatingNavigationLink
         linkTo="/action-object-search"
         buttonText="Action Object Search"
       />

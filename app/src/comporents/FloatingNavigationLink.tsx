@@ -1,7 +1,7 @@
 import { Box, Button } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 
-const FloatingNavigationButton = ({
+const FloatingNavigationLink = ({
   linkTo,
   buttonText,
 }: {
@@ -16,4 +16,4 @@ const FloatingNavigationButton = ({
     </Box>
   );
 };
-export default FloatingNavigationButton;
+export default FloatingNavigationLink;
