@@ -11,7 +11,7 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
-    path: 'action-object-search',
+    path: '/action-object-search',
     element: <ActionObjectSearch />,
   },
 ]);
