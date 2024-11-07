@@ -16,7 +16,7 @@ import { ResultVideo } from './comporents/ResultVideo';
 import { ResultImage } from './comporents/ResultImage';
 import FloatingNavigationLink from './comporents/FloatingNavigationLink';
 
-function App() {
+function ActionObjectSearch() {
   const [activityList, setActivityList] = useState<Map<string, string[]>>(
     new Map<string, string[]>()
   );
@@ -60,10 +60,7 @@ function App() {
 
   return (
     <ChakraProvider>
-      <FloatingNavigationLink
-        linkTo="/action-object-search"
-        buttonText="Action Object Search"
-      />
+      <FloatingNavigationLink linkTo="/" buttonText="Home" />
       <Flex flexDirection="column" width="1000px" mx="auto" gap={4}>
         <TableContainer>
           <Table>
@@ -124,4 +121,4 @@ function App() {
   );
 }
 
-export default App;
+export default ActionObjectSearch;
