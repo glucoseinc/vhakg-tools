@@ -1,12 +1,5 @@
-import ParsingClient from 'sparql-http-client/ParsingClient';
+import { makeClient } from '../../common/utils/sparql';
 import { NamedNode } from 'rdf-js';
-
-const makeClient = () => {
-  const endpointUrl = 'http://localhost:7200/repositories/kgrc4si';
-  return new ParsingClient({
-    endpointUrl: `${endpointUrl}?infer=false`,
-  });
-};
 
 export const PREFIXES = {
   ex: 'http://kgrc4si.home.kg/virtualhome2kg/instance/',
