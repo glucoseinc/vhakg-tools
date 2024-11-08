@@ -7,7 +7,7 @@ import {
   TableContainer,
   Tbody,
 } from '@chakra-ui/react';
-import { PREFIXES, fetchActivity } from '../root/utils/sparql';
+import { fetchActivity } from '../root/utils/sparql';
 import { SelectActivity } from '../root/components/SelectActivity';
 import { SelectScene } from '../root/components/SelectScene';
 import { SelectCamera } from '../root/components/SelectCamera';
@@ -15,6 +15,7 @@ import { SelectMedia } from '../root/components/SelectMedia';
 import { ResultVideo } from '../root/components/ResultVideo';
 import { ResultImage } from '../root/components/ResultImage';
 import FloatingNavigationLink from '../common/components/FloatingNavigationLink';
+import { PREFIXES } from '../common/utils/sparql';
 
 function ActionObjectSearch() {
   const [activityList, setActivityList] = useState<Map<string, string[]>>(

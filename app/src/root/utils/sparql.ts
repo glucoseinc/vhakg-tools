@@ -1,13 +1,6 @@
 import { makeClient } from '../../common/utils/sparql';
 import { NamedNode } from 'rdf-js';
 
-export const PREFIXES = {
-  ex: 'http://kgrc4si.home.kg/virtualhome2kg/instance/',
-  mssn: 'http://mssn.sigappfr.org/mssn/',
-  rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
-  vh2kg: 'http://kgrc4si.home.kg/virtualhome2kg/ontology/',
-};
-
 export type ActivityQueryType = {
   activity: NamedNode;
 };
