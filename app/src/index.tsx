@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css';
-import App from './App';
-import ActionObjectSearch from './ActionObjectSearch';
+import App from './root/App';
+import ActionObjectSearch from './action_object_search/ActionObjectSearch';
 
 const router = createBrowserRouter([
   {
