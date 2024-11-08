@@ -1,12 +1,5 @@
-import ParsingClient from 'sparql-http-client/ParsingClient';
 import { NamedNode } from 'rdf-js';
-
-const makeClient = () => {
-  const endpointUrl = 'http://localhost:7200/repositories/kgrc4si';
-  return new ParsingClient({
-    endpointUrl: `${endpointUrl}?infer=false`,
-  });
-};
+import { makeClient } from '../../common/utils/sparql';
 
 export type ActionQueryType = {
   action: NamedNode;
