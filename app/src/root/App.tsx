@@ -8,13 +8,13 @@ import {
   Tbody,
 } from '@chakra-ui/react';
 import { PREFIXES, fetchActivity } from './utils/sparql';
-import { SelectActivity } from './comporents/SelectActivity';
-import { SelectScene } from './comporents/SelectScene';
-import { SelectCamera } from './comporents/SelectCamera';
-import { SelectMedia } from './comporents/SelectMedia';
-import { ResultVideo } from './comporents/ResultVideo';
-import { ResultImage } from './comporents/ResultImage';
-import FloatingNavigationLink from './comporents/FloatingNavigationLink';
+import { SelectActivity } from './components/SelectActivity';
+import { SelectScene } from './components/SelectScene';
+import { SelectCamera } from './components/SelectCamera';
+import { SelectMedia } from './components/SelectMedia';
+import { ResultVideo } from './components/ResultVideo';
+import { ResultImage } from './components/ResultImage';
+import FloatingNavigationLink from '../common/components/FloatingNavigationLink';
 
 function App() {
   const [activityList, setActivityList] = useState<Map<string, string[]>>(
