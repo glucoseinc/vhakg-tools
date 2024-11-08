@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Select, Td, Th, Tr } from '@chakra-ui/react';
-import { PREFIXES, fetchCamera } from '../utils/sparql';
+import { fetchCamera } from '../utils/sparql';
+import { PREFIXES } from '../../common/utils/sparql';
 
 type SelectCameraProps = {
   selectedActivity: string;
