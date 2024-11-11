@@ -1,5 +1,5 @@
 import { NamedNode } from 'rdf-js';
-import { makeClient } from '../../common/utils/sparql';
+import { makeClient } from 'common/utils/sparql';
 
 export type ActionQueryType = {
   action: NamedNode;

@@ -10,7 +10,7 @@ import {
   Th,
   Tr,
 } from '@chakra-ui/react';
-import { SelectAction } from './SelectAction';
+import { SelectAction } from 'root/components/SelectAction';
 
 type SelectMediaProps = {
   selectedActivity: string;
