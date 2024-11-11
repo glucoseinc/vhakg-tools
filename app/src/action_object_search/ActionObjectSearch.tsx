@@ -8,10 +8,17 @@ import {
 import React, { useEffect, useState } from 'react';
 import { SelectAction } from 'action_object_search/components/SelectAction';
 import FloatingNavigationLink from 'common/components/FloatingNavigationLink';
-import { ActionQueryType, fetchAction } from 'action_object_search/utils/sparql';
+import {
+  ActionQueryType,
+  fetchAction,
+} from 'action_object_search/utils/sparql';
+import { InputObject } from 'action_object_search/components/InputObject';
 
-function ActionObjectSearch() {
+function ActionObjectSearch(): React.ReactElement {
   const [actions, setActions] = useState<ActionQueryType[]>([]);
+  const [mainObject, setMainObject] = useState<string>('');
+  const [targetObject, setTargetObject] = useState<string>('');
+
   const [selectedAction, setSelectedAction] = useState<string>('');
 
   useEffect(() => {
@@ -31,6 +38,18 @@ function ActionObjectSearch() {
                 actions={actions}
                 selectedAction={selectedAction}
                 setSelectedAction={setSelectedAction}
+              />
+              <InputObject
+                objectState={mainObject}
+                setObjectState={setMainObject}
+                tableHeader="Main Object"
+                inputPlaceholder="Required"
+              />
+              <InputObject
+                objectState={targetObject}
+                setObjectState={setTargetObject}
+                tableHeader="Target Object"
+                inputPlaceholder="Optional"
               />
             </Tbody>
           </Table>
