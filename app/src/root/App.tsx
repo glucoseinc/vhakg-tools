@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './App.css';
+import 'root/App.css';
 import {
   ChakraProvider,
   Flex,
@@ -7,15 +7,15 @@ import {
   TableContainer,
   Tbody,
 } from '@chakra-ui/react';
-import { fetchActivity } from './utils/sparql';
-import { SelectActivity } from './components/SelectActivity';
-import { SelectScene } from './components/SelectScene';
-import { SelectCamera } from './components/SelectCamera';
-import { SelectMedia } from './components/SelectMedia';
-import { ResultVideo } from './components/ResultVideo';
-import { ResultImage } from './components/ResultImage';
-import FloatingNavigationLink from '../common/components/FloatingNavigationLink';
-import { PREFIXES } from '../common/utils/sparql';
+import { fetchActivity } from 'root/utils/sparql';
+import { SelectActivity } from 'root/components/SelectActivity';
+import { SelectScene } from 'root/components/SelectScene';
+import { SelectCamera } from 'root/components/SelectCamera';
+import { SelectMedia } from 'root/components/SelectMedia';
+import { ResultVideo } from 'root/components/ResultVideo';
+import { ResultImage } from 'root/components/ResultImage';
+import FloatingNavigationLink from 'common/components/FloatingNavigationLink';
+import { PREFIXES } from 'common/utils/sparql';
 
 function App() {
   const [activityList, setActivityList] = useState<Map<string, string[]>>(

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchImage } from '../utils/sparql';
+import { fetchImage } from 'root/utils/sparql';
 
 type ResultImageProps = {
   selectedActivity: string;

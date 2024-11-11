@@ -1,6 +1,6 @@
 import React from 'react';
 import { Select, Td, Th, Tr } from '@chakra-ui/react';
-import { ActionQueryType } from '../utils/sparql';
+import { ActionQueryType } from 'action_object_search/utils/sparql';
 
 export function SelectAction({
   actions,

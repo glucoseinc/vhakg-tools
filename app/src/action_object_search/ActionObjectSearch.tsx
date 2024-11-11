@@ -6,9 +6,9 @@ import {
   Tbody,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { SelectAction } from './components/SelectAction';
-import FloatingNavigationLink from '../common/components/FloatingNavigationLink';
-import { ActionQueryType, fetchAction } from './utils/sparql';
+import { SelectAction } from 'action_object_search/components/SelectAction';
+import FloatingNavigationLink from 'common/components/FloatingNavigationLink';
+import { ActionQueryType, fetchAction } from 'action_object_search/utils/sparql';
 
 function ActionObjectSearch() {
   const [actions, setActions] = useState<ActionQueryType[]>([]);

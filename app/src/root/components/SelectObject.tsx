@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Select, Td, Th, Tr } from '@chakra-ui/react';
-import { fetchObject, fetchStartFrameOfObject } from '../utils/sparql';
-import { PREFIXES } from '../../common/utils/sparql';
+import { fetchObject, fetchStartFrameOfObject } from 'root/utils/sparql';
+import { PREFIXES } from 'common/utils/sparql';
 
 type SelectObjectProps = {
   selectedActivity: string;
