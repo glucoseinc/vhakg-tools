@@ -11,11 +11,14 @@ import FloatingNavigationLink from 'common/components/FloatingNavigationLink';
 import {
   ActionQueryType,
   fetchAction,
+  fetchEvent,
 } from 'action_object_search/utils/sparql';
 import { InputObject } from 'action_object_search/components/InputObject';
+import { EventQueryType } from 'action_object_search/utils/sparql';
 
 function ActionObjectSearch(): React.ReactElement {
   const [actions, setActions] = useState<ActionQueryType[]>([]);
+  const [events, setEvents] = useState<EventQueryType[]>([]);
   const [mainObject, setMainObject] = useState<string>('');
   const [targetObject, setTargetObject] = useState<string>('');
 
@@ -26,6 +29,18 @@ function ActionObjectSearch(): React.ReactElement {
       setActions(await fetchAction());
     })();
   }, []);
+
+  useEffect(() => {
+    if (selectedAction === '') {
+      return;
+    }
+    if (mainObject === '') {
+      return;
+    }
+    (async () => {
+      setEvents(await fetchEvent(selectedAction, mainObject, targetObject));
+    })();
+  }, [selectedAction, mainObject, targetObject]);
 
   return (
     <ChakraProvider>
