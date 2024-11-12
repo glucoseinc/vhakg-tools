@@ -14,3 +14,14 @@ export const fetchAction: () => Promise<ActionQueryType[]> = async () => {
   const result = (await makeClient().query.select(query)) as ActionQueryType[];
   return result;
 };
+
+export type VideoQueryType = {
+  video: NamedNode;
+};
+export const fetchVideo: () => Promise<VideoQueryType[]> = async () => {
+  const query = `
+    
+  `;
+  const result = (await makeClient().query.select(query)) as VideoQueryType[];
+  return result;
+};

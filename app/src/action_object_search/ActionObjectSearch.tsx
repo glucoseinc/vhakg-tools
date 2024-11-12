@@ -13,6 +13,7 @@ import {
   fetchAction,
 } from 'action_object_search/utils/sparql';
 import { InputObject } from 'action_object_search/components/InputObject';
+import { VideoDurationRadio } from './components/VideoDurationRadio';
 
 function ActionObjectSearch(): React.ReactElement {
   const [actions, setActions] = useState<ActionQueryType[]>([]);
@@ -20,6 +21,8 @@ function ActionObjectSearch(): React.ReactElement {
   const [targetObject, setTargetObject] = useState<string>('');
 
   const [selectedAction, setSelectedAction] = useState<string>('');
+  const [selectedVideoDuration, setSelectedVideoDuration] =
+    useState<string>('full');
 
   useEffect(() => {
     (async () => {
@@ -50,6 +53,10 @@ function ActionObjectSearch(): React.ReactElement {
                 setObjectState={setTargetObject}
                 tableHeader="Target Object"
                 inputPlaceholder="Optional"
+              />
+              <VideoDurationRadio
+                selectedVideoDuration={selectedVideoDuration}
+                setSelectedVideoDuration={setSelectedVideoDuration}
               />
             </Tbody>
           </Table>
