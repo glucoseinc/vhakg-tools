@@ -1,12 +1,13 @@
 import React from 'react';
-import { Radio, RadioGroup, Select, Stack, Td, Th, Tr } from '@chakra-ui/react';
+import { Radio, RadioGroup, Stack, Td, Th, Tr } from '@chakra-ui/react';
 
+export type VideoDurationType = 'full' | 'segment';
 export function VideoDurationRadio({
   selectedVideoDuration,
   setSelectedVideoDuration,
 }: {
-  selectedVideoDuration: string;
-  setSelectedVideoDuration: (videoDuration: string) => void;
+  selectedVideoDuration: VideoDurationType;
+  setSelectedVideoDuration: (videoDuration: VideoDurationType) => void;
 }): React.ReactElement {
   return (
     <>

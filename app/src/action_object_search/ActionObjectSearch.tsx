@@ -15,9 +15,12 @@ import {
   VideoQueryType,
 } from 'action_object_search/utils/sparql';
 import { InputObject } from 'action_object_search/components/InputObject';
-import { VideoDurationRadio } from './components/VideoDurationRadio';
-import { VideoGrid } from './components/VideoGrid';
-import { InputPageNumber } from './components/InputPageNumber';
+import {
+  VideoDurationRadio,
+  VideoDurationType,
+} from 'action_object_search/components/VideoDurationRadio';
+import { VideoGrid } from 'action_object_search/components/VideoGrid';
+import { InputPageNumber } from 'action_object_search/components/InputPageNumber';
 
 function ActionObjectSearch(): React.ReactElement {
   const [actions, setActions] = useState<ActionQueryType[]>([]);
@@ -28,7 +31,9 @@ function ActionObjectSearch(): React.ReactElement {
 
   const [selectedAction, setSelectedAction] = useState<string>('');
   const [selectedVideoDuration, setSelectedVideoDuration] =
-    useState<string>('full');
+    useState<VideoDurationType>('full');
+
+  const TOTAL_VIDEOS_PER_PAGE = 9;
 
   useEffect(() => {
     (async () => {
@@ -50,7 +55,13 @@ function ActionObjectSearch(): React.ReactElement {
     (async () => {
       if (selectedVideoDuration === 'full') {
         setVideos(
-          await fetchVideo(selectedAction, mainObject, targetObject, 9, page) // TODO: 9(一度に取得する動画の上限)に関しては後ほど調整可能とする
+          await fetchVideo(
+            selectedAction,
+            mainObject,
+            targetObject,
+            TOTAL_VIDEOS_PER_PAGE,
+            page
+          )
         );
       }
     })();
