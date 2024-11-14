@@ -1,6 +1,6 @@
 import { Button, ButtonGroup, HStack } from '@chakra-ui/react';
 import { TOTAL_VIDEOS_PER_PAGE } from 'action_object_search/constants';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 
 type PaginationProps = {
   searchParams: URLSearchParams;
