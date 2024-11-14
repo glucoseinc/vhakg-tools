@@ -58,7 +58,7 @@ function ActionObjectSearch(): React.ReactElement {
             mainObject,
             targetObject,
             TOTAL_VIDEOS_PER_PAGE,
-            Number(searchParams.get('page')) || 1
+            Number(searchParams.get('searchResultPage')) || 1
           )
         );
       }

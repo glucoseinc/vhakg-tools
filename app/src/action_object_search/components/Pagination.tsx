@@ -53,7 +53,7 @@ export function Pagination({
   };
 
   const handlePageNumberButtonClick = (pageNumber: number) => {
-    searchParams.set('page', pageNumber.toString());
+    searchParams.set('searchResultPage', pageNumber.toString());
     setSearchParams(searchParams);
   };
 
@@ -69,7 +69,9 @@ export function Pagination({
             onClick={() => handlePageNumberButtonClick(pageNumber)}
             width={'50px'}
             colorScheme={
-              pageNumber === Number(searchParams.get('page')) ? 'blue' : 'gray'
+              pageNumber === Number(searchParams.get('searchResultPage'))
+                ? 'blue'
+                : 'gray'
             }
           >
             {pageNumber}
