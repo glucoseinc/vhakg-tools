@@ -1,6 +1,6 @@
 import { Button, ButtonGroup, HStack } from '@chakra-ui/react';
 import { TOTAL_VIDEOS_PER_PAGE } from 'action_object_search/constants';
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 type PaginationProps = {
   searchParams: URLSearchParams;
@@ -16,20 +16,14 @@ export function Pagination({
 }: PaginationProps): React.ReactElement {
   const totalPages = Math.ceil(totalVideos / TOTAL_VIDEOS_PER_PAGE);
 
-  const [displayedPagesStart, setDisplayedPagesStart] = useState(1);
-  const [displayedPages, setDisplayedPages] = useState<number[]>(
-    makeDisplayedPagesArray(displayedPagesStart)
-  );
-
-  function makeDisplayedPagesArray(displayedPagesStart: number) {
+  const makeDisplayedPagesArray = (displayedPagesStart: number) => {
     return [...Array(totalPages).keys()]
       .map((i) => i + 1)
       .splice(displayedPagesStart - 1, totalDisplayablePages);
-  }
+  };
 
-  useEffect(() => {
-    setDisplayedPages(makeDisplayedPagesArray(displayedPagesStart));
-  }, [displayedPagesStart]);
+  const [displayedPagesStart, setDisplayedPagesStart] = useState(1);
+  const displayedPages = makeDisplayedPagesArray(displayedPagesStart);
 
   const handlePageMoveButtonClick = (direction: 'next' | 'previous') => {
     switch (direction) {
