@@ -22,17 +22,19 @@ import {
 import { VideoGrid } from 'action_object_search/components/VideoGrid';
 import { TOTAL_VIDEOS_PER_PAGE } from 'action_object_search/constants';
 import { Pagination } from 'action_object_search/components/Pagination';
+import { useSearchParams } from 'react-router-dom';
 
 function ActionObjectSearch(): React.ReactElement {
   const [actions, setActions] = useState<ActionQueryType[]>([]);
   const [mainObject, setMainObject] = useState<string>('');
   const [targetObject, setTargetObject] = useState<string>('');
   const [videos, setVideos] = useState<VideoQueryType[]>([]);
-  const [page, setPage] = useState<number>(1);
 
   const [selectedAction, setSelectedAction] = useState<string>('');
   const [selectedVideoDuration, setSelectedVideoDuration] =
     useState<VideoDurationType>('full');
+
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     (async () => {
@@ -47,9 +49,6 @@ function ActionObjectSearch(): React.ReactElement {
     if (mainObject === '') {
       return;
     }
-    if (isNaN(page)) {
-      return;
-    }
 
     (async () => {
       if (selectedVideoDuration === 'full') {
@@ -59,12 +58,18 @@ function ActionObjectSearch(): React.ReactElement {
             mainObject,
             targetObject,
             TOTAL_VIDEOS_PER_PAGE,
-            page
+            Number(searchParams.get('page')) || 1
           )
         );
       }
     })();
-  }, [selectedAction, mainObject, targetObject, selectedVideoDuration, page]);
+  }, [
+    selectedAction,
+    mainObject,
+    targetObject,
+    selectedVideoDuration,
+    searchParams,
+  ]);
 
   return (
     <ChakraProvider>
@@ -98,8 +103,12 @@ function ActionObjectSearch(): React.ReactElement {
           </Table>
         </TableContainer>
         <VideoGrid videos={videos} />
-        {/* TODO: 取得する動画の合計を取得し、totalPagesへ反映させる */}
-        <Pagination page={page} setPage={setPage} totalPages={100} />
+        {/* TODO: 取得する動画の合計を取得し、totalVideosへ反映させる */}
+        <Pagination
+          searchParams={searchParams}
+          setSearchParams={setSearchParams}
+          totalVideos={100}
+        />
       </Flex>
     </ChakraProvider>
   );
