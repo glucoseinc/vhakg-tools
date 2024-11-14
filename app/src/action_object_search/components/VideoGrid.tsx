@@ -1,12 +1,12 @@
-import { Grid, GridItem, Text } from '@chakra-ui/react';
+import { Grid, GridItem, Link } from '@chakra-ui/react';
 import { VideoQueryType } from 'action_object_search/utils/sparql';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { Link as ReactRouterLink } from 'react-router-dom';
 
-export function VideoGrid({
-  videos,
-}: {
+type VideoGridProps = {
   videos: VideoQueryType[];
-}): React.ReactElement {
+};
+export function VideoGrid({ videos }: VideoGridProps): React.ReactElement {
   return (
     <Grid templateColumns="repeat(3, 1fr)" gap={4}>
       {videos.map((video) => (
@@ -23,17 +23,8 @@ export function VideoGrid({
             width="100%"
             height="auto"
           />
-          <Link to={``} state={{}}>
-            {/* stateを使用するためにreact-router-domのLink要素を使用 */}
-            <Text
-              fontSize="sm"
-              color="gray.600"
-              align="center"
-              mt="2"
-              _hover={{ textDecoration: 'underline' }}
-            >
-              {video.camera.value.split('/').pop()}
-            </Text>
+          <Link as={ReactRouterLink} to={``} state={{}}>
+            {video.camera.value.split('/').pop()}
           </Link>
         </GridItem>
       ))}

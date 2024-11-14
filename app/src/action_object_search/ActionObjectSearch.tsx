@@ -21,6 +21,7 @@ import {
 } from 'action_object_search/components/VideoDurationRadio';
 import { VideoGrid } from 'action_object_search/components/VideoGrid';
 import { InputPageNumber } from 'action_object_search/components/InputPageNumber';
+import { TOTAL_VIDEOS_PER_PAGE } from 'action_object_search/constants';
 
 function ActionObjectSearch(): React.ReactElement {
   const [actions, setActions] = useState<ActionQueryType[]>([]);
@@ -32,8 +33,6 @@ function ActionObjectSearch(): React.ReactElement {
   const [selectedAction, setSelectedAction] = useState<string>('');
   const [selectedVideoDuration, setSelectedVideoDuration] =
     useState<VideoDurationType>('full');
-
-  const TOTAL_VIDEOS_PER_PAGE = 9;
 
   useEffect(() => {
     (async () => {

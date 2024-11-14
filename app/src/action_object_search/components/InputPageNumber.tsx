@@ -8,6 +8,7 @@ import {
   Th,
   Tr,
 } from '@chakra-ui/react';
+import React from 'react';
 
 export function InputPageNumber({
   page,
@@ -15,7 +16,7 @@ export function InputPageNumber({
 }: {
   page: number;
   setPage: (page: number) => void;
-}) {
+}): React.ReactElement {
   return (
     <Tr>
       <Th width={60} fontSize="large">
