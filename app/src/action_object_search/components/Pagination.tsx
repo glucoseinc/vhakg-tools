@@ -32,23 +32,25 @@ export function Pagination({
   }, [displayedPagesStart]);
 
   const handlePageMoveButtonClick = (direction: 'next' | 'previous') => {
-    if (direction === 'next') {
-      if (displayedPagesStart + totalDisplayablePages > totalPages) {
-        return;
-      }
-      setDisplayedPagesStart(
-        (prevDisplayedPagesStart) =>
-          prevDisplayedPagesStart + totalDisplayablePages
-      );
-    }
-    if (direction === 'previous') {
-      if (displayedPagesStart === 1) {
-        return;
-      }
-      setDisplayedPagesStart(
-        (prevDisplayedPagesStart) =>
-          prevDisplayedPagesStart - totalDisplayablePages
-      );
+    switch (direction) {
+      case 'next':
+        if (displayedPagesStart + totalDisplayablePages > totalPages) {
+          return;
+        }
+        setDisplayedPagesStart(
+          (prevDisplayedPagesStart) =>
+            prevDisplayedPagesStart + totalDisplayablePages
+        );
+        break;
+      case 'previous':
+        if (displayedPagesStart === 1) {
+          return;
+        }
+        setDisplayedPagesStart(
+          (prevDisplayedPagesStart) =>
+            prevDisplayedPagesStart - totalDisplayablePages
+        );
+        break;
     }
   };
 
