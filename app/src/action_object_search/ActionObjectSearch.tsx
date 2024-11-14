@@ -20,8 +20,8 @@ import {
   VideoDurationType,
 } from 'action_object_search/components/VideoDurationRadio';
 import { VideoGrid } from 'action_object_search/components/VideoGrid';
-import { InputPageNumber } from 'action_object_search/components/InputPageNumber';
 import { TOTAL_VIDEOS_PER_PAGE } from 'action_object_search/constants';
+import { Pagination } from 'action_object_search/components/Pagination';
 
 function ActionObjectSearch(): React.ReactElement {
   const [actions, setActions] = useState<ActionQueryType[]>([]);
@@ -94,11 +94,12 @@ function ActionObjectSearch(): React.ReactElement {
                 selectedVideoDuration={selectedVideoDuration}
                 setSelectedVideoDuration={setSelectedVideoDuration}
               />
-              <InputPageNumber page={page} setPage={setPage} />
             </Tbody>
           </Table>
         </TableContainer>
         <VideoGrid videos={videos} />
+        {/* TODO: 取得する動画の合計を取得し、totalPagesへ反映させる */}
+        <Pagination page={page} setPage={setPage} totalPages={100} />
       </Flex>
     </ChakraProvider>
   );
