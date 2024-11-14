@@ -2,15 +2,16 @@ import React from 'react';
 import { Select, Td, Th, Tr } from '@chakra-ui/react';
 import { ActionQueryType } from 'action_object_search/utils/sparql';
 
+type SelectActionProps = {
+  actions: ActionQueryType[];
+  searchParams: URLSearchParams;
+  setSearchParams: (searchParams: URLSearchParams) => void;
+};
 export function SelectAction({
   actions,
-  selectedAction,
-  setSelectedAction,
-}: {
-  actions: ActionQueryType[];
-  selectedAction: string;
-  setSelectedAction: (action: string) => void;
-}): React.ReactElement {
+  searchParams,
+  setSearchParams,
+}: SelectActionProps): React.ReactElement {
   const options = actions.map((action) => ({
     value: action.action.value,
     label: action.action.value.split('/').pop(), // vh2kg:action/<Action>から<Action>を取得
@@ -25,10 +26,11 @@ export function SelectAction({
         <Td>
           <Select
             placeholder="select"
-            value={selectedAction}
+            value={searchParams.get('action') || ''}
             onChange={(e) => {
               const action = e.target.value;
-              setSelectedAction(action);
+              searchParams.set('action', action);
+              setSearchParams(searchParams);
             }}
           >
             {options.map((option) => (

@@ -16,10 +16,7 @@ import {
   VideoQueryType,
 } from 'action_object_search/utils/sparql';
 import { InputObject } from 'action_object_search/components/InputObject';
-import {
-  VideoDurationRadio,
-  VideoDurationType,
-} from 'action_object_search/components/VideoDurationRadio';
+import { VideoDurationRadio } from 'action_object_search/components/VideoDurationRadio';
 import { VideoGrid } from 'action_object_search/components/VideoGrid';
 import { TOTAL_VIDEOS_PER_PAGE } from 'action_object_search/constants';
 import { Pagination } from 'action_object_search/components/Pagination';
@@ -27,14 +24,8 @@ import { useSearchParams } from 'react-router-dom';
 
 function ActionObjectSearch(): React.ReactElement {
   const [actions, setActions] = useState<ActionQueryType[]>([]);
-  const [mainObject, setMainObject] = useState<string>('');
-  const [targetObject, setTargetObject] = useState<string>('');
   const [videos, setVideos] = useState<VideoQueryType[]>([]);
   const [videoCount, setVideoCount] = useState<number>(0);
-
-  const [selectedAction, setSelectedAction] = useState<string>('');
-  const [selectedVideoDuration, setSelectedVideoDuration] =
-    useState<VideoDurationType>('full');
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -45,20 +36,20 @@ function ActionObjectSearch(): React.ReactElement {
   }, []);
 
   useEffect(() => {
-    if (selectedAction === '') {
+    if (!searchParams.get('action')) {
       return;
     }
-    if (mainObject === '') {
+    if (!searchParams.get('mainObject')) {
       return;
     }
 
     (async () => {
-      if (selectedVideoDuration === 'full') {
+      if (searchParams.get('videoDuration') === 'full') {
         setVideos(
           await fetchVideo(
-            selectedAction,
-            mainObject,
-            targetObject,
+            searchParams.get('action') as string,
+            searchParams.get('mainObject') as string,
+            searchParams.get('targetObject') || '',
             TOTAL_VIDEOS_PER_PAGE,
             Number(searchParams.get('searchResultPage')) || 1
           )
@@ -68,13 +59,7 @@ function ActionObjectSearch(): React.ReactElement {
         );
       }
     })();
-  }, [
-    selectedAction,
-    mainObject,
-    targetObject,
-    selectedVideoDuration,
-    searchParams,
-  ]);
+  }, [searchParams]);
 
   return (
     <ChakraProvider>
@@ -85,24 +70,26 @@ function ActionObjectSearch(): React.ReactElement {
             <Tbody>
               <SelectAction
                 actions={actions}
-                selectedAction={selectedAction}
-                setSelectedAction={setSelectedAction}
+                searchParams={searchParams}
+                setSearchParams={setSearchParams}
               />
               <InputObject
-                objectState={mainObject}
-                setObjectState={setMainObject}
+                objectType="mainObject"
+                searchParams={searchParams}
+                setSearchParams={setSearchParams}
                 tableHeader="Main Object"
                 inputPlaceholder="Required"
               />
               <InputObject
-                objectState={targetObject}
-                setObjectState={setTargetObject}
+                objectType="targetObject"
+                searchParams={searchParams}
+                setSearchParams={setSearchParams}
                 tableHeader="Target Object"
                 inputPlaceholder="Optional"
               />
               <VideoDurationRadio
-                selectedVideoDuration={selectedVideoDuration}
-                setSelectedVideoDuration={setSelectedVideoDuration}
+                searchParams={searchParams}
+                setSearchParams={setSearchParams}
               />
             </Tbody>
           </Table>

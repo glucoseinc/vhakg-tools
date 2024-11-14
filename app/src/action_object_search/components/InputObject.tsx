@@ -1,19 +1,23 @@
 import React from 'react';
 import { Input, Td, Th, Tr } from '@chakra-ui/react';
 
-export function InputObject({
-  objectState,
-  setObjectState,
-  tableHeader,
-  inputPlaceholder,
-}: {
-  objectState: string;
-  setObjectState: (mainObject: string) => void;
+type InputObjectProps = {
+  objectType: string;
+  searchParams: URLSearchParams;
+  setSearchParams: (searchParams: URLSearchParams) => void;
   tableHeader: string;
   inputPlaceholder: string;
-}): React.ReactElement {
+};
+export function InputObject({
+  objectType,
+  searchParams,
+  setSearchParams,
+  tableHeader,
+  inputPlaceholder,
+}: InputObjectProps): React.ReactElement {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setObjectState(event.target.value);
+    searchParams.set(objectType, event.target.value);
+    setSearchParams(searchParams);
   };
 
   return (
@@ -25,7 +29,7 @@ export function InputObject({
         <Td>
           <Input
             placeholder={inputPlaceholder}
-            value={objectState}
+            value={searchParams.get(objectType) || ''}
             onChange={handleChange}
           />
         </Td>
