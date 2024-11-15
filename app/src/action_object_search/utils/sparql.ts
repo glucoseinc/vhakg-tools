@@ -53,3 +53,35 @@ export const fetchVideo: (
   const result = (await makeClient().query.select(query)) as VideoQueryType[];
   return result;
 };
+
+export type VideoCountQueryType = {
+  videoCount: NamedNode;
+};
+export const fetchVideoCount: (
+  action: string,
+  mainObject: string,
+  targetObject: string
+) => Promise<number> = async (action, mainObject, targetObject) => {
+  const query = `
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX vh2kg: <http://kgrc4si.home.kg/virtualhome2kg/ontology/>
+    SELECT DISTINCT (COUNT(*) AS ?videoCount) WHERE {
+      ?mainObject rdfs:label ?mainObjectLabel FILTER regex(?mainObjectLabel, "${mainObject}", "i") .
+      ${
+        targetObject !== ''
+          ? `?targetObject rdfs:label ?targetObjectLabel FILTER regex(?targetObjectLabel, "${targetObject}", "i") .`
+          : ''
+      }
+      ?event vh2kg:mainObject ?mainObject ;
+             ${targetObject !== '' ? 'vh2kg:targetObject ?targetObject ;' : ''}
+             vh2kg:action <${action}> .
+      ?activity vh2kg:hasEvent ?event ;
+                vh2kg:hasVideo ?camera .
+      ?camera vh2kg:video ?base64Video .
+    }
+  `;
+  const result = (await makeClient().query.select(
+    query
+  )) as VideoCountQueryType[];
+  return Number(result[0].videoCount.value);
+};

@@ -12,6 +12,7 @@ import {
   ActionQueryType,
   fetchAction,
   fetchVideo,
+  fetchVideoCount,
   VideoQueryType,
 } from 'action_object_search/utils/sparql';
 import { InputObject } from 'action_object_search/components/InputObject';
@@ -29,6 +30,7 @@ function ActionObjectSearch(): React.ReactElement {
   const [mainObject, setMainObject] = useState<string>('');
   const [targetObject, setTargetObject] = useState<string>('');
   const [videos, setVideos] = useState<VideoQueryType[]>([]);
+  const [videoCount, setVideoCount] = useState<number>(0);
 
   const [selectedAction, setSelectedAction] = useState<string>('');
   const [selectedVideoDuration, setSelectedVideoDuration] =
@@ -60,6 +62,9 @@ function ActionObjectSearch(): React.ReactElement {
             TOTAL_VIDEOS_PER_PAGE,
             Number(searchParams.get('searchResultPage')) || 1
           )
+        );
+        setVideoCount(
+          await fetchVideoCount(selectedAction, mainObject, targetObject)
         );
       }
     })();
@@ -103,11 +108,10 @@ function ActionObjectSearch(): React.ReactElement {
           </Table>
         </TableContainer>
         <VideoGrid videos={videos} />
-        {/* TODO: 取得する動画の合計を取得し、totalVideosへ反映させる */}
         <Pagination
           searchParams={searchParams}
           setSearchParams={setSearchParams}
-          totalVideos={100}
+          totalVideos={videoCount}
         />
       </Flex>
     </ChakraProvider>
