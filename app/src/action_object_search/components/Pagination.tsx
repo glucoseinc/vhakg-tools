@@ -17,9 +17,9 @@ export function Pagination({
   const totalPages = Math.ceil(totalVideos / TOTAL_VIDEOS_PER_PAGE);
 
   const makeDisplayedPagesArray = (displayedPagesStart: number) => {
-    return [...Array(totalPages).keys()]
-      .map((i) => i + 1)
-      .splice(displayedPagesStart - 1, totalDisplayablePages);
+    return [...Array(totalDisplayablePages).keys()]
+      .map((i) => displayedPagesStart + i)
+      .filter((pageNumber) => pageNumber <= totalPages);
   };
 
   const [displayedPagesStart, setDisplayedPagesStart] = useState(1);
