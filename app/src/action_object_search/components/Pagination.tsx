@@ -1,19 +1,22 @@
 import { Button, ButtonGroup, HStack } from '@chakra-ui/react';
 import { TOTAL_VIDEOS_PER_PAGE } from 'action_object_search/constants';
 import React, { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 type PaginationProps = {
-  searchParams: URLSearchParams;
-  setSearchParams: (searchParams: URLSearchParams) => void;
+  searchResultPage: number;
+  setSearchResultPage: (searchResultPage: number) => void;
   totalVideos: number;
   totalDisplayablePages?: number;
 };
 export function Pagination({
-  searchParams,
-  setSearchParams,
+  searchResultPage,
+  setSearchResultPage,
   totalVideos,
   totalDisplayablePages = 10,
 }: PaginationProps): React.ReactElement {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const totalPages = Math.ceil(totalVideos / TOTAL_VIDEOS_PER_PAGE);
 
   const makeDisplayedPagesArray = (displayedPagesStart: number) => {
@@ -49,6 +52,7 @@ export function Pagination({
   };
 
   const handlePageNumberButtonClick = (pageNumber: number) => {
+    setSearchResultPage(pageNumber);
     searchParams.set('searchResultPage', pageNumber.toString());
     setSearchParams(searchParams);
   };
@@ -64,11 +68,7 @@ export function Pagination({
             key={pageNumber}
             onClick={() => handlePageNumberButtonClick(pageNumber)}
             width={'50px'}
-            colorScheme={
-              pageNumber === Number(searchParams.get('searchResultPage'))
-                ? 'blue'
-                : 'gray'
-            }
+            colorScheme={pageNumber === searchResultPage ? 'blue' : 'gray'}
           >
             {pageNumber}
           </Button>

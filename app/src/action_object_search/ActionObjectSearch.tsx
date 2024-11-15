@@ -5,7 +5,7 @@ import {
   TableContainer,
   Tbody,
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { SelectAction } from 'action_object_search/components/SelectAction';
 import FloatingNavigationLink from 'common/components/FloatingNavigationLink';
 import {
@@ -16,7 +16,10 @@ import {
   VideoQueryType,
 } from 'action_object_search/utils/sparql';
 import { InputObject } from 'action_object_search/components/InputObject';
-import { VideoDurationRadio } from 'action_object_search/components/VideoDurationRadio';
+import {
+  VideoDurationRadio,
+  VideoDurationType,
+} from 'action_object_search/components/VideoDurationRadio';
 import { VideoGrid } from 'action_object_search/components/VideoGrid';
 import { TOTAL_VIDEOS_PER_PAGE } from 'action_object_search/constants';
 import { Pagination } from 'action_object_search/components/Pagination';
@@ -27,7 +30,23 @@ function ActionObjectSearch(): React.ReactElement {
   const [videos, setVideos] = useState<VideoQueryType[]>([]);
   const [videoCount, setVideoCount] = useState<number>(0);
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
+
+  const [action, setAction] = useState<string>(
+    searchParams.get('action') || ''
+  );
+  const [mainObject, setMainObject] = useState<string>(
+    searchParams.get('mainObject') || ''
+  );
+  const [targetObject, setTargetObject] = useState<string>(
+    searchParams.get('targetObject') || ''
+  );
+  const [videoDuration, setVideoDuration] = useState<VideoDurationType>(
+    (searchParams.get('videoDuration') as VideoDurationType) || 'full'
+  );
+  const [searchResultPage, setSearchResultPage] = useState<number>(
+    Number(searchParams.get('searchResultPage')) || 1
+  );
 
   useEffect(() => {
     (async () => {
@@ -36,30 +55,40 @@ function ActionObjectSearch(): React.ReactElement {
   }, []);
 
   useEffect(() => {
-    if (!searchParams.get('action')) {
+    if (action === '') {
       return;
     }
-    if (!searchParams.get('mainObject')) {
+    if (mainObject === '') {
       return;
     }
 
     (async () => {
-      if (searchParams.get('videoDuration') === 'full') {
+      if (videoDuration === 'full') {
         setVideos(
           await fetchVideo(
-            searchParams.get('action') as string,
-            searchParams.get('mainObject') as string,
-            searchParams.get('targetObject') || '',
+            action,
+            mainObject,
+            targetObject,
             TOTAL_VIDEOS_PER_PAGE,
-            Number(searchParams.get('searchResultPage')) || 1
+            searchResultPage
           )
-        );
-        setVideoCount(
-          await fetchVideoCount(selectedAction, mainObject, targetObject)
         );
       }
     })();
-  }, [searchParams]);
+  }, [action, mainObject, targetObject, videoDuration, searchResultPage]);
+
+  useMemo(() => {
+    (async () => {
+      if (action === '') {
+        return;
+      }
+      if (mainObject === '') {
+        return;
+      }
+
+      setVideoCount(await fetchVideoCount(action, mainObject, targetObject));
+    })();
+  }, [action, mainObject, targetObject, videoDuration]);
 
   return (
     <ChakraProvider>
@@ -70,34 +99,34 @@ function ActionObjectSearch(): React.ReactElement {
             <Tbody>
               <SelectAction
                 actions={actions}
-                searchParams={searchParams}
-                setSearchParams={setSearchParams}
+                action={action}
+                setAction={setAction}
               />
               <InputObject
                 objectType="mainObject"
-                searchParams={searchParams}
-                setSearchParams={setSearchParams}
+                objectState={mainObject}
+                setObjectState={setMainObject}
                 tableHeader="Main Object"
                 inputPlaceholder="Required"
               />
               <InputObject
                 objectType="targetObject"
-                searchParams={searchParams}
-                setSearchParams={setSearchParams}
+                objectState={targetObject}
+                setObjectState={setTargetObject}
                 tableHeader="Target Object"
                 inputPlaceholder="Optional"
               />
               <VideoDurationRadio
-                searchParams={searchParams}
-                setSearchParams={setSearchParams}
+                videoDuration={videoDuration}
+                setVideoDuration={setVideoDuration}
               />
             </Tbody>
           </Table>
         </TableContainer>
         <VideoGrid videos={videos} />
         <Pagination
-          searchParams={searchParams}
-          setSearchParams={setSearchParams}
+          searchResultPage={searchResultPage}
+          setSearchResultPage={setSearchResultPage}
           totalVideos={videoCount}
         />
       </Flex>

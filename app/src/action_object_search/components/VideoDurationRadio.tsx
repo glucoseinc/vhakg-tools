@@ -1,19 +1,24 @@
 import React from 'react';
 import { Radio, RadioGroup, Stack, Td, Th, Tr } from '@chakra-ui/react';
+import { useSearchParams } from 'react-router-dom';
 
-type VideoDurationType = 'full' | 'segment';
+export type VideoDurationType = 'full' | 'segment';
 type VideoDurationRadioProps = {
-  searchParams: URLSearchParams;
-  setSearchParams: (searchParams: URLSearchParams) => void;
+  videoDuration: VideoDurationType;
+  setVideoDuration: (videoDuration: VideoDurationType) => void;
 };
 export function VideoDurationRadio({
-  searchParams,
-  setSearchParams,
+  videoDuration,
+  setVideoDuration,
 }: VideoDurationRadioProps): React.ReactElement {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const handleChange = (value: VideoDurationType) => {
+    setVideoDuration(value);
     searchParams.set('videoDuration', value);
     setSearchParams(searchParams);
   };
+
   return (
     <>
       <Tr>
@@ -25,7 +30,7 @@ export function VideoDurationRadio({
             onChange={(value) => {
               handleChange(value as VideoDurationType);
             }}
-            value={searchParams.get('videoDuration') || 'full'}
+            value={videoDuration}
           >
             <Stack direction="row">
               <Radio value="full">Full</Radio>
