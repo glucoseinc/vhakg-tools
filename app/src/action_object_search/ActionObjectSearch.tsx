@@ -37,12 +37,15 @@ import FloatingNavigationLink from 'common/components/FloatingNavigationLink';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { SelectScene } from 'action_object_search/components/SelectScene';
+import { SelectCamera } from 'action_object_search/components/SelectCamera';
+import { fetchCamera } from 'action_object_search/utils/sparql';
 
 function ActionObjectSearch(): React.ReactElement {
   const [actions, setActions] = useState<ActionQueryType[]>([]);
   const [videos, setVideos] = useState<VideoQueryType[]>([]);
   const [videoCount, setVideoCount] = useState<number>(0);
   const [scenes, setScenes] = useState<SceneQueryType[]>([]);
+  const [cameras, setCameras] = useState<CameraQueryType[]>([]);
 
   const [searchParams, setSearchParams] = useSearchParams();
 

@@ -24,6 +24,7 @@ export const fetchVideo: (
   mainObject: string,
   targetObject: string,
   scene: string,
+  camera: string,
   limit: number,
   page: number
 ) => Promise<VideoQueryType[]> = async (
@@ -31,6 +32,7 @@ export const fetchVideo: (
   mainObject,
   targetObject,
   scene,
+  camera,
   limit,
   page
 ) => {
@@ -51,6 +53,7 @@ export const fetchVideo: (
              vh2kg:hasVideo ?camera .
       ?camera vh2kg:video ?base64Video .
       ${scene !== '' ? `FILTER regex(STR(?camera), "${scene}", "i") .` : ''}
+      ${camera !== '' ? `FILTER regex(STR(?camera), "${camera}", "i") .` : ''}
     } ORDER BY asc(?camera) LIMIT ${limit} OFFSET ${limit * (page - 1)}
   `;
   const result = (await makeClient().query.select(query)) as VideoQueryType[];
@@ -117,10 +120,46 @@ export const fetchScene: (
       ?event vh2kg:mainObject ?mainObject ;
              ${targetObject !== '' ? 'vh2kg:targetObject ?targetObject ;' : ''}
              vh2kg:action <${action}> .
-      ?scene ${camera !== '' ? `vh2kg:hasVideo ?camera FILTER regex(STR(?camera), "${camera}", "i") ;` : ''}
-             vh2kg:hasEvent ?event .
+      ?scene vh2kg:hasEvent ?event .
+      ${camera !== '' ? `?scene vh2kg:hasVideo ?camera FILTER regex(STR(?camera), "${camera}", "i") .` : ''}
     }
   `;
   const result = (await makeClient().query.select(query)) as SceneQueryType[];
+  return result;
+};
+
+export type CameraQueryType = {
+  camera: NamedNode;
+};
+export const fetchCamera: (
+  action: string,
+  mainObject: string,
+  targetObject: string,
+  scene: string
+) => Promise<CameraQueryType[]> = async (
+  action,
+  mainObject,
+  targetObject,
+  scene
+) => {
+  const query = `
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX vh2kg: <http://kgrc4si.home.kg/virtualhome2kg/ontology/>
+    SELECT DISTINCT ?camera WHERE {
+      ?mainObject rdfs:label ?mainObjectLabel FILTER regex(?mainObjectLabel, "${mainObject}", "i") .
+      ${
+        targetObject !== ''
+          ? `?targetObject rdfs:label ?targetObjectLabel FILTER regex(?targetObjectLabel, "${targetObject}", "i") .`
+          : ''
+      }
+      ?event vh2kg:mainObject ?mainObject ;
+             ${targetObject !== '' ? 'vh2kg:targetObject ?targetObject ;' : ''}
+             vh2kg:action <${action}> .
+      ?scene vh2kg:hasVideo ?camera ;
+             vh2kg:hasEvent ?event .
+      ${scene !== '' ? `FILTER regex(STR(?camera), "${scene}", "i") .` : ''}
+    }
+  `;
+  const result = (await makeClient().query.select(query)) as CameraQueryType[];
   return result;
 };
