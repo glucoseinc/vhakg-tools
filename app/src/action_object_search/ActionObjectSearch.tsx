@@ -26,6 +26,7 @@ import {
 import {
   type ActionQueryType,
   fetchAction,
+  fetchScene,
   fetchVideo,
   fetchVideoCount,
   type VideoQueryType,
@@ -33,6 +34,7 @@ import {
 import FloatingNavigationLink from 'common/components/FloatingNavigationLink';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { SelectScene } from 'action_object_search/components/SelectScene';
 
 function ActionObjectSearch(): React.ReactElement {
   const [actions, setActions] = useState<ActionQueryType[]>([]);

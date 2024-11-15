@@ -23,12 +23,14 @@ export const fetchVideo: (
   action: string,
   mainObject: string,
   targetObject: string,
+  scene: string,
   limit: number,
   page: number
 ) => Promise<VideoQueryType[]> = async (
   action,
   mainObject,
   targetObject,
+  scene,
   limit,
   page
 ) => {
@@ -45,9 +47,10 @@ export const fetchVideo: (
       ?event vh2kg:mainObject ?mainObject ;
              ${targetObject !== '' ? 'vh2kg:targetObject ?targetObject ;' : ''}
              vh2kg:action <${action}> .
-      ?activity vh2kg:hasEvent ?event ;
-                vh2kg:hasVideo ?camera .
+      ?scene vh2kg:hasEvent ?event ;
+             vh2kg:hasVideo ?camera .
       ?camera vh2kg:video ?base64Video .
+      ${scene !== '' ? `FILTER regex(STR(?camera), "${scene}", "i") .` : ''}
     } ORDER BY asc(?camera) LIMIT ${limit} OFFSET ${limit * (page - 1)}
   `;
   const result = (await makeClient().query.select(query)) as VideoQueryType[];
@@ -83,4 +86,39 @@ export const fetchVideoCount: (
     query
   )) as VideoCountQueryType[];
   return Number(result[0].videoCount.value);
+};
+
+export type SceneQueryType = {
+  scene: NamedNode;
+};
+export const fetchScene: (
+  action: string,
+  mainObject: string,
+  targetObject: string,
+  camera: string
+) => Promise<SceneQueryType[]> = async (
+  action,
+  mainObject,
+  targetObject,
+  camera
+) => {
+  const query = `
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX vh2kg: <http://kgrc4si.home.kg/virtualhome2kg/ontology/>
+    SELECT DISTINCT ?scene WHERE {
+      ?mainObject rdfs:label ?mainObjectLabel FILTER regex(?mainObjectLabel, "${mainObject}", "i") .
+      ${
+        targetObject !== ''
+          ? `?targetObject rdfs:label ?targetObjectLabel FILTER regex(?targetObjectLabel, "${targetObject}", "i") .`
+          : ''
+      }
+      ?event vh2kg:mainObject ?mainObject ;
+             ${targetObject !== '' ? 'vh2kg:targetObject ?targetObject ;' : ''}
+             vh2kg:action <${action}> .
+      ?scene ${camera !== '' ? `vh2kg:hasVideo ?camera FILTER regex(STR(?camera), "${camera}", "i") ;` : ''}
+             vh2kg:hasEvent ?event .
+    }
+  `;
+  const result = (await makeClient().query.select(query)) as SceneQueryType[];
+  return result;
 };
