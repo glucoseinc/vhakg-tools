@@ -65,7 +65,7 @@ export const fetchVideoCount: (
   const query = `
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
     PREFIX vh2kg: <http://kgrc4si.home.kg/virtualhome2kg/ontology/>
-    SELECT DISTINCT (COUNT(*) AS ?videoCount) WHERE {
+    SELECT (COUNT(DISTINCT ?camera) AS ?videoCount) WHERE {
       ?mainObject rdfs:label ?mainObjectLabel FILTER regex(?mainObjectLabel, "${mainObject}", "i") .
       ${
         targetObject !== ''
@@ -77,7 +77,6 @@ export const fetchVideoCount: (
              vh2kg:action <${action}> .
       ?activity vh2kg:hasEvent ?event ;
                 vh2kg:hasVideo ?camera .
-      ?camera vh2kg:video ?base64Video .
     }
   `;
   const result = (await makeClient().query.select(
