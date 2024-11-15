@@ -5,13 +5,13 @@ import { useSearchParams } from 'react-router-dom';
 
 type SelectActionProps = {
   actions: ActionQueryType[];
-  action: string;
-  setAction: (action: string) => void;
+  selectedAction: string;
+  setSelectedAction: (action: string) => void;
 };
 export function SelectAction({
   actions,
-  action,
-  setAction,
+  selectedAction,
+  setSelectedAction,
 }: SelectActionProps): React.ReactElement {
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -21,8 +21,8 @@ export function SelectAction({
   }));
 
   const handleChange = (value: string) => {
-    setAction(value);
-    searchParams.set('action', value);
+    setSelectedAction(value);
+    searchParams.set('selectedAction', value);
     setSearchParams(searchParams);
   };
 
@@ -35,7 +35,7 @@ export function SelectAction({
         <Td>
           <Select
             placeholder="select"
-            value={action}
+            value={selectedAction}
             onChange={(e) => {
               handleChange(e.target.value);
             }}

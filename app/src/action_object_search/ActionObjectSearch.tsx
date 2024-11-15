@@ -32,8 +32,8 @@ function ActionObjectSearch(): React.ReactElement {
 
   const [searchParams] = useSearchParams();
 
-  const [action, setAction] = useState<string>(
-    searchParams.get('action') || ''
+  const [selectedAction, setSelectedAction] = useState<string>(
+    searchParams.get('selectedAction') || ''
   );
   const [mainObject, setMainObject] = useState<string>(
     searchParams.get('mainObject') || ''
@@ -41,9 +41,10 @@ function ActionObjectSearch(): React.ReactElement {
   const [targetObject, setTargetObject] = useState<string>(
     searchParams.get('targetObject') || ''
   );
-  const [videoDuration, setVideoDuration] = useState<VideoDurationType>(
-    (searchParams.get('videoDuration') as VideoDurationType) || 'full'
-  );
+  const [selectedVideoDuration, setSelectedVideoDuration] =
+    useState<VideoDurationType>(
+      (searchParams.get('selectedVideoDuration') as VideoDurationType) || 'full'
+    );
   const [searchResultPage, setSearchResultPage] = useState<number>(
     Number(searchParams.get('searchResultPage')) || 1
   );
@@ -55,7 +56,7 @@ function ActionObjectSearch(): React.ReactElement {
   }, []);
 
   useEffect(() => {
-    if (action === '') {
+    if (selectedAction === '') {
       return;
     }
     if (mainObject === '') {
@@ -63,10 +64,10 @@ function ActionObjectSearch(): React.ReactElement {
     }
 
     (async () => {
-      if (videoDuration === 'full') {
+      if (selectedVideoDuration === 'full') {
         setVideos(
           await fetchVideo(
-            action,
+            selectedAction,
             mainObject,
             targetObject,
             TOTAL_VIDEOS_PER_PAGE,
@@ -75,20 +76,28 @@ function ActionObjectSearch(): React.ReactElement {
         );
       }
     })();
-  }, [action, mainObject, targetObject, videoDuration, searchResultPage]);
+  }, [
+    selectedAction,
+    mainObject,
+    targetObject,
+    selectedVideoDuration,
+    searchResultPage,
+  ]);
 
   useMemo(() => {
     (async () => {
-      if (action === '') {
+      if (selectedAction === '') {
         return;
       }
       if (mainObject === '') {
         return;
       }
 
-      setVideoCount(await fetchVideoCount(action, mainObject, targetObject));
+      setVideoCount(
+        await fetchVideoCount(selectedAction, mainObject, targetObject)
+      );
     })();
-  }, [action, mainObject, targetObject, videoDuration]);
+  }, [selectedAction, mainObject, targetObject, selectedVideoDuration]);
 
   return (
     <ChakraProvider>
@@ -99,8 +108,8 @@ function ActionObjectSearch(): React.ReactElement {
             <Tbody>
               <SelectAction
                 actions={actions}
-                action={action}
-                setAction={setAction}
+                selectedAction={selectedAction}
+                setSelectedAction={setSelectedAction}
               />
               <InputObject
                 objectType="mainObject"
@@ -117,8 +126,8 @@ function ActionObjectSearch(): React.ReactElement {
                 inputPlaceholder="Optional"
               />
               <VideoDurationRadio
-                videoDuration={videoDuration}
-                setVideoDuration={setVideoDuration}
+                selectedVideoDuration={selectedVideoDuration}
+                setSelectedVideoDuration={setSelectedVideoDuration}
               />
             </Tbody>
           </Table>

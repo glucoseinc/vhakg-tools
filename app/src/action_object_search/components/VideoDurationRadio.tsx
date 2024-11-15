@@ -4,18 +4,18 @@ import { useSearchParams } from 'react-router-dom';
 
 export type VideoDurationType = 'full' | 'segment';
 type VideoDurationRadioProps = {
-  videoDuration: VideoDurationType;
-  setVideoDuration: (videoDuration: VideoDurationType) => void;
+  selectedVideoDuration: VideoDurationType;
+  setSelectedVideoDuration: (videoDuration: VideoDurationType) => void;
 };
 export function VideoDurationRadio({
-  videoDuration,
-  setVideoDuration,
+  selectedVideoDuration,
+  setSelectedVideoDuration,
 }: VideoDurationRadioProps): React.ReactElement {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const handleChange = (value: VideoDurationType) => {
-    setVideoDuration(value);
-    searchParams.set('videoDuration', value);
+    setSelectedVideoDuration(value);
+    searchParams.set('selectedVideoDuration', value);
     setSearchParams(searchParams);
   };
 
@@ -30,7 +30,7 @@ export function VideoDurationRadio({
             onChange={(value) => {
               handleChange(value as VideoDurationType);
             }}
-            value={videoDuration}
+            value={selectedVideoDuration}
           >
             <Stack direction="row">
               <Radio value="full">Full</Radio>
