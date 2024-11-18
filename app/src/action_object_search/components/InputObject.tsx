@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Input, Td, Th, Tr } from '@chakra-ui/react';
-import { SearchParamObjectKey } from 'action_object_search/ActionObjectSearch';
+import {
+  SearchParamKey,
+  SearchParamObjectKey,
+} from 'action_object_search/constants';
 
 type InputObjectProps = {
   searchParamObjectKey: SearchParamObjectKey;
   objectState: string;
   setObjectState: (objectState: string) => void;
-  searchParams: URLSearchParams;
-  setSearchParams: (searchParams: URLSearchParams) => void;
+  handleSearchParamsChange: (key: SearchParamKey, value: string) => void;
   tableHeader: string;
   inputPlaceholder: string;
 };
@@ -15,16 +17,20 @@ export function InputObject({
   searchParamObjectKey,
   objectState,
   setObjectState,
-  searchParams,
-  setSearchParams,
+  handleSearchParamsChange,
   tableHeader,
   inputPlaceholder,
 }: InputObjectProps): React.ReactElement {
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setObjectState(event.target.value);
-    searchParams.set(searchParamObjectKey, event.target.value);
-    setSearchParams(searchParams);
-  };
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setObjectState(event.target.value);
+      handleSearchParamsChange(
+        searchParamObjectKey as SearchParamKey,
+        event.target.value
+      );
+    },
+    [searchParamObjectKey, setObjectState, handleSearchParamsChange]
+  );
 
   return (
     <>

@@ -1,21 +1,22 @@
 import { Button, ButtonGroup, HStack } from '@chakra-ui/react';
-import { searchResultPageKey } from 'action_object_search/ActionObjectSearch';
+import {
+  SearchParamKey,
+  searchResultPageKey,
+} from 'action_object_search/constants';
 import { TOTAL_VIDEOS_PER_PAGE } from 'action_object_search/constants';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 type PaginationProps = {
   searchResultPage: number;
   setSearchResultPage: (searchResultPage: number) => void;
-  searchParams: URLSearchParams;
-  setSearchParams: (searchParams: URLSearchParams) => void;
+  handleSearchParamsChange: (key: SearchParamKey, value: string) => void;
   totalVideos: number;
   totalDisplayablePages?: number;
 };
 export function Pagination({
   searchResultPage,
   setSearchResultPage,
-  searchParams,
-  setSearchParams,
+  handleSearchParamsChange,
   totalVideos,
   totalDisplayablePages = 10,
 }: PaginationProps): React.ReactElement {
@@ -30,19 +31,19 @@ export function Pagination({
   const [displayedPagesStart, setDisplayedPagesStart] = useState(1);
   const displayedPages = makeDisplayedPagesArray(displayedPagesStart);
 
-  const handlePageNumberButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    const page = event.currentTarget.dataset.page;
-    if (page === undefined) {
-      return;
-    }
-    setSearchResultPage(Number(page));
-    searchParams.set(searchResultPageKey, page);
-    setSearchParams(searchParams);
-  };
+  const handlePageNumberButtonClick = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      const page = event.currentTarget.dataset.page;
+      if (page === undefined) {
+        return;
+      }
+      setSearchResultPage(Number(page));
+      handleSearchParamsChange(searchResultPageKey, page);
+    },
+    [setSearchResultPage, handleSearchParamsChange]
+  );
 
-  const displayPreviousPage = () => {
+  const displayPreviousPage = useCallback(() => {
     if (displayedPagesStart === 1) {
       return;
     }
@@ -50,9 +51,9 @@ export function Pagination({
       (prevDisplayedPagesStart) =>
         prevDisplayedPagesStart - totalDisplayablePages
     );
-  };
+  }, [displayedPagesStart]);
 
-  const displayNextPage = () => {
+  const displayNextPage = useCallback(() => {
     if (displayedPagesStart + totalDisplayablePages > totalPages) {
       return;
     }
@@ -60,7 +61,7 @@ export function Pagination({
       (prevDisplayedPagesStart) =>
         prevDisplayedPagesStart + totalDisplayablePages
     );
-  };
+  }, [displayedPagesStart, totalPages]);
 
   return (
     <HStack mx="auto" my={2}>

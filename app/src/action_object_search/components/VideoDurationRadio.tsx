@@ -1,25 +1,28 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Radio, RadioGroup, Stack, Td, Th, Tr } from '@chakra-ui/react';
-import { selectedVideoDurationKey } from 'action_object_search/ActionObjectSearch';
+import {
+  SearchParamKey,
+  selectedVideoDurationKey,
+} from 'action_object_search/constants';
 
 export type VideoDurationType = 'full' | 'segment';
 type VideoDurationRadioProps = {
   selectedVideoDuration: VideoDurationType;
   setSelectedVideoDuration: (videoDuration: VideoDurationType) => void;
-  searchParams: URLSearchParams;
-  setSearchParams: (searchParams: URLSearchParams) => void;
+  handleSearchParamsChange: (key: SearchParamKey, value: string) => void;
 };
 export function VideoDurationRadio({
   selectedVideoDuration,
   setSelectedVideoDuration,
-  searchParams,
-  setSearchParams,
+  handleSearchParamsChange,
 }: VideoDurationRadioProps): React.ReactElement {
-  const handleChange = (value: VideoDurationType) => {
-    setSelectedVideoDuration(value);
-    searchParams.set(selectedVideoDurationKey, value);
-    setSearchParams(searchParams);
-  };
+  const handleChange = useCallback(
+    (value: VideoDurationType) => {
+      setSelectedVideoDuration(value);
+      handleSearchParamsChange(selectedVideoDurationKey, value);
+    },
+    [setSelectedVideoDuration, handleSearchParamsChange]
+  );
 
   return (
     <>
@@ -28,12 +31,7 @@ export function VideoDurationRadio({
           Video Duration
         </Th>
         <Td>
-          <RadioGroup
-            onChange={(value) => {
-              handleChange(value as VideoDurationType);
-            }}
-            value={selectedVideoDuration}
-          >
+          <RadioGroup onChange={handleChange} value={selectedVideoDuration}>
             <Stack direction="row">
               <Radio value="full">Full</Radio>
               <Radio value="segment">Segment</Radio>
