@@ -1,22 +1,24 @@
 import { Button, ButtonGroup, HStack } from '@chakra-ui/react';
+import { searchResultPageKey } from 'action_object_search/ActionObjectSearch';
 import { TOTAL_VIDEOS_PER_PAGE } from 'action_object_search/constants';
 import React, { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 
 type PaginationProps = {
   searchResultPage: number;
   setSearchResultPage: (searchResultPage: number) => void;
+  searchParams: URLSearchParams;
+  setSearchParams: (searchParams: URLSearchParams) => void;
   totalVideos: number;
   totalDisplayablePages?: number;
 };
 export function Pagination({
   searchResultPage,
   setSearchResultPage,
+  searchParams,
+  setSearchParams,
   totalVideos,
   totalDisplayablePages = 10,
 }: PaginationProps): React.ReactElement {
-  const [searchParams, setSearchParams] = useSearchParams();
-
   const totalPages = Math.ceil(totalVideos / TOTAL_VIDEOS_PER_PAGE);
 
   const makeDisplayedPagesArray = (displayedPagesStart: number) => {
@@ -28,45 +30,47 @@ export function Pagination({
   const [displayedPagesStart, setDisplayedPagesStart] = useState(1);
   const displayedPages = makeDisplayedPagesArray(displayedPagesStart);
 
-  const handlePageMoveButtonClick = (direction: 'next' | 'previous') => {
-    switch (direction) {
-      case 'next':
-        if (displayedPagesStart + totalDisplayablePages > totalPages) {
-          return;
-        }
-        setDisplayedPagesStart(
-          (prevDisplayedPagesStart) =>
-            prevDisplayedPagesStart + totalDisplayablePages
-        );
-        break;
-      case 'previous':
-        if (displayedPagesStart === 1) {
-          return;
-        }
-        setDisplayedPagesStart(
-          (prevDisplayedPagesStart) =>
-            prevDisplayedPagesStart - totalDisplayablePages
-        );
-        break;
+  const handlePageNumberButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    const page = event.currentTarget.dataset.page;
+    if (page === undefined) {
+      return;
     }
+    setSearchResultPage(Number(page));
+    searchParams.set(searchResultPageKey, page);
+    setSearchParams(searchParams);
   };
 
-  const handlePageNumberButtonClick = (pageNumber: number) => {
-    setSearchResultPage(pageNumber);
-    searchParams.set('searchResultPage', pageNumber.toString());
-    setSearchParams(searchParams);
+  const displayPreviousPage = () => {
+    if (displayedPagesStart === 1) {
+      return;
+    }
+    setDisplayedPagesStart(
+      (prevDisplayedPagesStart) =>
+        prevDisplayedPagesStart - totalDisplayablePages
+    );
+  };
+
+  const displayNextPage = () => {
+    if (displayedPagesStart + totalDisplayablePages > totalPages) {
+      return;
+    }
+    setDisplayedPagesStart(
+      (prevDisplayedPagesStart) =>
+        prevDisplayedPagesStart + totalDisplayablePages
+    );
   };
 
   return (
     <HStack mx="auto" my={2}>
-      <Button onClick={() => handlePageMoveButtonClick('previous')}>
-        Previous
-      </Button>
+      <Button onClick={displayPreviousPage}>Previous</Button>
       <ButtonGroup>
         {displayedPages.map((pageNumber) => (
           <Button
             key={pageNumber}
-            onClick={() => handlePageNumberButtonClick(pageNumber)}
+            data-page={pageNumber}
+            onClick={handlePageNumberButtonClick}
             width={'50px'}
             colorScheme={pageNumber === searchResultPage ? 'blue' : 'gray'}
           >
@@ -74,7 +78,7 @@ export function Pagination({
           </Button>
         ))}
       </ButtonGroup>
-      <Button onClick={() => handlePageMoveButtonClick('next')}>Next</Button>
+      <Button onClick={displayNextPage}>Next</Button>
     </HStack>
   );
 }

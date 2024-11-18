@@ -1,26 +1,28 @@
 import React from 'react';
 import { Input, Td, Th, Tr } from '@chakra-ui/react';
-import { useSearchParams } from 'react-router-dom';
+import { SearchParamObjectKey } from 'action_object_search/ActionObjectSearch';
 
 type InputObjectProps = {
-  objectType: string;
+  searchParamObjectKey: SearchParamObjectKey;
   objectState: string;
   setObjectState: (objectState: string) => void;
+  searchParams: URLSearchParams;
+  setSearchParams: (searchParams: URLSearchParams) => void;
   tableHeader: string;
   inputPlaceholder: string;
 };
 export function InputObject({
-  objectType,
+  searchParamObjectKey,
   objectState,
   setObjectState,
+  searchParams,
+  setSearchParams,
   tableHeader,
   inputPlaceholder,
 }: InputObjectProps): React.ReactElement {
-  const [searchParams, setSearchParams] = useSearchParams();
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setObjectState(event.target.value);
-    searchParams.set(objectType, event.target.value);
+    searchParams.set(searchParamObjectKey, event.target.value);
     setSearchParams(searchParams);
   };
 

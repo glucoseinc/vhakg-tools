@@ -25,28 +25,42 @@ import { TOTAL_VIDEOS_PER_PAGE } from 'action_object_search/constants';
 import { Pagination } from 'action_object_search/components/Pagination';
 import { useSearchParams } from 'react-router-dom';
 
+export type SearchParamObjectKey = 'mainObject' | 'targetObject';
+type SearchParamKey =
+  | 'selectedAction'
+  | 'selectedVideoDuration'
+  | 'searchResultPage'
+  | SearchParamObjectKey;
+
+export const selectedActionKey: SearchParamKey = 'selectedAction';
+export const mainObjectKey: SearchParamKey = 'mainObject';
+export const targetObjectKey: SearchParamKey = 'targetObject';
+export const selectedVideoDurationKey: SearchParamKey = 'selectedVideoDuration';
+export const searchResultPageKey: SearchParamKey = 'searchResultPage';
+
 function ActionObjectSearch(): React.ReactElement {
   const [actions, setActions] = useState<ActionQueryType[]>([]);
   const [videos, setVideos] = useState<VideoQueryType[]>([]);
   const [videoCount, setVideoCount] = useState<number>(0);
 
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [selectedAction, setSelectedAction] = useState<string>(
-    searchParams.get('selectedAction') || ''
+    searchParams.get(selectedActionKey) || ''
   );
   const [mainObject, setMainObject] = useState<string>(
-    searchParams.get('mainObject') || ''
+    searchParams.get(mainObjectKey) || ''
   );
   const [targetObject, setTargetObject] = useState<string>(
-    searchParams.get('targetObject') || ''
+    searchParams.get(targetObjectKey) || ''
   );
   const [selectedVideoDuration, setSelectedVideoDuration] =
     useState<VideoDurationType>(
-      (searchParams.get('selectedVideoDuration') as VideoDurationType) || 'full'
+      (searchParams.get(selectedVideoDurationKey) as VideoDurationType) ||
+        'full'
     );
   const [searchResultPage, setSearchResultPage] = useState<number>(
-    Number(searchParams.get('searchResultPage')) || 1
+    Number(searchParams.get(searchResultPageKey)) || 1
   );
 
   useEffect(() => {
@@ -109,25 +123,33 @@ function ActionObjectSearch(): React.ReactElement {
               <SelectAction
                 actions={actions}
                 selectedAction={selectedAction}
+                searchParams={searchParams}
+                setSearchParams={setSearchParams}
                 setSelectedAction={setSelectedAction}
               />
               <InputObject
-                objectType="mainObject"
+                searchParamObjectKey={mainObjectKey as SearchParamObjectKey}
                 objectState={mainObject}
                 setObjectState={setMainObject}
+                searchParams={searchParams}
+                setSearchParams={setSearchParams}
                 tableHeader="Main Object"
                 inputPlaceholder="Required"
               />
               <InputObject
-                objectType="targetObject"
+                searchParamObjectKey={targetObjectKey as SearchParamObjectKey}
                 objectState={targetObject}
                 setObjectState={setTargetObject}
+                searchParams={searchParams}
+                setSearchParams={setSearchParams}
                 tableHeader="Target Object"
                 inputPlaceholder="Optional"
               />
               <VideoDurationRadio
                 selectedVideoDuration={selectedVideoDuration}
                 setSelectedVideoDuration={setSelectedVideoDuration}
+                searchParams={searchParams}
+                setSearchParams={setSearchParams}
               />
             </Tbody>
           </Table>
@@ -136,6 +158,8 @@ function ActionObjectSearch(): React.ReactElement {
         <Pagination
           searchResultPage={searchResultPage}
           setSearchResultPage={setSearchResultPage}
+          searchParams={searchParams}
+          setSearchParams={setSearchParams}
           totalVideos={videoCount}
         />
       </Flex>

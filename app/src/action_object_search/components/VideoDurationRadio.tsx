@@ -1,21 +1,23 @@
 import React from 'react';
 import { Radio, RadioGroup, Stack, Td, Th, Tr } from '@chakra-ui/react';
-import { useSearchParams } from 'react-router-dom';
+import { selectedVideoDurationKey } from 'action_object_search/ActionObjectSearch';
 
 export type VideoDurationType = 'full' | 'segment';
 type VideoDurationRadioProps = {
   selectedVideoDuration: VideoDurationType;
   setSelectedVideoDuration: (videoDuration: VideoDurationType) => void;
+  searchParams: URLSearchParams;
+  setSearchParams: (searchParams: URLSearchParams) => void;
 };
 export function VideoDurationRadio({
   selectedVideoDuration,
   setSelectedVideoDuration,
+  searchParams,
+  setSearchParams,
 }: VideoDurationRadioProps): React.ReactElement {
-  const [searchParams, setSearchParams] = useSearchParams();
-
   const handleChange = (value: VideoDurationType) => {
     setSelectedVideoDuration(value);
-    searchParams.set('selectedVideoDuration', value);
+    searchParams.set(selectedVideoDurationKey, value);
     setSearchParams(searchParams);
   };
 
