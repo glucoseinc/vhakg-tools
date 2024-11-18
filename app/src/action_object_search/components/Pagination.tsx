@@ -1,7 +1,7 @@
 import { Button, ButtonGroup, HStack } from '@chakra-ui/react';
 import {
   SearchParamKey,
-  searchResultPageKey,
+  SEARCH_RESULT_PAGE_KEY,
 } from 'action_object_search/constants';
 import { TOTAL_VIDEOS_PER_PAGE } from 'action_object_search/constants';
 import React, { useCallback, useState } from 'react';
@@ -38,34 +38,59 @@ export function Pagination({
         return;
       }
       setSearchResultPage(Number(page));
-      handleSearchParamsChange(searchResultPageKey, page);
+      handleSearchParamsChange(SEARCH_RESULT_PAGE_KEY, page);
     },
     [setSearchResultPage, handleSearchParamsChange]
   );
 
-  const displayPreviousPage = useCallback(() => {
-    if (displayedPagesStart === 1) {
-      return;
-    }
-    setDisplayedPagesStart(
-      (prevDisplayedPagesStart) =>
-        prevDisplayedPagesStart - totalDisplayablePages
-    );
-  }, [displayedPagesStart]);
+  const hasPreviousPage = displayedPagesStart !== 1;
+  const hasNextPage = displayedPagesStart + totalDisplayablePages <= totalPages;
 
-  const displayNextPage = useCallback(() => {
-    if (displayedPagesStart + totalDisplayablePages > totalPages) {
-      return;
-    }
-    setDisplayedPagesStart(
-      (prevDisplayedPagesStart) =>
-        prevDisplayedPagesStart + totalDisplayablePages
-    );
-  }, [displayedPagesStart, totalPages]);
+  const handlePageMoveButtonClick = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      const direction = event.currentTarget.dataset.direction;
+      if (direction === undefined) {
+        return;
+      }
+      switch (direction) {
+        case 'previous':
+          if (!hasPreviousPage) {
+            return;
+          }
+          setDisplayedPagesStart(
+            (prevDisplayedPagesStart) =>
+              prevDisplayedPagesStart - totalDisplayablePages
+          );
+          break;
+
+        case 'next':
+          if (!hasNextPage) {
+            return;
+          }
+          setDisplayedPagesStart(
+            (prevDisplayedPagesStart) =>
+              prevDisplayedPagesStart + totalDisplayablePages
+          );
+          break;
+      }
+    },
+    [
+      displayedPagesStart,
+      setDisplayedPagesStart,
+      totalDisplayablePages,
+      totalPages,
+    ]
+  );
 
   return (
     <HStack mx="auto" my={2}>
-      <Button onClick={displayPreviousPage}>Previous</Button>
+      <Button
+        data-direction="previous"
+        onClick={handlePageMoveButtonClick}
+        isDisabled={!hasPreviousPage}
+      >
+        Previous
+      </Button>
       <ButtonGroup>
         {displayedPages.map((pageNumber) => (
           <Button
@@ -79,7 +104,13 @@ export function Pagination({
           </Button>
         ))}
       </ButtonGroup>
-      <Button onClick={displayNextPage}>Next</Button>
+      <Button
+        data-direction="next"
+        onClick={handlePageMoveButtonClick}
+        isDisabled={!hasNextPage}
+      >
+        Next
+      </Button>
     </HStack>
   );
 }

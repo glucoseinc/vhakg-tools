@@ -22,13 +22,13 @@ import {
 } from 'action_object_search/components/VideoDurationRadio';
 import { VideoGrid } from 'action_object_search/components/VideoGrid';
 import {
-  mainObjectKey,
-  SearchParamKey,
-  SearchParamObjectKey,
-  searchResultPageKey,
-  selectedActionKey,
-  selectedVideoDurationKey,
-  targetObjectKey,
+  type SearchParamKey,
+  type SearchParamObjectKey,
+  MAIN_OBJECT_KEY,
+  SEARCH_RESULT_PAGE_KEY,
+  SELETED_ACTION_KEY,
+  SELETED_VIDEO_DURATION_KEY,
+  TARGET_OBJECT_KEY,
   TOTAL_VIDEOS_PER_PAGE,
 } from 'action_object_search/constants';
 import { Pagination } from 'action_object_search/components/Pagination';
@@ -42,21 +42,21 @@ function ActionObjectSearch(): React.ReactElement {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [selectedAction, setSelectedAction] = useState<string>(
-    searchParams.get(selectedActionKey) || ''
+    searchParams.get(SELETED_ACTION_KEY) || ''
   );
   const [mainObject, setMainObject] = useState<string>(
-    searchParams.get(mainObjectKey) || ''
+    searchParams.get(MAIN_OBJECT_KEY) || ''
   );
   const [targetObject, setTargetObject] = useState<string>(
-    searchParams.get(targetObjectKey) || ''
+    searchParams.get(TARGET_OBJECT_KEY) || ''
   );
   const [selectedVideoDuration, setSelectedVideoDuration] =
     useState<VideoDurationType>(
-      (searchParams.get(selectedVideoDurationKey) as VideoDurationType) ||
+      (searchParams.get(SELETED_VIDEO_DURATION_KEY) as VideoDurationType) ||
         'full'
     );
   const [searchResultPage, setSearchResultPage] = useState<number>(
-    Number(searchParams.get(searchResultPageKey)) || 1
+    Number(searchParams.get(SEARCH_RESULT_PAGE_KEY)) || 1
   );
 
   const handleSearchParamsChange = useCallback(
@@ -132,7 +132,7 @@ function ActionObjectSearch(): React.ReactElement {
                 handleSearchParamsChange={handleSearchParamsChange}
               />
               <InputObject
-                searchParamObjectKey={mainObjectKey as SearchParamObjectKey}
+                searchParamObjectKey={MAIN_OBJECT_KEY as SearchParamObjectKey}
                 objectState={mainObject}
                 setObjectState={setMainObject}
                 handleSearchParamsChange={handleSearchParamsChange}
@@ -140,7 +140,7 @@ function ActionObjectSearch(): React.ReactElement {
                 inputPlaceholder="Required"
               />
               <InputObject
-                searchParamObjectKey={targetObjectKey as SearchParamObjectKey}
+                searchParamObjectKey={TARGET_OBJECT_KEY as SearchParamObjectKey}
                 objectState={targetObject}
                 setObjectState={setTargetObject}
                 handleSearchParamsChange={handleSearchParamsChange}

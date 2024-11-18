@@ -3,7 +3,7 @@ import { Select, Td, Th, Tr } from '@chakra-ui/react';
 import { ActionQueryType } from 'action_object_search/utils/sparql';
 import {
   SearchParamKey,
-  selectedActionKey,
+  SELETED_ACTION_KEY,
 } from 'action_object_search/constants';
 
 type SelectActionProps = {
@@ -26,7 +26,7 @@ export function SelectAction({
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
       setSelectedAction(event.target.value);
-      handleSearchParamsChange(selectedActionKey, event.target.value);
+      handleSearchParamsChange(SELETED_ACTION_KEY, event.target.value);
     },
     [setSelectedAction, handleSearchParamsChange]
   );

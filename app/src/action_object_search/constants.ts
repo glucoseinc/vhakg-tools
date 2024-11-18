@@ -6,8 +6,9 @@ export type SearchParamKey =
   | 'selectedVideoDuration'
   | 'searchResultPage'
   | SearchParamObjectKey;
-export const selectedActionKey: SearchParamKey = 'selectedAction';
-export const mainObjectKey: SearchParamKey = 'mainObject';
-export const targetObjectKey: SearchParamKey = 'targetObject';
-export const selectedVideoDurationKey: SearchParamKey = 'selectedVideoDuration';
-export const searchResultPageKey: SearchParamKey = 'searchResultPage';
+export const SELETED_ACTION_KEY: SearchParamKey = 'selectedAction';
+export const MAIN_OBJECT_KEY: SearchParamKey = 'mainObject';
+export const TARGET_OBJECT_KEY: SearchParamKey = 'targetObject';
+export const SELETED_VIDEO_DURATION_KEY: SearchParamKey =
+  'selectedVideoDuration';
+export const SEARCH_RESULT_PAGE_KEY: SearchParamKey = 'searchResultPage';

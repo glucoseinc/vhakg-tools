@@ -24,10 +24,7 @@ export function InputObject({
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setObjectState(event.target.value);
-      handleSearchParamsChange(
-        searchParamObjectKey as SearchParamKey,
-        event.target.value
-      );
+      handleSearchParamsChange(searchParamObjectKey, event.target.value);
     },
     [searchParamObjectKey, setObjectState, handleSearchParamsChange]
   );
