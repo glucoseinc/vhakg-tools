@@ -1,6 +1,7 @@
 import {
   ChakraProvider,
   Flex,
+  Select,
   Table,
   TableContainer,
   Tbody,
@@ -26,6 +27,7 @@ import {
 } from 'action_object_search/constants';
 import {
   type ActionQueryType,
+  type CameraQueryType,
   fetchAction,
   fetchScene,
   fetchVideo,
@@ -68,6 +70,7 @@ function ActionObjectSearch(): React.ReactElement {
   const [selectedScene, setSelectedScene] = useState<string>(
     searchParams.get(SCENE_KEY) || ''
   );
+  const [selectedCamera, setSelectedCamera] = useState<string>('');
 
   const handleSearchParamsChange = useCallback(
     (key: SearchParamKey, value: string) => {
@@ -100,12 +103,26 @@ function ActionObjectSearch(): React.ReactElement {
             mainObject,
             targetObject,
             selectedScene,
+            selectedCamera,
             TOTAL_VIDEOS_PER_PAGE,
             searchResultPage
           )
         );
         setScenes(
-          await fetchScene(selectedAction, mainObject, targetObject, '')
+          await fetchScene(
+            selectedAction,
+            mainObject,
+            targetObject,
+            selectedCamera
+          )
+        );
+        setCameras(
+          await fetchCamera(
+            selectedAction,
+            mainObject,
+            targetObject,
+            selectedScene
+          )
         );
       }
     })();
@@ -176,6 +193,12 @@ function ActionObjectSearch(): React.ReactElement {
                 scenes={scenes}
                 selectedScene={selectedScene}
                 setSelectedScene={setSelectedScene}
+                handleSearchParamsChange={handleSearchParamsChange}
+              />
+              <SelectCamera
+                cameras={cameras}
+                selectedCamera={selectedCamera}
+                setSelectedCamera={setSelectedCamera}
                 handleSearchParamsChange={handleSearchParamsChange}
               />
             </Tbody>
