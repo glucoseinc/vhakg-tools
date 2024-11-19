@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { Select, Td, Th, Tr } from '@chakra-ui/react';
 import { SceneQueryType } from 'action_object_search/utils/sparql';
-import { SearchParamKey } from 'action_object_search/constants';
+import { SCENE_KEY, SearchParamKey } from 'action_object_search/constants';
 
 type SelectSceneProps = {
   scenes: SceneQueryType[];
@@ -24,7 +24,7 @@ export function SelectScene({
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
       setSelectedScene(event.target.value);
-      handleSearchParamsChange('scene', event.target.value);
+      handleSearchParamsChange(SCENE_KEY, event.target.value);
     },
     [setSelectedScene, handleSearchParamsChange]
   );
