@@ -122,10 +122,15 @@ function ActionObjectSearch(): React.ReactElement {
       }
 
       setVideoCount(
-        await fetchVideoCount(selectedAction, mainObject, targetObject)
+        await fetchVideoCount(
+          selectedAction,
+          mainObject,
+          targetObject,
+          selectedScene
+        )
       );
     })();
-  }, [selectedAction, mainObject, targetObject]);
+  }, [selectedAction, mainObject, targetObject, selectedScene]);
 
   return (
     <ChakraProvider>
