@@ -22,22 +22,27 @@ import {
   VIDEO_DURATION_KEY,
   TARGET_OBJECT_KEY,
   TOTAL_VIDEOS_PER_PAGE,
+  SCENE_KEY,
 } from 'action_object_search/constants';
 import {
   type ActionQueryType,
   fetchAction,
+  fetchScene,
   fetchVideo,
   fetchVideoCount,
+  type SceneQueryType,
   type VideoQueryType,
 } from 'action_object_search/utils/sparql';
 import FloatingNavigationLink from 'common/components/FloatingNavigationLink';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { SelectScene } from 'action_object_search/components/SelectScene';
 
 function ActionObjectSearch(): React.ReactElement {
   const [actions, setActions] = useState<ActionQueryType[]>([]);
   const [videos, setVideos] = useState<VideoQueryType[]>([]);
   const [videoCount, setVideoCount] = useState<number>(0);
+  const [scenes, setScenes] = useState<SceneQueryType[]>([]);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -56,6 +61,9 @@ function ActionObjectSearch(): React.ReactElement {
     );
   const [searchResultPage, setSearchResultPage] = useState<number>(
     Number(searchParams.get(SEARCH_RESULT_PAGE_KEY)) || 1
+  );
+  const [selectedScene, setSelectedScene] = useState<string>(
+    searchParams.get(SCENE_KEY) || ''
   );
 
   const handleSearchParamsChange = useCallback(
@@ -88,9 +96,13 @@ function ActionObjectSearch(): React.ReactElement {
             selectedAction,
             mainObject,
             targetObject,
+            selectedScene,
             TOTAL_VIDEOS_PER_PAGE,
             searchResultPage
           )
+        );
+        setScenes(
+          await fetchScene(selectedAction, mainObject, targetObject, '')
         );
       }
     })();
@@ -98,6 +110,7 @@ function ActionObjectSearch(): React.ReactElement {
     selectedAction,
     mainObject,
     targetObject,
+    selectedScene,
     selectedVideoDuration,
     searchResultPage,
   ]);
@@ -112,10 +125,15 @@ function ActionObjectSearch(): React.ReactElement {
       }
 
       setVideoCount(
-        await fetchVideoCount(selectedAction, mainObject, targetObject)
+        await fetchVideoCount(
+          selectedAction,
+          mainObject,
+          targetObject,
+          selectedScene
+        )
       );
     })();
-  }, [selectedAction, mainObject, targetObject]);
+  }, [selectedAction, mainObject, targetObject, selectedScene]);
 
   return (
     <ChakraProvider>
@@ -149,6 +167,12 @@ function ActionObjectSearch(): React.ReactElement {
               <VideoDurationRadio
                 selectedVideoDuration={selectedVideoDuration}
                 setSelectedVideoDuration={setSelectedVideoDuration}
+                handleSearchParamsChange={handleSearchParamsChange}
+              />
+              <SelectScene
+                scenes={scenes}
+                selectedScene={selectedScene}
+                setSelectedScene={setSelectedScene}
                 handleSearchParamsChange={handleSearchParamsChange}
               />
             </Tbody>
