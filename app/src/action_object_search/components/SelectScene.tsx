@@ -19,6 +19,7 @@ export function SelectScene({
     scenes
       .map((scene) => scene.scene.value.split('_').pop())
       .filter((scene) => scene !== undefined)
+      .sort()
   );
 
   const handleChange = useCallback(
