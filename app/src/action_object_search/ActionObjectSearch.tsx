@@ -22,6 +22,7 @@ import {
   VIDEO_DURATION_KEY,
   TARGET_OBJECT_KEY,
   TOTAL_VIDEOS_PER_PAGE,
+  SCENE_KEY,
 } from 'action_object_search/constants';
 import {
   type ActionQueryType,
@@ -61,7 +62,9 @@ function ActionObjectSearch(): React.ReactElement {
   const [searchResultPage, setSearchResultPage] = useState<number>(
     Number(searchParams.get(SEARCH_RESULT_PAGE_KEY)) || 1
   );
-  const [selectedScene, setSelectedScene] = useState<string>('');
+  const [selectedScene, setSelectedScene] = useState<string>(
+    searchParams.get(SCENE_KEY) || ''
+  );
 
   const handleSearchParamsChange = useCallback(
     (key: SearchParamKey, value: string) => {
