@@ -15,11 +15,13 @@ export function SelectScene({
   setSelectedScene,
   handleSearchParamsChange,
 }: SelectSceneProps): React.ReactElement {
-  const options = new Set(
-    scenes
-      .map((scene) => scene.scene.value.split('_').pop())
-      .filter((scene) => scene !== undefined)
-      .sort()
+  const options = Array.from(
+    new Set(
+      scenes
+        .map((scene) => scene.scene.value.split('_').pop())
+        .filter((scene) => scene !== undefined)
+        .sort()
+    )
   );
 
   const handleChange = useCallback(
@@ -42,7 +44,7 @@ export function SelectScene({
             value={selectedScene}
             onChange={handleChange}
           >
-            {Array.from(options).map((option) => (
+            {options.map((option) => (
               <option key={option} value={option}>
                 {option}
               </option>
