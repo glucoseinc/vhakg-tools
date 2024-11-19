@@ -5,20 +5,12 @@ import {
   TableContainer,
   Tbody,
 } from '@chakra-ui/react';
-import React, { useCallback, useEffect, useState } from 'react';
-import { SelectAction } from 'action_object_search/components/SelectAction';
-import FloatingNavigationLink from 'common/components/FloatingNavigationLink';
-import {
-  ActionQueryType,
-  fetchAction,
-  fetchVideo,
-  fetchVideoCount,
-  VideoQueryType,
-} from 'action_object_search/utils/sparql';
 import { InputObject } from 'action_object_search/components/InputObject';
+import { Pagination } from 'action_object_search/components/Pagination';
+import { SelectAction } from 'action_object_search/components/SelectAction';
 import {
   VideoDurationRadio,
-  VideoDurationType,
+  type VideoDurationType,
 } from 'action_object_search/components/VideoDurationRadio';
 import { VideoGrid } from 'action_object_search/components/VideoGrid';
 import {
@@ -31,7 +23,15 @@ import {
   TARGET_OBJECT_KEY,
   TOTAL_VIDEOS_PER_PAGE,
 } from 'action_object_search/constants';
-import { Pagination } from 'action_object_search/components/Pagination';
+import {
+  type ActionQueryType,
+  fetchAction,
+  fetchVideo,
+  fetchVideoCount,
+  type VideoQueryType,
+} from 'action_object_search/utils/sparql';
+import FloatingNavigationLink from 'common/components/FloatingNavigationLink';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 function ActionObjectSearch(): React.ReactElement {

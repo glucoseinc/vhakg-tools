@@ -1,9 +1,9 @@
-import React, { useCallback } from 'react';
 import { Radio, RadioGroup, Stack, Td, Th, Tr } from '@chakra-ui/react';
 import {
-  SearchParamKey,
+  type SearchParamKey,
   SELETED_VIDEO_DURATION_KEY,
 } from 'action_object_search/constants';
+import React, { useCallback } from 'react';
 
 export type VideoDurationType = 'full' | 'segment';
 type VideoDurationRadioProps = {
