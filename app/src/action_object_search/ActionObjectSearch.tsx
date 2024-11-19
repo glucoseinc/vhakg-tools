@@ -131,6 +131,7 @@ function ActionObjectSearch(): React.ReactElement {
     mainObject,
     targetObject,
     selectedScene,
+    selectedCamera,
     selectedVideoDuration,
     searchResultPage,
   ]);
