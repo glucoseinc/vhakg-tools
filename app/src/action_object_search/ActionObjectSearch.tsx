@@ -18,8 +18,8 @@ import {
   type SearchParamObjectKey,
   MAIN_OBJECT_KEY,
   SEARCH_RESULT_PAGE_KEY,
-  SELETED_ACTION_KEY,
-  SELETED_VIDEO_DURATION_KEY,
+  ACTION_KEY,
+  VIDEO_DURATION_KEY,
   TARGET_OBJECT_KEY,
   TOTAL_VIDEOS_PER_PAGE,
 } from 'action_object_search/constants';
@@ -42,7 +42,7 @@ function ActionObjectSearch(): React.ReactElement {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [selectedAction, setSelectedAction] = useState<string>(
-    searchParams.get(SELETED_ACTION_KEY) || ''
+    searchParams.get(ACTION_KEY) || ''
   );
   const [mainObject, setMainObject] = useState<string>(
     searchParams.get(MAIN_OBJECT_KEY) || ''
@@ -52,8 +52,7 @@ function ActionObjectSearch(): React.ReactElement {
   );
   const [selectedVideoDuration, setSelectedVideoDuration] =
     useState<VideoDurationType>(
-      (searchParams.get(SELETED_VIDEO_DURATION_KEY) as VideoDurationType) ||
-        'full'
+      (searchParams.get(VIDEO_DURATION_KEY) as VideoDurationType) || 'full'
     );
   const [searchResultPage, setSearchResultPage] = useState<number>(
     Number(searchParams.get(SEARCH_RESULT_PAGE_KEY)) || 1

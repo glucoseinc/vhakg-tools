@@ -1,7 +1,7 @@
 import { Radio, RadioGroup, Stack, Td, Th, Tr } from '@chakra-ui/react';
 import {
   type SearchParamKey,
-  SELETED_VIDEO_DURATION_KEY,
+  VIDEO_DURATION_KEY,
 } from 'action_object_search/constants';
 import React, { useCallback } from 'react';
 
@@ -19,7 +19,7 @@ export function VideoDurationRadio({
   const handleChange = useCallback(
     (value: VideoDurationType) => {
       setSelectedVideoDuration(value);
-      handleSearchParamsChange(SELETED_VIDEO_DURATION_KEY, value);
+      handleSearchParamsChange(VIDEO_DURATION_KEY, value);
     },
     [setSelectedVideoDuration, handleSearchParamsChange]
   );
