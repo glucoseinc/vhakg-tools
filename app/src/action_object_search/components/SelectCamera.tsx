@@ -20,6 +20,7 @@ export function SelectCamera({
       cameras
         .map((camera) => camera.camera.value.split('_').pop())
         .filter((camera) => camera !== undefined)
+        .sort()
     )
   );
 
