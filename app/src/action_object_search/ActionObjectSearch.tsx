@@ -30,7 +30,7 @@ import {
   fetchScene,
   fetchVideo,
   fetchVideoCount,
-  SceneQueryType,
+  type SceneQueryType,
   type VideoQueryType,
 } from 'action_object_search/utils/sparql';
 import FloatingNavigationLink from 'common/components/FloatingNavigationLink';
