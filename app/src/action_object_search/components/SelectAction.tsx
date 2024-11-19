@@ -1,20 +1,35 @@
-import React from 'react';
 import { Select, Td, Th, Tr } from '@chakra-ui/react';
-import { ActionQueryType } from 'action_object_search/utils/sparql';
+import {
+  type SearchParamKey,
+  ACTION_KEY,
+} from 'action_object_search/constants';
+import { type ActionQueryType } from 'action_object_search/utils/sparql';
+import React, { useCallback } from 'react';
 
+type SelectActionProps = {
+  actions: ActionQueryType[];
+  selectedAction: string;
+  setSelectedAction: (action: string) => void;
+  handleSearchParamsChange: (key: SearchParamKey, value: string) => void;
+};
 export function SelectAction({
   actions,
   selectedAction,
   setSelectedAction,
-}: {
-  actions: ActionQueryType[];
-  selectedAction: string;
-  setSelectedAction: (action: string) => void;
-}): React.ReactElement {
+  handleSearchParamsChange,
+}: SelectActionProps): React.ReactElement {
   const options = actions.map((action) => ({
     value: action.action.value,
     label: action.action.value.split('/').pop(), // vh2kg:action/<Action>から<Action>を取得
   }));
+
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      setSelectedAction(event.target.value);
+      handleSearchParamsChange(ACTION_KEY, event.target.value);
+    },
+    [setSelectedAction, handleSearchParamsChange]
+  );
 
   return (
     <>
@@ -26,10 +41,7 @@ export function SelectAction({
           <Select
             placeholder="select"
             value={selectedAction}
-            onChange={(e) => {
-              const action = e.target.value;
-              setSelectedAction(action);
-            }}
+            onChange={handleChange}
           >
             {options.map((option) => (
               <option key={option.value} value={option.value}>

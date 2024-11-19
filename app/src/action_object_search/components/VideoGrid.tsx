@@ -1,5 +1,5 @@
 import { Grid, GridItem, Link } from '@chakra-ui/react';
-import { VideoQueryType } from 'action_object_search/utils/sparql';
+import { type VideoQueryType } from 'action_object_search/utils/sparql';
 import React from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 
