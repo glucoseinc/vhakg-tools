@@ -153,11 +153,12 @@ function ActionObjectSearch(): React.ReactElement {
           selectedAction,
           mainObject,
           targetObject,
-          selectedScene
+          selectedScene,
+          selectedCamera
         )
       );
     })();
-  }, [selectedAction, mainObject, targetObject, selectedScene]);
+  }, [selectedAction, mainObject, targetObject, selectedScene, selectedCamera]);
 
   return (
     <ChakraProvider>

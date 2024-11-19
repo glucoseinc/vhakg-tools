@@ -67,8 +67,15 @@ export const fetchVideoCount: (
   action: string,
   mainObject: string,
   targetObject: string,
-  scene: string
-) => Promise<number> = async (action, mainObject, targetObject, scene) => {
+  scene: string,
+  camera: string
+) => Promise<number> = async (
+  action,
+  mainObject,
+  targetObject,
+  scene,
+  camera
+) => {
   const query = `
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
     PREFIX vh2kg: <http://kgrc4si.home.kg/virtualhome2kg/ontology/>
@@ -85,6 +92,7 @@ export const fetchVideoCount: (
       ?activity vh2kg:hasEvent ?event ;
                 vh2kg:hasVideo ?camera .
       ${scene !== '' ? `FILTER regex(STR(?camera), "${scene}", "i") .` : ''}
+      ${camera !== '' ? `FILTER regex(STR(?camera), "${camera}", "i") .` : ''}
     }
   `;
   const result = (await makeClient().query.select(
