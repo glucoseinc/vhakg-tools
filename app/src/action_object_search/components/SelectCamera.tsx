@@ -1,7 +1,10 @@
 import React, { useCallback } from 'react';
 import { Select, Td, Th, Tr } from '@chakra-ui/react';
-import { CameraQueryType } from 'action_object_search/utils/sparql';
-import { CAMERA_KEY, SearchParamKey } from 'action_object_search/constants';
+import { type CameraQueryType } from 'action_object_search/utils/sparql';
+import {
+  CAMERA_KEY,
+  type SearchParamKey,
+} from 'action_object_search/constants';
 
 type SelectCameraProps = {
   cameras: CameraQueryType[];

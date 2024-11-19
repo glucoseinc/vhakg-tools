@@ -1,7 +1,6 @@
 import {
   ChakraProvider,
   Flex,
-  Select,
   Table,
   TableContainer,
   Tbody,
