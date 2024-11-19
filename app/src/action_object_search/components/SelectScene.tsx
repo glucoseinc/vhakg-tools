@@ -1,22 +1,34 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Select, Td, Th, Tr } from '@chakra-ui/react';
 import { SceneQueryType } from 'action_object_search/utils/sparql';
+import { SearchParamKey } from 'action_object_search/constants';
 
 type SelectSceneProps = {
   scenes: SceneQueryType[];
-  searchParams: URLSearchParams;
-  setSearchParams: (searchParams: URLSearchParams) => void;
+  selectedScene: string;
+  setSelectedScene: (scene: string) => void;
+  handleSearchParamsChange: (key: SearchParamKey, value: string) => void;
 };
 export function SelectScene({
   scenes,
-  searchParams,
-  setSearchParams,
+  selectedScene,
+  setSelectedScene,
+  handleSearchParamsChange,
 }: SelectSceneProps): React.ReactElement {
   const options = new Set(
     scenes
       .map((scene) => scene.scene.value.split('_').pop())
       .filter((scene) => scene !== undefined)
   );
+
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      setSelectedScene(event.target.value);
+      handleSearchParamsChange('scene', event.target.value);
+    },
+    [setSelectedScene, handleSearchParamsChange]
+  );
+
   return (
     <>
       <Tr>
@@ -26,12 +38,8 @@ export function SelectScene({
         <Td>
           <Select
             placeholder="select"
-            value={searchParams.get('scene') || ''}
-            onChange={(e) => {
-              const scene = e.target.value;
-              searchParams.set('scene', scene);
-              setSearchParams(searchParams);
-            }}
+            value={selectedScene}
+            onChange={handleChange}
           >
             {Array.from(options).map((option) => (
               <option key={option} value={option}>

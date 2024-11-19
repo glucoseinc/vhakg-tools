@@ -29,6 +29,7 @@ import {
   fetchScene,
   fetchVideo,
   fetchVideoCount,
+  SceneQueryType,
   type VideoQueryType,
 } from 'action_object_search/utils/sparql';
 import FloatingNavigationLink from 'common/components/FloatingNavigationLink';
@@ -40,6 +41,7 @@ function ActionObjectSearch(): React.ReactElement {
   const [actions, setActions] = useState<ActionQueryType[]>([]);
   const [videos, setVideos] = useState<VideoQueryType[]>([]);
   const [videoCount, setVideoCount] = useState<number>(0);
+  const [scenes, setScenes] = useState<SceneQueryType[]>([]);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -59,6 +61,7 @@ function ActionObjectSearch(): React.ReactElement {
   const [searchResultPage, setSearchResultPage] = useState<number>(
     Number(searchParams.get(SEARCH_RESULT_PAGE_KEY)) || 1
   );
+  const [selectedScene, setSelectedScene] = useState<string>('');
 
   const handleSearchParamsChange = useCallback(
     (key: SearchParamKey, value: string) => {
@@ -90,9 +93,13 @@ function ActionObjectSearch(): React.ReactElement {
             selectedAction,
             mainObject,
             targetObject,
+            selectedScene,
             TOTAL_VIDEOS_PER_PAGE,
             searchResultPage
           )
+        );
+        setScenes(
+          await fetchScene(selectedAction, mainObject, targetObject, '')
         );
       }
     })();
@@ -100,6 +107,7 @@ function ActionObjectSearch(): React.ReactElement {
     selectedAction,
     mainObject,
     targetObject,
+    selectedScene,
     selectedVideoDuration,
     searchResultPage,
   ]);
@@ -151,6 +159,12 @@ function ActionObjectSearch(): React.ReactElement {
               <VideoDurationRadio
                 selectedVideoDuration={selectedVideoDuration}
                 setSelectedVideoDuration={setSelectedVideoDuration}
+                handleSearchParamsChange={handleSearchParamsChange}
+              />
+              <SelectScene
+                scenes={scenes}
+                selectedScene={selectedScene}
+                setSelectedScene={setSelectedScene}
                 handleSearchParamsChange={handleSearchParamsChange}
               />
             </Tbody>
