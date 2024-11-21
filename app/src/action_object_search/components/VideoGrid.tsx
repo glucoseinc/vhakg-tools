@@ -13,43 +13,62 @@ function getVideoDurationAsMediaFragment(video: VideoSegmentQueryType) {
   return `#t=${start},${end}`;
 }
 
-type VideoGridProps = {
-  videos: VideoQueryType[] | VideoSegmentQueryType[];
-  isSegment?: boolean;
-};
-export function VideoGrid({
-  videos,
-  isSegment = false,
-}: VideoGridProps): React.ReactElement {
-  return (
-    <Grid templateColumns="repeat(3, 1fr)" gap={4}>
-      {videos.map((video) => (
-        <GridItem
-          key={
-            isSegment
-              ? (video as VideoSegmentQueryType).videoSegment.value
-              : (video as VideoQueryType).camera.value
-          }
-          p={2}
-          border="1px"
-          borderColor="gray.200"
-          rounded="xl"
-        >
-          <video
-            src={`data:video/mp4;base64,${video.base64Video.value}${isSegment ? getVideoDurationAsMediaFragment(video as VideoSegmentQueryType) : ''}`}
-            controls
-            width="100%"
-            height="auto"
-          />
-          <Link as={ReactRouterLink} to={``} state={{}}>
-            {isSegment
-              ? (video as VideoSegmentQueryType).videoSegment.value
-                  .split('/')
-                  .pop()
-              : (video as VideoQueryType).camera.value.split('/').pop()}
-          </Link>
-        </GridItem>
-      ))}
-    </Grid>
-  );
+type VideoGridProps =
+  | {
+      videos: VideoQueryType[];
+    }
+  | {
+      videos: VideoSegmentQueryType[];
+      isSegment: boolean;
+    };
+export function VideoGrid(props: VideoGridProps): React.ReactElement {
+  if ('isSegment' in props) {
+    return (
+      <Grid templateColumns="repeat(3, 1fr)" gap={4}>
+        {props.videos.map((video) => (
+          <GridItem
+            key={video.videoSegment.value}
+            p={2}
+            border="1px"
+            borderColor="gray.200"
+            rounded="xl"
+          >
+            <video
+              src={`data:video/mp4;base64,${video.base64Video.value}${getVideoDurationAsMediaFragment(video)}`}
+              controls
+              width="100%"
+              height="auto"
+            />
+            <Link as={ReactRouterLink} to={``} state={{}}>
+              {video.videoSegment.value.split('/').pop()}
+            </Link>
+          </GridItem>
+        ))}
+      </Grid>
+    );
+  } else {
+    return (
+      <Grid templateColumns="repeat(3, 1fr)" gap={4}>
+        {props.videos.map((video) => (
+          <GridItem
+            key={video.camera.value}
+            p={2}
+            border="1px"
+            borderColor="gray.200"
+            rounded="xl"
+          >
+            <video
+              src={`data:video/mp4;base64,${video.base64Video.value}`}
+              controls
+              width="100%"
+              height="auto"
+            />
+            <Link as={ReactRouterLink} to={``} state={{}}>
+              {video.camera.value.split('/').pop()}
+            </Link>
+          </GridItem>
+        ))}
+      </Grid>
+    );
+  }
 }
