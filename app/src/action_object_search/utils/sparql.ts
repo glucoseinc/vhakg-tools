@@ -1,5 +1,6 @@
 import { NamedNode } from 'rdf-js';
 import { makeClient } from 'common/utils/sparql';
+import { type VideoDurationType } from 'action_object_search/components/VideoDurationRadio';
 
 export type ActionQueryType = {
   action: NamedNode;
@@ -122,18 +123,21 @@ export const fetchVideoCount: (
   mainObject: string,
   targetObject: string,
   scene: string,
-  camera: string
+  camera: string,
+  videoDuration: VideoDurationType
 ) => Promise<number> = async (
   action,
   mainObject,
   targetObject,
   scene,
-  camera
+  camera,
+  videoDuration
 ) => {
   const query = `
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX mssn: <http://mssn.sigappfr.org/mssn/>
     PREFIX vh2kg: <http://kgrc4si.home.kg/virtualhome2kg/ontology/>
-    SELECT (COUNT(DISTINCT ?camera) AS ?videoCount) WHERE {
+    SELECT (COUNT(DISTINCT ${videoDuration === 'full' ? '?camera' : '?videoSegment'}) AS ?videoCount) WHERE {
       ?mainObject rdfs:label ?mainObjectLabel FILTER regex(?mainObjectLabel, "${mainObject}", "i") .
       ${
         targetObject !== ''
@@ -142,6 +146,7 @@ export const fetchVideoCount: (
       }
       ?event vh2kg:mainObject ?mainObject ;
              ${targetObject !== '' ? 'vh2kg:targetObject ?targetObject ;' : ''}
+             ${videoDuration === 'segment' ? 'vh2kg:hasVideoSegment ?videoSegment ;' : ''}
              vh2kg:action <${action}> .
       ?activity vh2kg:hasEvent ?event ;
                 vh2kg:hasVideo ?camera .
