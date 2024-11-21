@@ -23,9 +23,11 @@ import {
   TARGET_OBJECT_KEY,
   TOTAL_VIDEOS_PER_PAGE,
   SCENE_KEY,
+  CAMERA_KEY,
 } from 'action_object_search/constants';
 import {
   type ActionQueryType,
+  type CameraQueryType,
   fetchAction,
   fetchScene,
   fetchVideo,
@@ -37,12 +39,15 @@ import FloatingNavigationLink from 'common/components/FloatingNavigationLink';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { SelectScene } from 'action_object_search/components/SelectScene';
+import { SelectCamera } from 'action_object_search/components/SelectCamera';
+import { fetchCamera } from 'action_object_search/utils/sparql';
 
 function ActionObjectSearch(): React.ReactElement {
   const [actions, setActions] = useState<ActionQueryType[]>([]);
   const [videos, setVideos] = useState<VideoQueryType[]>([]);
   const [videoCount, setVideoCount] = useState<number>(0);
   const [scenes, setScenes] = useState<SceneQueryType[]>([]);
+  const [cameras, setCameras] = useState<CameraQueryType[]>([]);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -64,6 +69,9 @@ function ActionObjectSearch(): React.ReactElement {
   );
   const [selectedScene, setSelectedScene] = useState<string>(
     searchParams.get(SCENE_KEY) || ''
+  );
+  const [selectedCamera, setSelectedCamera] = useState<string>(
+    searchParams.get(CAMERA_KEY) || ''
   );
 
   const handleSearchParamsChange = useCallback(
@@ -97,12 +105,26 @@ function ActionObjectSearch(): React.ReactElement {
             mainObject,
             targetObject,
             selectedScene,
+            selectedCamera,
             TOTAL_VIDEOS_PER_PAGE,
             searchResultPage
           )
         );
         setScenes(
-          await fetchScene(selectedAction, mainObject, targetObject, '')
+          await fetchScene(
+            selectedAction,
+            mainObject,
+            targetObject,
+            selectedCamera
+          )
+        );
+        setCameras(
+          await fetchCamera(
+            selectedAction,
+            mainObject,
+            targetObject,
+            selectedScene
+          )
         );
       }
     })();
@@ -111,6 +133,7 @@ function ActionObjectSearch(): React.ReactElement {
     mainObject,
     targetObject,
     selectedScene,
+    selectedCamera,
     selectedVideoDuration,
     searchResultPage,
   ]);
@@ -129,11 +152,12 @@ function ActionObjectSearch(): React.ReactElement {
           selectedAction,
           mainObject,
           targetObject,
-          selectedScene
+          selectedScene,
+          selectedCamera
         )
       );
     })();
-  }, [selectedAction, mainObject, targetObject, selectedScene]);
+  }, [selectedAction, mainObject, targetObject, selectedScene, selectedCamera]);
 
   return (
     <ChakraProvider>
@@ -173,6 +197,12 @@ function ActionObjectSearch(): React.ReactElement {
                 scenes={scenes}
                 selectedScene={selectedScene}
                 setSelectedScene={setSelectedScene}
+                handleSearchParamsChange={handleSearchParamsChange}
+              />
+              <SelectCamera
+                cameras={cameras}
+                selectedCamera={selectedCamera}
+                setSelectedCamera={setSelectedCamera}
                 handleSearchParamsChange={handleSearchParamsChange}
               />
             </Tbody>
