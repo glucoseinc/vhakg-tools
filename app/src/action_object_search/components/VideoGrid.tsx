@@ -6,6 +6,13 @@ import {
 import React from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 
+function getVideoDurationAsMediaFragment(video: VideoSegmentQueryType) {
+  const frameRate = Number(video.frameRate.value);
+  const start = Math.floor(Number(video.startFrame.value) / frameRate);
+  const end = Math.floor(Number(video.endFrame.value) / frameRate);
+  return `#t=${start},${end}`;
+}
+
 type VideoGridProps = {
   videos: VideoQueryType[] | VideoSegmentQueryType[];
   isSegment?: boolean;
@@ -14,13 +21,6 @@ export function VideoGrid({
   videos,
   isSegment = false,
 }: VideoGridProps): React.ReactElement {
-  const getVideoDurationAsMediaFragment = (video: VideoSegmentQueryType) => {
-    const frameRate = Number(video.frameRate.value);
-    const start = Math.floor(Number(video.startFrame.value) / frameRate);
-    const end = Math.floor(Number(video.endFrame.value) / frameRate);
-    return `#t=${start},${end}`;
-  };
-
   return (
     <Grid templateColumns="repeat(3, 1fr)" gap={4}>
       {videos.map((video) => (
