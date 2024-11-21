@@ -20,23 +20,25 @@ export function VideoGrid({ videos }: VideoGridProps): React.ReactElement {
   return (
     <Grid templateColumns="repeat(3, 1fr)" gap={4}>
       {videos.map((video) => {
-        const isVideoSegment = 'videoSegment' in video;
+        const hasVideoSegment = 'videoSegment' in video;
         return (
           <GridItem
-            key={isVideoSegment ? video.videoSegment.value : video.camera.value}
+            key={
+              hasVideoSegment ? video.videoSegment.value : video.camera.value
+            }
             p={2}
             border="1px"
             borderColor="gray.200"
             rounded="xl"
           >
             <video
-              src={`data:video/mp4;base64,${video.base64Video.value}${isVideoSegment ? getVideoDurationAsMediaFragment(video) : ''}`}
+              src={`data:video/mp4;base64,${video.base64Video.value}${hasVideoSegment ? getVideoDurationAsMediaFragment(video) : ''}`}
               controls
               width="100%"
               height="auto"
             />
             <Link as={ReactRouterLink} to={``} state={{}}>
-              {isVideoSegment
+              {hasVideoSegment
                 ? video.videoSegment.value.split('/').pop()
                 : video.camera.value.split('/').pop()}
             </Link>
