@@ -150,6 +150,7 @@ export const fetchVideoCount: (
              vh2kg:action <${action}> .
       ?activity vh2kg:hasEvent ?event ;
                 vh2kg:hasVideo ?camera .
+      ${videoDuration === 'segment' ? '?camera mssn:hasMediaSegment ?videoSegment .' : ''}
       ${scene !== '' ? `FILTER regex(STR(?camera), "${scene}", "i") .` : ''}
       ${camera !== '' ? `FILTER regex(STR(?camera), "${camera}", "i") .` : ''}
     }
