@@ -32,8 +32,10 @@ import {
   fetchScene,
   fetchVideo,
   fetchVideoCount,
+  fetchVideoSegment,
   type SceneQueryType,
   type VideoQueryType,
+  type VideoSegmentQueryType,
 } from 'action_object_search/utils/sparql';
 import FloatingNavigationLink from 'common/components/FloatingNavigationLink';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -45,6 +47,9 @@ import { fetchCamera } from 'action_object_search/utils/sparql';
 function ActionObjectSearch(): React.ReactElement {
   const [actions, setActions] = useState<ActionQueryType[]>([]);
   const [videos, setVideos] = useState<VideoQueryType[]>([]);
+  const [videoSegments, setVideoSegments] = useState<VideoSegmentQueryType[]>(
+    []
+  );
   const [videoCount, setVideoCount] = useState<number>(0);
   const [scenes, setScenes] = useState<SceneQueryType[]>([]);
   const [cameras, setCameras] = useState<CameraQueryType[]>([]);
@@ -98,34 +103,50 @@ function ActionObjectSearch(): React.ReactElement {
     }
 
     (async () => {
-      if (selectedVideoDuration === 'full') {
-        setVideos(
-          await fetchVideo(
-            selectedAction,
-            mainObject,
-            targetObject,
-            selectedScene,
-            selectedCamera,
-            TOTAL_VIDEOS_PER_PAGE,
-            searchResultPage
-          )
-        );
-        setScenes(
-          await fetchScene(
-            selectedAction,
-            mainObject,
-            targetObject,
-            selectedCamera
-          )
-        );
-        setCameras(
-          await fetchCamera(
-            selectedAction,
-            mainObject,
-            targetObject,
-            selectedScene
-          )
-        );
+      setScenes(
+        await fetchScene(
+          selectedAction,
+          mainObject,
+          targetObject,
+          selectedCamera
+        )
+      );
+      setCameras(
+        await fetchCamera(
+          selectedAction,
+          mainObject,
+          targetObject,
+          selectedScene
+        )
+      );
+
+      switch (selectedVideoDuration) {
+        case 'full':
+          setVideos(
+            await fetchVideo(
+              selectedAction,
+              mainObject,
+              targetObject,
+              selectedScene,
+              selectedCamera,
+              TOTAL_VIDEOS_PER_PAGE,
+              searchResultPage
+            )
+          );
+          break;
+        case 'segment':
+          setVideoSegments(
+            await fetchVideoSegment(
+              selectedAction,
+              mainObject,
+              targetObject,
+              selectedScene,
+              selectedCamera,
+              TOTAL_VIDEOS_PER_PAGE,
+              searchResultPage
+            )
+          );
+          break;
       }
     })();
   }, [
