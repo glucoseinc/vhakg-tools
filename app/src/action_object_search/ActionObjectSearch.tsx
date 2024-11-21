@@ -79,7 +79,7 @@ function ActionObjectSearch(): React.ReactElement {
     searchParams.get(CAMERA_KEY) || ''
   );
 
-  const isRequiredParamsEmpty = selectedAction === '' || mainObject === '';
+  const isAnyRequiredParamsEmpty = selectedAction === '' || mainObject === '';
 
   const handleSearchParamsChange = useCallback(
     (key: SearchParamKey, value: string) => {
@@ -97,7 +97,7 @@ function ActionObjectSearch(): React.ReactElement {
   }, []);
 
   useEffect(() => {
-    if (isRequiredParamsEmpty) {
+    if (isAnyRequiredParamsEmpty) {
       return;
     }
 
@@ -114,7 +114,7 @@ function ActionObjectSearch(): React.ReactElement {
   }, [selectedAction, mainObject, targetObject, selectedCamera]);
 
   useEffect(() => {
-    if (isRequiredParamsEmpty) {
+    if (isAnyRequiredParamsEmpty) {
       return;
     }
 
@@ -131,7 +131,7 @@ function ActionObjectSearch(): React.ReactElement {
   }, [selectedAction, mainObject, targetObject, selectedScene]);
 
   useEffect(() => {
-    if (isRequiredParamsEmpty) {
+    if (isAnyRequiredParamsEmpty) {
       return;
     }
 
@@ -176,7 +176,7 @@ function ActionObjectSearch(): React.ReactElement {
   ]);
 
   useEffect(() => {
-    if (isRequiredParamsEmpty) {
+    if (isAnyRequiredParamsEmpty) {
       return;
     }
 
