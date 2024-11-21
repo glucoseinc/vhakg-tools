@@ -79,6 +79,8 @@ function ActionObjectSearch(): React.ReactElement {
     searchParams.get(CAMERA_KEY) || ''
   );
 
+  const isRequiredParamsEmpty = selectedAction === '' || mainObject === '';
+
   const handleSearchParamsChange = useCallback(
     (key: SearchParamKey, value: string) => {
       const newSearchParams = new URLSearchParams(searchParams);
@@ -95,10 +97,7 @@ function ActionObjectSearch(): React.ReactElement {
   }, []);
 
   useEffect(() => {
-    if (selectedAction === '') {
-      return;
-    }
-    if (mainObject === '') {
+    if (isRequiredParamsEmpty) {
       return;
     }
 
@@ -111,6 +110,15 @@ function ActionObjectSearch(): React.ReactElement {
           selectedCamera
         )
       );
+    })();
+  }, [selectedAction, mainObject, targetObject, selectedCamera]);
+
+  useEffect(() => {
+    if (isRequiredParamsEmpty) {
+      return;
+    }
+
+    (async () => {
       setCameras(
         await fetchCamera(
           selectedAction,
@@ -119,7 +127,15 @@ function ActionObjectSearch(): React.ReactElement {
           selectedScene
         )
       );
+    })();
+  }, [selectedAction, mainObject, targetObject, selectedScene]);
 
+  useEffect(() => {
+    if (isRequiredParamsEmpty) {
+      return;
+    }
+
+    (async () => {
       switch (selectedVideoDuration) {
         case 'full':
           setVideos(
@@ -160,14 +176,11 @@ function ActionObjectSearch(): React.ReactElement {
   ]);
 
   useEffect(() => {
-    (async () => {
-      if (selectedAction === '') {
-        return;
-      }
-      if (mainObject === '') {
-        return;
-      }
+    if (isRequiredParamsEmpty) {
+      return;
+    }
 
+    (async () => {
       setVideoCount(
         await fetchVideoCount(
           selectedAction,
