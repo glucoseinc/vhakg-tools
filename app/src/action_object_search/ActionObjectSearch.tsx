@@ -38,7 +38,7 @@ import {
   type VideoSegmentQueryType,
 } from 'action_object_search/utils/sparql';
 import FloatingNavigationLink from 'common/components/FloatingNavigationLink';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { SelectScene } from 'action_object_search/components/SelectScene';
 import { SelectCamera } from 'action_object_search/components/SelectCamera';
@@ -78,6 +78,8 @@ function ActionObjectSearch(): React.ReactElement {
   const [selectedCamera, setSelectedCamera] = useState<string>(
     searchParams.get(CAMERA_KEY) || ''
   );
+
+  const isFirstRender = useRef(true);
 
   const isAnyRequiredParamsEmpty = selectedAction === '' || mainObject === '';
 
@@ -192,6 +194,13 @@ function ActionObjectSearch(): React.ReactElement {
         )
       );
     })();
+
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    setSearchResultPage(1);
+    handleSearchParamsChange(SEARCH_RESULT_PAGE_KEY, '1');
   }, [
     selectedAction,
     mainObject,
