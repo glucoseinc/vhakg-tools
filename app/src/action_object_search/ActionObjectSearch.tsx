@@ -181,16 +181,20 @@ function ActionObjectSearch(): React.ReactElement {
     }
 
     (async () => {
-      setVideoCount(
-        await fetchVideoCount(
-          selectedAction,
-          mainObject,
-          targetObject,
-          selectedScene,
-          selectedCamera,
-          selectedVideoDuration
-        )
+      const newVideoCount = await fetchVideoCount(
+        selectedAction,
+        mainObject,
+        targetObject,
+        selectedScene,
+        selectedCamera,
+        selectedVideoDuration
       );
+      setVideoCount(newVideoCount);
+
+      if ((searchResultPage - 1) * TOTAL_VIDEOS_PER_PAGE >= newVideoCount) {
+        setSearchResultPage(1);
+        handleSearchParamsChange(SEARCH_RESULT_PAGE_KEY, '1');
+      }
     })();
   }, [
     selectedAction,
