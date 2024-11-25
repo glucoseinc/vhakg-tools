@@ -7,6 +7,7 @@ import {
   MAIN_OBJECT_KEY,
   type SearchParamKey,
   TARGET_OBJECT_KEY,
+  TOTAL_IMAGES_PER_PAGE,
 } from 'constants/action_object_search/constants';
 import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -109,7 +110,7 @@ function BoundingBoxImageViewer(): React.ReactElement {
             pageKey={IMAGE_VIEWER_PAGE_KEY}
             handleSearchParamsChange={handleSearchParamsChange}
             totalElements={frameCount}
-            totalElementsPerPage={1}
+            totalElementsPerPage={TOTAL_IMAGES_PER_PAGE}
           />
         </Box>
       </Center>

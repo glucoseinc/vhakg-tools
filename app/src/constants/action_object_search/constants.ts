@@ -1,4 +1,5 @@
 export const TOTAL_VIDEOS_PER_PAGE = 9;
+export const TOTAL_IMAGES_PER_PAGE = 1;
 
 export type SearchParamObjectKey = 'mainObject' | 'targetObject';
 export type SearchParamKey =
