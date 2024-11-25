@@ -13,6 +13,7 @@ export const fetchFrameByCamera: (
   mainObject,
   targetObject
 ) => {
+  const isTargetObjectSpecified = targetObject !== '';
   const query = `
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
     PREFIX mssn: <http://mssn.sigappfr.org/mssn/>
@@ -22,22 +23,26 @@ export const fetchFrameByCamera: (
     SELECT DISTINCT ?frame WHERE { 
       BIND (<${cameraIri}> AS ?camera) .
       BIND ("${mainObject}" AS ?mainObjectName) .
-      BIND ("${targetObject}" AS ?targetObjectName) .
+      ${isTargetObjectSpecified ? `BIND ("${targetObject}" AS ?targetObjectName) .` : ''}
       
       ?scene vh2kg:hasVideo ?camera .
       ?scene vh2kg:hasEvent ?event .
       ?event vh2kg:mainObject ?mainObject .
-      ${targetObject !== '' ? '?event vh2kg:targetObject ?targetObject .' : ''}
+      ${isTargetObjectSpecified ? '?event vh2kg:targetObject ?targetObject .' : ''}
       
       ?camera mssn:hasMediaSegment ?videoSegment .
       ?videoSegment mssn:hasMediaDescriptor ?frame .
-      ?frame mssn:hasMediaDescriptor ?object ;
-      {{?object vh2kg:is2DbboxOf ?mainObject} UNION {?object vh2kg:is2DbboxOf ?targetObject}} .
+      ?frame mssn:hasMediaDescriptor ?object .
+      ${
+        isTargetObjectSpecified
+          ? `{{?object vh2kg:is2DbboxOf ?mainObject} UNION {?object vh2kg:is2DbboxOf ?targetObject}} .`
+          : `?object vh2kg:is2DbboxOf ?mainObject .`
+      }
       
       ?mainObject rdfs:label ?mainObjectLabel .
-      ?targetObject rdfs:label ?targetObjectLabel .
+      ${isTargetObjectSpecified ? `?targetObject rdfs:label ?targetObjectLabel .` : ''}
       FILTER regex(?mainObjectLabel, ?mainObjectName, "i") .
-      FILTER regex(?targetObjectLabel, ?targetObjectName, "i") .
+      ${isTargetObjectSpecified ? `FILTER regex(?targetObjectLabel, ?targetObjectName, "i") . ` : ''}
     } ORDER BY asc(?frame)
   `;
   const result = (await makeClient().query.select(query)) as FrameQueryType[];
@@ -53,6 +58,7 @@ export const fetchFrameByVideoSegment: (
   mainObject,
   targetObject
 ) => {
+  const isTargetObjectSpecified = targetObject !== '';
   const query = `
     PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
     PREFIX mssn: <http://mssn.sigappfr.org/mssn/>
@@ -62,22 +68,26 @@ export const fetchFrameByVideoSegment: (
     SELECT DISTINCT ?frame WHERE { 
       BIND (<${videoSegmentIri}> AS ?videoSegment) .
       BIND ("${mainObject}" AS ?mainObjectName) .
-      BIND ("${targetObject}" AS ?targetObjectName) .
+      ${isTargetObjectSpecified ? `BIND ("${targetObject}" AS ?targetObjectName) .` : ''}
       
       ?scene vh2kg:hasVideo ?camera .
       ?scene vh2kg:hasEvent ?event .
       ?event vh2kg:mainObject ?mainObject .
-      ${targetObject !== '' ? '?event vh2kg:targetObject ?targetObject .' : ''}
+      ${isTargetObjectSpecified ? '?event vh2kg:targetObject ?targetObject .' : ''}
       
       ?camera mssn:hasMediaSegment ?videoSegment .
       ?videoSegment mssn:hasMediaDescriptor ?frame .
-      ?frame mssn:hasMediaDescriptor ?object ;
-      {{?object vh2kg:is2DbboxOf ?mainObject} UNION {?object vh2kg:is2DbboxOf ?targetObject}} .
+      ?frame mssn:hasMediaDescriptor ?object .
+      ${
+        isTargetObjectSpecified
+          ? `{{?object vh2kg:is2DbboxOf ?mainObject} UNION {?object vh2kg:is2DbboxOf ?targetObject}} .`
+          : `?object vh2kg:is2DbboxOf ?mainObject .`
+      }
       
       ?mainObject rdfs:label ?mainObjectLabel .
-      ?targetObject rdfs:label ?targetObjectLabel .
+      ${isTargetObjectSpecified ? `?targetObject rdfs:label ?targetObjectLabel .` : ''}
       FILTER regex(?mainObjectLabel, ?mainObjectName, "i") .
-      FILTER regex(?targetObjectLabel, ?targetObjectName, "i") .
+      ${isTargetObjectSpecified ? `FILTER regex(?targetObjectLabel, ?targetObjectName, "i") .` : ''}
     } ORDER BY asc(?frame)
   `;
   const result = (await makeClient().query.select(query)) as FrameQueryType[];
