@@ -1,6 +1,6 @@
-import ActionObjectSearch from 'action_object_search/ActionObjectSearch';
+import ActionObjectSearch from 'pages/action_object_search';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import App from 'root/App';
+import App from 'pages';
 
 const Router = () => {
   const router = createBrowserRouter([

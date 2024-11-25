@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import 'root/App.css';
+import 'pages/index.css';
 import {
   ChakraProvider,
   Flex,
