@@ -274,8 +274,9 @@ function ActionObjectSearch(): React.ReactElement {
           />
         )}
         <Pagination
-          searchResultPage={searchResultPage}
-          setSearchResultPage={setSearchResultPage}
+          pageState={searchResultPage}
+          setPageState={setSearchResultPage}
+          pageKey={SEARCH_RESULT_PAGE_KEY}
           handleSearchParamsChange={handleSearchParamsChange}
           totalElements={videoCount}
           totalElementsPerPage={TOTAL_VIDEOS_PER_PAGE}

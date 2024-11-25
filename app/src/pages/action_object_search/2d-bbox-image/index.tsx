@@ -1,6 +1,14 @@
 import { Box, ChakraProvider } from '@chakra-ui/react';
 import { Pagination } from 'components/action_object_search/Pagination';
-import { useEffect, useState } from 'react';
+import {
+  IMAGE_VIEWER_PAGE_KEY,
+  IRI_KEY,
+  IS_VIDEO_SEGMENT_KEY,
+  MAIN_OBJECT_KEY,
+  type SearchParamKey,
+  TARGET_OBJECT_KEY,
+} from 'constants/action_object_search/constants';
+import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
   type FrameQueryType,
@@ -12,13 +20,15 @@ import {
 function BoundingBoxImageViewer(): React.ReactElement {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const mainObject = searchParams.get('mainObject') || '';
-  const targetObject = searchParams.get('targetObject') || '';
-  const isVideoSegment = searchParams.get('isVideoSegment') === 'true';
-  const iri = searchParams.get('iri') || '';
+  const mainObject = searchParams.get(MAIN_OBJECT_KEY) || '';
+  const targetObject = searchParams.get(TARGET_OBJECT_KEY) || '';
+  const isVideoSegment = searchParams.get(IS_VIDEO_SEGMENT_KEY) === 'true';
+  const iri = searchParams.get(IRI_KEY) || '';
 
   const [frames, setFrames] = useState<FrameQueryType[]>([]);
-  const [imagePage, setImagePage] = useState(1);
+  const [imageViewerPage, setImageViewerPage] = useState(
+    Number(searchParams.get(IMAGE_VIEWER_PAGE_KEY)) || 1
+  );
   const [canvasContext, setCanvasContext] =
     useState<CanvasRenderingContext2D | null>(null);
   const [resolutionX, setResolutionX] = useState(0);
@@ -53,7 +63,9 @@ function BoundingBoxImageViewer(): React.ReactElement {
         return;
       }
 
-      const splitImages = await fetchImage(frames[imagePage - 1].frame.value);
+      const splitImages = await fetchImage(
+        frames[imageViewerPage - 1].frame.value
+      );
       const [resX, resY] = splitImages[0].resolution.value.split('x');
       setResolutionX(Number(resX));
       setResolutionY(Number(resY));
@@ -69,7 +81,16 @@ function BoundingBoxImageViewer(): React.ReactElement {
         };
       });
     })();
-  }, [frames, imagePage]);
+  }, [frames, imageViewerPage]);
+
+  const handleSearchParamsChange = useCallback(
+    (key: SearchParamKey, value: string) => {
+      const newSearchParams = new URLSearchParams(searchParams);
+      newSearchParams.set(key, value);
+      setSearchParams(newSearchParams);
+    },
+    [searchParams, setSearchParams]
+  );
 
   return (
     <ChakraProvider>
@@ -80,9 +101,10 @@ function BoundingBoxImageViewer(): React.ReactElement {
           id="image"
         />
         <Pagination
-          searchResultPage={imagePage}
-          setSearchResultPage={setImagePage}
-          handleSearchParamsChange={() => {}}
+          pageState={imageViewerPage}
+          setPageState={setImageViewerPage}
+          pageKey={IMAGE_VIEWER_PAGE_KEY}
+          handleSearchParamsChange={handleSearchParamsChange}
           totalElements={frameCount}
           totalElementsPerPage={1}
         />
