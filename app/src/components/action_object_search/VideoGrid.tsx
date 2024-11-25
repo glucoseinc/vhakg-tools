@@ -15,8 +15,14 @@ function getVideoDurationAsMediaFragment(video: VideoSegmentQueryType) {
 
 type VideoGridProps = {
   videos: VideoQueryType[] | VideoSegmentQueryType[];
+  mainObject: string;
+  targetObject: string;
 };
-export function VideoGrid({ videos }: VideoGridProps): React.ReactElement {
+export function VideoGrid({
+  videos,
+  mainObject,
+  targetObject,
+}: VideoGridProps): React.ReactElement {
   return (
     <Grid templateColumns="repeat(3, 1fr)" gap={4}>
       {videos.map((video) => {
@@ -37,7 +43,17 @@ export function VideoGrid({ videos }: VideoGridProps): React.ReactElement {
               width="100%"
               height="auto"
             />
-            <Link as={ReactRouterLink} to={``} state={{}}>
+            <Link
+              as={ReactRouterLink}
+              to={`/action-object-search/2d-bbox-image?${new URLSearchParams({
+                mainObject,
+                targetObject,
+                isVideoSegment: String(hasVideoSegment),
+                iri: hasVideoSegment
+                  ? video.videoSegment.value
+                  : video.camera.value,
+              }).toString()}`}
+            >
               {hasVideoSegment
                 ? video.videoSegment.value.split('/').pop()
                 : video.camera.value.split('/').pop()}

@@ -259,9 +259,19 @@ function ActionObjectSearch(): React.ReactElement {
             </Tbody>
           </Table>
         </TableContainer>
-        {selectedVideoDuration === 'full' && <VideoGrid videos={videos} />}
+        {selectedVideoDuration === 'full' && (
+          <VideoGrid
+            videos={videos}
+            mainObject={mainObject}
+            targetObject={targetObject}
+          />
+        )}
         {selectedVideoDuration === 'segment' && (
-          <VideoGrid videos={videoSegments} />
+          <VideoGrid
+            videos={videoSegments}
+            mainObject={mainObject}
+            targetObject={targetObject}
+          />
         )}
         <Pagination
           searchResultPage={searchResultPage}
