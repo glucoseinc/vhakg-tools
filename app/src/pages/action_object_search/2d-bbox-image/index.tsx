@@ -34,7 +34,7 @@ function BoundingBoxImageViewer(): React.ReactElement {
   const [resolutionX, setResolutionX] = useState(0);
   const [resolutionY, setResolutionY] = useState(0);
 
-  const anyRequiredParamIsEmpty = mainObject === '' || iri === '';
+  const isAnyRequiredParamEmpty = mainObject === '' || iri === '';
   const frameCount = frames.length;
 
   useEffect(() => {
@@ -43,7 +43,7 @@ function BoundingBoxImageViewer(): React.ReactElement {
     setCanvasContext(context);
 
     (async () => {
-      if (anyRequiredParamIsEmpty) {
+      if (isAnyRequiredParamEmpty) {
         return;
       }
 
@@ -66,7 +66,7 @@ function BoundingBoxImageViewer(): React.ReactElement {
       const splitImages = await fetchImage(
         frames[imageViewerPage - 1].frame.value
       );
-      const [resX, resY] = splitImages[0].resolution.value.split('x');
+      const [resX, resY] = splitImages[0].resolution.value.split('x'); // "1920x1080" -> ["1920", "1080"]
       setResolutionX(Number(resX));
       setResolutionY(Number(resY));
 
