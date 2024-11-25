@@ -84,8 +84,8 @@ function BoundingBoxImageViewer(): React.ReactElement {
           searchResultPage={imagePage}
           setSearchResultPage={setImagePage}
           handleSearchParamsChange={() => {}}
-          totalVideos={frameCount}
-          totalDisplayablePages={10}
+          totalElements={frameCount}
+          totalElementsPerPage={1}
         />
       </Box>
     </ChakraProvider>

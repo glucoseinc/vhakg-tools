@@ -277,7 +277,8 @@ function ActionObjectSearch(): React.ReactElement {
           searchResultPage={searchResultPage}
           setSearchResultPage={setSearchResultPage}
           handleSearchParamsChange={handleSearchParamsChange}
-          totalVideos={videoCount}
+          totalElements={videoCount}
+          totalElementsPerPage={TOTAL_VIDEOS_PER_PAGE}
         />
       </Flex>
     </ChakraProvider>

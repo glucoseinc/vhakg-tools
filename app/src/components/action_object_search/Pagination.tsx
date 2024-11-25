@@ -2,7 +2,6 @@ import { Button, ButtonGroup, HStack } from '@chakra-ui/react';
 import {
   type SearchParamKey,
   SEARCH_RESULT_PAGE_KEY,
-  TOTAL_VIDEOS_PER_PAGE,
 } from 'constants/action_object_search/constants';
 import React, { useCallback, useState } from 'react';
 
@@ -10,17 +9,19 @@ type PaginationProps = {
   searchResultPage: number;
   setSearchResultPage: (searchResultPage: number) => void;
   handleSearchParamsChange: (key: SearchParamKey, value: string) => void;
-  totalVideos: number;
+  totalElements: number;
+  totalElementsPerPage: number;
   totalDisplayablePages?: number;
 };
 export function Pagination({
   searchResultPage,
   setSearchResultPage,
   handleSearchParamsChange,
-  totalVideos,
+  totalElements,
+  totalElementsPerPage,
   totalDisplayablePages = 10,
 }: PaginationProps): React.ReactElement {
-  const totalPages = Math.ceil(totalVideos / TOTAL_VIDEOS_PER_PAGE);
+  const totalPages = Math.ceil(totalElements / totalElementsPerPage);
 
   const makeDisplayedPagesArray = (displayedPagesStart: number) => {
     return [...Array(totalDisplayablePages).keys()]
