@@ -2,8 +2,8 @@ import { Select, Td, Th, Tr } from '@chakra-ui/react';
 import {
   type SearchParamKey,
   ACTION_KEY,
-} from 'action_object_search/constants';
-import { type ActionQueryType } from 'action_object_search/utils/sparql';
+} from 'constants/action_object_search/constants';
+import { type ActionQueryType } from 'utils/action_object_search/sparql';
 import React, { useCallback } from 'react';
 
 type SelectActionProps = {

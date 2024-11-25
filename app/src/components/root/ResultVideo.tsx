@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { fetchVideo } from 'root/utils/sparql';
+import { fetchVideo } from 'utils/root/sparql';
 
 type ResultVideoProps = {
   selectedActivity: string;

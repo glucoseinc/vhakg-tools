@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Select, Td, Th, Tr } from '@chakra-ui/react';
-import { fetchEvent } from 'root/utils/sparql';
-import { SelectObject } from 'root/components/SelectObject';
-import { PREFIXES } from 'common/utils/sparql';
+import { fetchEvent } from 'utils/root/sparql';
+import { SelectObject } from 'components/root/SelectObject';
+import { PREFIXES } from 'utils/common/sparql';
 
 type EventActionType = { action: string; startFrame: number };
 

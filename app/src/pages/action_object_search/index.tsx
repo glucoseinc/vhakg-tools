@@ -5,14 +5,14 @@ import {
   TableContainer,
   Tbody,
 } from '@chakra-ui/react';
-import { InputObject } from 'action_object_search/components/InputObject';
-import { Pagination } from 'action_object_search/components/Pagination';
-import { SelectAction } from 'action_object_search/components/SelectAction';
+import { InputObject } from 'components/action_object_search/InputObject';
+import { Pagination } from 'components/action_object_search/Pagination';
+import { SelectAction } from 'components/action_object_search/SelectAction';
 import {
   VideoDurationRadio,
   type VideoDurationType,
-} from 'action_object_search/components/VideoDurationRadio';
-import { VideoGrid } from 'action_object_search/components/VideoGrid';
+} from 'components/action_object_search/VideoDurationRadio';
+import { VideoGrid } from 'components/action_object_search/VideoGrid';
 import {
   type SearchParamKey,
   type SearchParamObjectKey,
@@ -24,7 +24,7 @@ import {
   TOTAL_VIDEOS_PER_PAGE,
   SCENE_KEY,
   CAMERA_KEY,
-} from 'action_object_search/constants';
+} from 'constants/action_object_search/constants';
 import {
   type ActionQueryType,
   type CameraQueryType,
@@ -36,13 +36,13 @@ import {
   type SceneQueryType,
   type VideoQueryType,
   type VideoSegmentQueryType,
-} from 'action_object_search/utils/sparql';
-import FloatingNavigationLink from 'common/components/FloatingNavigationLink';
+} from 'utils/action_object_search/sparql';
+import FloatingNavigationLink from 'components/common/FloatingNavigationLink';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { SelectScene } from 'action_object_search/components/SelectScene';
-import { SelectCamera } from 'action_object_search/components/SelectCamera';
-import { fetchCamera } from 'action_object_search/utils/sparql';
+import { SelectScene } from 'components/action_object_search/SelectScene';
+import { SelectCamera } from 'components/action_object_search/SelectCamera';
+import { fetchCamera } from 'utils/action_object_search/sparql';
 
 function ActionObjectSearch(): React.ReactElement {
   const [actions, setActions] = useState<ActionQueryType[]>([]);

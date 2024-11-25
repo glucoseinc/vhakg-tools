@@ -1,7 +1,10 @@
 import React, { useCallback } from 'react';
 import { Select, Td, Th, Tr } from '@chakra-ui/react';
-import { type SceneQueryType } from 'action_object_search/utils/sparql';
-import { SCENE_KEY, type SearchParamKey } from 'action_object_search/constants';
+import { type SceneQueryType } from 'utils/action_object_search/sparql';
+import {
+  SCENE_KEY,
+  type SearchParamKey,
+} from 'constants/action_object_search/constants';
 
 type SelectSceneProps = {
   scenes: SceneQueryType[];

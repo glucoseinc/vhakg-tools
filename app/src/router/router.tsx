@@ -1,8 +1,9 @@
 import ActionObjectSearch from 'pages/action_object_search';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from 'pages';
+import React from 'react';
 
-const Router = () => {
+const Router = (): React.ReactElement => {
   const router = createBrowserRouter([
     {
       path: '/',
