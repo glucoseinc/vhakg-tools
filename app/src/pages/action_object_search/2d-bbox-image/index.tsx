@@ -1,4 +1,4 @@
-import { Box, ChakraProvider } from '@chakra-ui/react';
+import { Box, Center, ChakraProvider } from '@chakra-ui/react';
 import { Pagination } from 'components/action_object_search/Pagination';
 import {
   IMAGE_VIEWER_PAGE_KEY,
@@ -94,21 +94,25 @@ function BoundingBoxImageViewer(): React.ReactElement {
 
   return (
     <ChakraProvider>
-      <Box>
-        <canvas
-          width={`${resolutionX}px`}
-          height={`${resolutionY}px`}
-          id="image"
-        />
-        <Pagination
-          pageState={imageViewerPage}
-          setPageState={setImageViewerPage}
-          pageKey={IMAGE_VIEWER_PAGE_KEY}
-          handleSearchParamsChange={handleSearchParamsChange}
-          totalElements={frameCount}
-          totalElementsPerPage={1}
-        />
-      </Box>
+      <Center>
+        <Box>
+          <Center>
+            <canvas
+              width={`${resolutionX}px`}
+              height={`${resolutionY}px`}
+              id="image"
+            />
+          </Center>
+          <Pagination
+            pageState={imageViewerPage}
+            setPageState={setImageViewerPage}
+            pageKey={IMAGE_VIEWER_PAGE_KEY}
+            handleSearchParamsChange={handleSearchParamsChange}
+            totalElements={frameCount}
+            totalElementsPerPage={1}
+          />
+        </Box>
+      </Center>
     </ChakraProvider>
   );
 }
