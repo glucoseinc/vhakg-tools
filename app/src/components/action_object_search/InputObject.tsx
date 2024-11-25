@@ -2,7 +2,7 @@ import { Input, Td, Th, Tr } from '@chakra-ui/react';
 import type {
   SearchParamKey,
   SearchParamObjectKey,
-} from 'action_object_search/constants';
+} from 'constants/action_object_search/constants';
 import React, { useCallback } from 'react';
 
 type InputObjectProps = {

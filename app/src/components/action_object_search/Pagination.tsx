@@ -3,7 +3,7 @@ import {
   type SearchParamKey,
   SEARCH_RESULT_PAGE_KEY,
   TOTAL_VIDEOS_PER_PAGE,
-} from 'action_object_search/constants';
+} from 'constants/action_object_search/constants';
 import React, { useCallback, useState } from 'react';
 
 type PaginationProps = {

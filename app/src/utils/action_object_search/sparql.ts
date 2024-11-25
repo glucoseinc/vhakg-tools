@@ -1,6 +1,6 @@
 import { NamedNode } from 'rdf-js';
-import { makeClient } from 'common/utils/sparql';
-import { type VideoDurationType } from 'action_object_search/components/VideoDurationRadio';
+import { makeClient } from 'utils/common/sparql';
+import { type VideoDurationType } from 'components/action_object_search/VideoDurationRadio';
 
 export type ActionQueryType = {
   action: NamedNode;

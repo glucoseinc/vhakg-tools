@@ -2,7 +2,7 @@ import { Grid, GridItem, Link } from '@chakra-ui/react';
 import {
   type VideoSegmentQueryType,
   type VideoQueryType,
-} from 'action_object_search/utils/sparql';
+} from 'utils/action_object_search/sparql';
 import React from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 

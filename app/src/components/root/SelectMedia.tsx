@@ -10,7 +10,7 @@ import {
   Th,
   Tr,
 } from '@chakra-ui/react';
-import { SelectAction } from 'root/components/SelectAction';
+import { SelectAction } from 'components/root/SelectAction';
 
 type SelectMediaProps = {
   selectedActivity: string;
@@ -53,7 +53,8 @@ export function SelectMedia({
           >
             {mediaList.map((media) => (
               <option key={media} value={media}>
-                {media}{media === 'image' ? ' (under development)' : ''}
+                {media}
+                {media === 'image' ? ' (under development)' : ''}
               </option>
             ))}
           </Select>

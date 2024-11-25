@@ -1,4 +1,4 @@
-import { makeClient } from 'common/utils/sparql';
+import { makeClient } from 'utils/common/sparql';
 import { NamedNode } from 'rdf-js';
 
 export type ActivityQueryType = {
