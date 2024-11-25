@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
   type FrameQueryType,
-  ImageQueryType,
   fetchFrameByCamera,
   fetchFrameByVideoSegment,
   fetchImage,
@@ -12,6 +11,7 @@ import {
 
 function BoundingBoxImageViewer(): React.ReactElement {
   const [searchParams, setSearchParams] = useSearchParams();
+
   const mainObject = searchParams.get('mainObject') || '';
   const targetObject = searchParams.get('targetObject') || '';
   const isVideoSegment = searchParams.get('isVideoSegment') === 'true';
@@ -28,12 +28,10 @@ function BoundingBoxImageViewer(): React.ReactElement {
   const frameCount = frames.length;
 
   useEffect(() => {
-    const canvas = document.getElementById('resultImage') as HTMLCanvasElement;
+    const canvas = document.getElementById('image') as HTMLCanvasElement;
     const context = canvas.getContext('2d');
     setCanvasContext(context);
-  }, []);
 
-  useEffect(() => {
     (async () => {
       if (anyRequiredParamIsEmpty) {
         return;
@@ -51,13 +49,14 @@ function BoundingBoxImageViewer(): React.ReactElement {
 
   useEffect(() => {
     (async () => {
-      if (frames.length === 0) {
+      if (frameCount === 0) {
         return;
       }
 
       const splitImages = await fetchImage(frames[imagePage - 1].frame.value);
-      setResolutionX(Number(splitImages[0].resolution.value.split('x')[0]));
-      setResolutionY(Number(splitImages[0].resolution.value.split('x')[1]));
+      const [resX, resY] = splitImages[0].resolution.value.split('x');
+      setResolutionX(Number(resX));
+      setResolutionY(Number(resY));
 
       splitImages.forEach((image, index) => {
         const img = new Image();
@@ -78,7 +77,7 @@ function BoundingBoxImageViewer(): React.ReactElement {
         <canvas
           width={`${resolutionX}px`}
           height={`${resolutionY}px`}
-          id="resultImage"
+          id="image"
         />
         <Pagination
           searchResultPage={imagePage}
