@@ -5,6 +5,12 @@ import {
 } from 'utils/action_object_search/sparql';
 import React from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
+import {
+  IRI_KEY,
+  IS_VIDEO_SEGMENT_KEY,
+  MAIN_OBJECT_KEY,
+  TARGET_OBJECT_KEY,
+} from 'constants/action_object_search/constants';
 
 function getVideoDurationAsMediaFragment(video: VideoSegmentQueryType) {
   const frameRate = Number(video.frameRate.value);
@@ -46,10 +52,10 @@ export function VideoGrid({
             <Link
               as={ReactRouterLink}
               to={`/action-object-search/2d-bbox-image?${new URLSearchParams({
-                mainObject,
-                targetObject,
-                isVideoSegment: String(hasVideoSegment),
-                iri: hasVideoSegment
+                [MAIN_OBJECT_KEY]: mainObject,
+                [TARGET_OBJECT_KEY]: targetObject,
+                [IS_VIDEO_SEGMENT_KEY]: String(hasVideoSegment),
+                [IRI_KEY]: hasVideoSegment
                   ? video.videoSegment.value
                   : video.camera.value,
               }).toString()}`}
