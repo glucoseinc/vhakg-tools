@@ -1,7 +1,6 @@
 import { Link } from '@chakra-ui/react';
 import {
   IRI_KEY,
-  IS_VIDEO_SEGMENT_KEY,
   MAIN_OBJECT_KEY,
   TARGET_OBJECT_KEY,
 } from 'constants/action_object_search/constants';
@@ -12,14 +11,12 @@ type ImagePageLinkProps = {
   linkText: string;
   mainObject: string;
   targetObject: string;
-  isVideoSegment: boolean;
   iri: string;
 };
 export function ImagePageLink({
   linkText,
   mainObject,
   targetObject,
-  isVideoSegment,
   iri,
 }: ImagePageLinkProps): React.ReactElement {
   const navigate = useNavigate();
@@ -33,7 +30,6 @@ export function ImagePageLink({
     const imageSearchParams = new URLSearchParams({
       [MAIN_OBJECT_KEY]: mainObject,
       [TARGET_OBJECT_KEY]: targetObject,
-      [IS_VIDEO_SEGMENT_KEY]: isVideoSegment.toString(),
       [IRI_KEY]: iri,
     });
     const path =
