@@ -1,4 +1,5 @@
 import { Box, Center, ChakraProvider } from '@chakra-ui/react';
+import { ReturnVideoSearchButton } from 'components/action_object_search/2d-bbox-image/ReturnVideoSearchButton';
 import { Pagination } from 'components/action_object_search/Pagination';
 import {
   IMAGE_VIEWER_PAGE_KEY,
@@ -115,6 +116,7 @@ function BoundingBoxImageViewer(): React.ReactElement {
             totalElements={frameCount}
             displayedElementsPerPage={TOTAL_IMAGES_PER_PAGE}
           />
+          <ReturnVideoSearchButton />
         </Box>
       </Center>
     </ChakraProvider>
