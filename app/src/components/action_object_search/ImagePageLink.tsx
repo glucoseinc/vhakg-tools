@@ -3,6 +3,7 @@ import {
   IRI_KEY,
   MAIN_OBJECT_KEY,
   TARGET_OBJECT_KEY,
+  VIDEO_SEARCH_SESSION_STORAGE_KEY,
 } from 'constants/action_object_search/constants';
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -22,19 +23,20 @@ export function ImagePageLink({
   const navigate = useNavigate();
 
   const handleClick = useCallback(() => {
+    const videoSearchParams = new URLSearchParams(window.location.search);
+    sessionStorage.removeItem(VIDEO_SEARCH_SESSION_STORAGE_KEY);
+    sessionStorage.setItem(
+      VIDEO_SEARCH_SESSION_STORAGE_KEY,
+      videoSearchParams.toString()
+    );
+
     const imageSearchParams = new URLSearchParams({
       [MAIN_OBJECT_KEY]: mainObject,
       [TARGET_OBJECT_KEY]: targetObject,
       [IRI_KEY]: iri,
     });
-
-    const imageSearchParamsString = imageSearchParams.toString();
     const path =
-      '/action-object-search/2d-bbox-image?' + imageSearchParamsString;
-
-    const videoSearchParams = new URLSearchParams(window.location.search);
-    localStorage.removeItem(imageSearchParamsString);
-    localStorage.setItem(imageSearchParamsString, videoSearchParams.toString());
+      '/action-object-search/2d-bbox-image?' + imageSearchParams.toString();
     navigate(path);
   }, []);
 
