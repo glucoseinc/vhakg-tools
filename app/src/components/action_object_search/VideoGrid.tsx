@@ -1,4 +1,4 @@
-import { Grid, GridItem, Link } from '@chakra-ui/react';
+import { Grid, GridItem } from '@chakra-ui/react';
 import {
   type VideoSegmentQueryType,
   type VideoQueryType,
