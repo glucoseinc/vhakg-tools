@@ -21,5 +21,3 @@ export const SCENE_KEY: SearchParamKey = 'scene';
 export const CAMERA_KEY: SearchParamKey = 'camera';
 export const IRI_KEY: SearchParamKey = 'iri';
 export const IMAGE_VIEWER_PAGE_KEY: SearchParamKey = 'imageViewerPage';
-
-export const VIDEO_SEARCH_SESSION_STORAGE_KEY = 'videoSearchParams';
