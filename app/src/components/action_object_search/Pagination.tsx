@@ -1,26 +1,26 @@
 import { Button, ButtonGroup, HStack } from '@chakra-ui/react';
-import {
-  type SearchParamKey,
-  SEARCH_RESULT_PAGE_KEY,
-  TOTAL_VIDEOS_PER_PAGE,
-} from 'constants/action_object_search/constants';
+import { type SearchParamKey } from 'constants/action_object_search/constants';
 import React, { useCallback, useState } from 'react';
 
 type PaginationProps = {
-  searchResultPage: number;
-  setSearchResultPage: (searchResultPage: number) => void;
+  pageState: number;
+  setPageState: (pageNumber: number) => void;
+  searchParamPageKey: SearchParamKey;
   handleSearchParamsChange: (key: SearchParamKey, value: string) => void;
-  totalVideos: number;
+  totalElements: number;
+  displayedElementsPerPage: number;
   totalDisplayablePages?: number;
 };
 export function Pagination({
-  searchResultPage,
-  setSearchResultPage,
+  pageState,
+  setPageState,
+  searchParamPageKey,
   handleSearchParamsChange,
-  totalVideos,
+  totalElements,
+  displayedElementsPerPage,
   totalDisplayablePages = 10,
 }: PaginationProps): React.ReactElement {
-  const totalPages = Math.ceil(totalVideos / TOTAL_VIDEOS_PER_PAGE);
+  const totalPages = Math.ceil(totalElements / displayedElementsPerPage);
 
   const makeDisplayedPagesArray = (displayedPagesStart: number) => {
     return [...Array(totalDisplayablePages).keys()]
@@ -37,10 +37,10 @@ export function Pagination({
       if (page === undefined) {
         return;
       }
-      setSearchResultPage(Number(page));
-      handleSearchParamsChange(SEARCH_RESULT_PAGE_KEY, page);
+      setPageState(Number(page));
+      handleSearchParamsChange(searchParamPageKey, page);
     },
-    [setSearchResultPage, handleSearchParamsChange]
+    [handleSearchParamsChange, searchParamPageKey, setPageState]
   );
 
   const hasPreviousPage = displayedPagesStart !== 1;
@@ -98,7 +98,7 @@ export function Pagination({
             data-page={pageNumber}
             onClick={handlePageNumberButtonClick}
             width={'50px'}
-            colorScheme={pageNumber === searchResultPage ? 'blue' : 'gray'}
+            colorScheme={pageNumber === pageState ? 'blue' : 'gray'}
           >
             {pageNumber}
           </Button>

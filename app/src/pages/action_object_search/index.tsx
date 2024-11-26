@@ -259,15 +259,27 @@ function ActionObjectSearch(): React.ReactElement {
             </Tbody>
           </Table>
         </TableContainer>
-        {selectedVideoDuration === 'full' && <VideoGrid videos={videos} />}
+        {selectedVideoDuration === 'full' && (
+          <VideoGrid
+            videos={videos}
+            mainObject={mainObject}
+            targetObject={targetObject}
+          />
+        )}
         {selectedVideoDuration === 'segment' && (
-          <VideoGrid videos={videoSegments} />
+          <VideoGrid
+            videos={videoSegments}
+            mainObject={mainObject}
+            targetObject={targetObject}
+          />
         )}
         <Pagination
-          searchResultPage={searchResultPage}
-          setSearchResultPage={setSearchResultPage}
+          pageState={searchResultPage}
+          setPageState={setSearchResultPage}
+          searchParamPageKey={SEARCH_RESULT_PAGE_KEY}
           handleSearchParamsChange={handleSearchParamsChange}
-          totalVideos={videoCount}
+          totalElements={videoCount}
+          displayedElementsPerPage={TOTAL_VIDEOS_PER_PAGE}
         />
       </Flex>
     </ChakraProvider>
