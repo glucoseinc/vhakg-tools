@@ -24,6 +24,7 @@ import {
   TOTAL_VIDEOS_PER_PAGE,
   SCENE_KEY,
   CAMERA_KEY,
+  VIDEO_SEARCH_SESSION_STORAGE_KEY,
 } from 'constants/action_object_search/constants';
 import {
   type ActionQueryType,
@@ -201,6 +202,12 @@ function ActionObjectSearch(): React.ReactElement {
     }
     setSearchResultPage(1);
     handleSearchParamsChange(SEARCH_RESULT_PAGE_KEY, '1');
+
+    sessionStorage.removeItem(VIDEO_SEARCH_SESSION_STORAGE_KEY);
+    sessionStorage.setItem(
+      VIDEO_SEARCH_SESSION_STORAGE_KEY,
+      searchParams.toString()
+    );
   }, [
     selectedAction,
     mainObject,
