@@ -3,6 +3,7 @@ import {
   IRI_KEY,
   MAIN_OBJECT_KEY,
   TARGET_OBJECT_KEY,
+  VIDEO_SEARCH_SESSION_STORAGE_KEY,
 } from 'constants/action_object_search/constants';
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -23,9 +24,11 @@ export function ImagePageLink({
 
   const handleClick = useCallback(() => {
     const videoSearchParams = new URLSearchParams(window.location.search);
-    const sessionStorageKey = 'searchParams';
-    sessionStorage.removeItem(sessionStorageKey);
-    sessionStorage.setItem(sessionStorageKey, videoSearchParams.toString());
+    sessionStorage.removeItem(VIDEO_SEARCH_SESSION_STORAGE_KEY);
+    sessionStorage.setItem(
+      VIDEO_SEARCH_SESSION_STORAGE_KEY,
+      videoSearchParams.toString()
+    );
 
     const imageSearchParams = new URLSearchParams({
       [MAIN_OBJECT_KEY]: mainObject,
