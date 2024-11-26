@@ -32,8 +32,10 @@ function BoundingBoxImageViewer(): React.ReactElement {
   );
   const [canvasContext, setCanvasContext] =
     useState<CanvasRenderingContext2D | null>(null);
-  const [resolutionX, setResolutionX] = useState(0);
-  const [resolutionY, setResolutionY] = useState(0);
+  const [resolution, setResolution] = useState<{
+    width: number;
+    height: number;
+  }>({ width: 0, height: 0 });
 
   const isAnyRequiredParamEmpty = mainObject === '' || iri === '';
   const frameCount = frames.length;
@@ -67,9 +69,11 @@ function BoundingBoxImageViewer(): React.ReactElement {
       const splitImages = await fetchImage(
         frames[imageViewerPage - 1].frame.value
       );
-      const [resX, resY] = splitImages[0].resolution.value.split('x'); // "1920x1080" -> ["1920", "1080"]
-      setResolutionX(Number(resX));
-      setResolutionY(Number(resY));
+
+      const [width, height] = splitImages[0].resolution.value
+        .split('x')
+        .map((v) => Number(v)); // "1920x1080" -> [1920, 1080]
+      setResolution({ width, height });
 
       splitImages.forEach((image, index) => {
         const img = new Image();
@@ -99,8 +103,8 @@ function BoundingBoxImageViewer(): React.ReactElement {
         <Box>
           <Center>
             <canvas
-              width={`${resolutionX}px`}
-              height={`${resolutionY}px`}
+              width={`${resolution.width}px`}
+              height={`${resolution.height}px`}
               id="image"
             />
           </Center>
