@@ -3,7 +3,6 @@ import { Pagination } from 'components/action_object_search/Pagination';
 import {
   IMAGE_VIEWER_PAGE_KEY,
   IRI_KEY,
-  IS_VIDEO_SEGMENT_KEY,
   MAIN_OBJECT_KEY,
   type SearchParamKey,
   TARGET_OBJECT_KEY,
@@ -23,7 +22,6 @@ function BoundingBoxImageViewer(): React.ReactElement {
 
   const mainObject = searchParams.get(MAIN_OBJECT_KEY) || '';
   const targetObject = searchParams.get(TARGET_OBJECT_KEY) || '';
-  const isVideoSegment = searchParams.get(IS_VIDEO_SEGMENT_KEY) === 'true';
   const iri = searchParams.get(IRI_KEY) || '';
 
   const [frames, setFrames] = useState<FrameQueryType[]>([]);
@@ -38,6 +36,7 @@ function BoundingBoxImageViewer(): React.ReactElement {
   }>({ width: 0, height: 0 });
 
   const isAnyRequiredParamEmpty = mainObject === '' || iri === '';
+  const isVideoSegment = iri.includes('video_segment');
   const frameCount = frames.length;
 
   useEffect(() => {
