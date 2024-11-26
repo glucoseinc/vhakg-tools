@@ -276,10 +276,10 @@ function ActionObjectSearch(): React.ReactElement {
         <Pagination
           pageState={searchResultPage}
           setPageState={setSearchResultPage}
-          pageKey={SEARCH_RESULT_PAGE_KEY}
+          searchParamPageKey={SEARCH_RESULT_PAGE_KEY}
           handleSearchParamsChange={handleSearchParamsChange}
           totalElements={videoCount}
-          totalElementsPerPage={TOTAL_VIDEOS_PER_PAGE}
+          displayedElementsPerPage={TOTAL_VIDEOS_PER_PAGE}
         />
       </Flex>
     </ChakraProvider>

@@ -4,23 +4,23 @@ import React, { useCallback, useState } from 'react';
 
 type PaginationProps = {
   pageState: number;
-  setPageState: (searchResultPage: number) => void;
-  pageKey: SearchParamKey;
+  setPageState: (pageNumber: number) => void;
+  searchParamPageKey: SearchParamKey;
   handleSearchParamsChange: (key: SearchParamKey, value: string) => void;
   totalElements: number;
-  totalElementsPerPage: number;
+  displayedElementsPerPage: number;
   totalDisplayablePages?: number;
 };
 export function Pagination({
   pageState,
   setPageState,
-  pageKey,
+  searchParamPageKey,
   handleSearchParamsChange,
   totalElements,
-  totalElementsPerPage,
+  displayedElementsPerPage,
   totalDisplayablePages = 10,
 }: PaginationProps): React.ReactElement {
-  const totalPages = Math.ceil(totalElements / totalElementsPerPage);
+  const totalPages = Math.ceil(totalElements / displayedElementsPerPage);
 
   const makeDisplayedPagesArray = (displayedPagesStart: number) => {
     return [...Array(totalDisplayablePages).keys()]
@@ -38,9 +38,9 @@ export function Pagination({
         return;
       }
       setPageState(Number(page));
-      handleSearchParamsChange(pageKey, page);
+      handleSearchParamsChange(searchParamPageKey, page);
     },
-    [handleSearchParamsChange, pageKey, setPageState]
+    [handleSearchParamsChange, searchParamPageKey, setPageState]
   );
 
   const hasPreviousPage = displayedPagesStart !== 1;

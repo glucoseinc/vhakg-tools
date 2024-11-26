@@ -107,10 +107,10 @@ function BoundingBoxImageViewer(): React.ReactElement {
           <Pagination
             pageState={imageViewerPage}
             setPageState={setImageViewerPage}
-            pageKey={IMAGE_VIEWER_PAGE_KEY}
+            searchParamPageKey={IMAGE_VIEWER_PAGE_KEY}
             handleSearchParamsChange={handleSearchParamsChange}
             totalElements={frameCount}
-            totalElementsPerPage={TOTAL_IMAGES_PER_PAGE}
+            displayedElementsPerPage={TOTAL_IMAGES_PER_PAGE}
           />
         </Box>
       </Center>
