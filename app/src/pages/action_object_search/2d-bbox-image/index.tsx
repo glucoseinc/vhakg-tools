@@ -9,7 +9,7 @@ import {
   TARGET_OBJECT_KEY,
   TOTAL_IMAGES_PER_PAGE,
 } from 'constants/action_object_search/constants';
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
   type FrameQueryType,
