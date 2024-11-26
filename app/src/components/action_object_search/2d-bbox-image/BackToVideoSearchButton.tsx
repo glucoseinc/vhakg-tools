@@ -3,7 +3,7 @@ import { VIDEO_SEARCH_SESSION_STORAGE_KEY } from 'constants/action_object_search
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export function ReturnVideoSearchButton(): React.ReactElement {
+export function BackToVideoSearchButton(): React.ReactElement {
   const navigate = useNavigate();
   const handleClick = useCallback(() => {
     const videoSearchParams = sessionStorage.getItem(
@@ -17,7 +17,7 @@ export function ReturnVideoSearchButton(): React.ReactElement {
   }, []);
   return (
     <Center>
-      <Button onClick={handleClick}>Return</Button>
+      <Button onClick={handleClick}>Back</Button>
     </Center>
   );
 }
