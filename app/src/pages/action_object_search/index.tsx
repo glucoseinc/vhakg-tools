@@ -39,7 +39,7 @@ import {
   type VideoSegmentQueryType,
 } from 'utils/action_object_search/sparql';
 import FloatingNavigationLink from 'components/common/FloatingNavigationLink';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { SelectScene } from 'components/action_object_search/SelectScene';
 import { SelectCamera } from 'components/action_object_search/SelectCamera';
@@ -80,17 +80,25 @@ function ActionObjectSearch(): React.ReactElement {
     searchParams.get(CAMERA_KEY) || ''
   );
 
-  const isFirstRender = useRef(true);
-
   const isAnyRequiredParamsEmpty = selectedAction === '' || mainObject === '';
 
   const handleSearchParamsChange = useCallback(
     (key: SearchParamKey, value: string) => {
       const newSearchParams = new URLSearchParams(searchParams);
       newSearchParams.set(key, value);
+      if (key !== SEARCH_RESULT_PAGE_KEY) {
+        setSearchResultPage(1);
+        newSearchParams.set(SEARCH_RESULT_PAGE_KEY, '1');
+      }
       setSearchParams(newSearchParams);
+
+      sessionStorage.removeItem(VIDEO_SEARCH_SESSION_STORAGE_KEY);
+      sessionStorage.setItem(
+        VIDEO_SEARCH_SESSION_STORAGE_KEY,
+        newSearchParams.toString()
+      );
     },
-    [searchParams, setSearchParams]
+    [searchParams, setSearchParams, setSearchResultPage]
   );
 
   useEffect(() => {
@@ -195,19 +203,6 @@ function ActionObjectSearch(): React.ReactElement {
         )
       );
     })();
-
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-    setSearchResultPage(1);
-    handleSearchParamsChange(SEARCH_RESULT_PAGE_KEY, '1');
-
-    sessionStorage.removeItem(VIDEO_SEARCH_SESSION_STORAGE_KEY);
-    sessionStorage.setItem(
-      VIDEO_SEARCH_SESSION_STORAGE_KEY,
-      searchParams.toString()
-    );
   }, [
     selectedAction,
     mainObject,
