@@ -13,6 +13,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
   type FrameQueryType,
+  fetchBoundingBox,
   fetchFrameByCamera,
   fetchFrameByVideoSegment,
   fetchImage,
@@ -65,15 +66,18 @@ function BoundingBoxImageViewer(): React.ReactElement {
       if (frameCount === 0) {
         return;
       }
+      if (canvasContext === null) {
+        return;
+      }
 
-      const splitImages = await fetchImage(
-        frames[imageViewerPage - 1].frame.value
-      );
+      const frameIri = frames[imageViewerPage - 1].frame.value;
 
-      const [width, height] = splitImages[0].resolution.value
+      const splitImages = await fetchImage(frameIri);
+
+      const [imageWidth, imageHeight] = splitImages[0].resolution.value
         .split('x')
         .map((v) => Number(v)); // "1920x1080" -> [1920, 1080]
-      setResolution({ width, height });
+      setResolution({ width: imageWidth, height: imageHeight });
 
       splitImages.forEach((image, index) => {
         const img = new Image();
@@ -82,8 +86,28 @@ function BoundingBoxImageViewer(): React.ReactElement {
           const x = (index % Number(image.splitWidth.value)) * img.width;
           const y =
             Math.floor(index / Number(image.splitHeight.value)) * img.height;
-          canvasContext?.drawImage(img, x, y);
+          canvasContext.drawImage(img, x, y);
         };
+      });
+
+      const boundingBoxes = await fetchBoundingBox(
+        frameIri,
+        mainObject,
+        targetObject
+      );
+
+      boundingBoxes.forEach((boundingBox) => {
+        const [leftX, topY, rightX, bottomY] =
+          boundingBox.boundingBoxValue.value.split(',').map((v) => Number(v));
+        boundingBox.label.value.includes(mainObject)
+          ? (canvasContext.strokeStyle = 'red')
+          : (canvasContext.strokeStyle = 'blue');
+        canvasContext?.strokeRect(
+          leftX,
+          imageHeight - topY, // Y軸はRDFとcanvasで上下が逆
+          rightX - leftX,
+          topY - bottomY
+        );
       });
     })();
   }, [frames, imageViewerPage]);
