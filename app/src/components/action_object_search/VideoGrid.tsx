@@ -4,7 +4,7 @@ import {
   type VideoQueryType,
 } from 'utils/action_object_search/sparql';
 import React from 'react';
-import { ImagePageLink } from './ImagePageLink';
+import { ImagePageLink } from 'components/action_object_search/ImagePageLink';
 
 function getVideoDurationAsMediaFragment(video: VideoSegmentQueryType) {
   const frameRate = Number(video.frameRate.value);
