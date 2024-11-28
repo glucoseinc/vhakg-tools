@@ -125,3 +125,64 @@ export const fetchImage: (
   const result = (await makeClient().query.select(query)) as ImageQueryType[];
   return result;
 };
+
+export type BoundingBoxQueryType = {
+  label: NamedNode;
+  boundingBoxValue: NamedNode;
+};
+export const fetchBoundingBox: (
+  frameIri: string,
+  mainObject: string,
+  targetObject: string
+) => Promise<BoundingBoxQueryType[]> = async (
+  frameIri,
+  mainObject,
+  targetObject
+) => {
+  const isTargetObjectSpecified = targetObject !== '';
+  const query = `
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX mssn: <http://mssn.sigappfr.org/mssn/>
+    PREFIX vh2kg: <http://kgrc4si.home.kg/virtualhome2kg/ontology/>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+    SELECT DISTINCT ?label ?boundingBoxValue WHERE { 
+      BIND (<${frameIri}> AS ?frame) .
+      BIND ("${mainObject}" AS ?mainObjectName) .
+      BIND ("${targetObject}" AS ?targetObjectName) .
+      
+      ?scene vh2kg:hasVideo ?camera .
+      ?scene vh2kg:hasEvent ?event .
+      ?event vh2kg:mainObject ?mainObject .
+      ${isTargetObjectSpecified ? `?event vh2kg:targetObject ?targetObject .` : ''}
+      
+      ?camera mssn:hasMediaSegment ?videoSegment .
+      ?videoSegment mssn:hasMediaDescriptor ?frame .
+      ?frame mssn:hasMediaDescriptor ?object .
+      
+      ${
+        isTargetObjectSpecified
+          ? `{
+               ?object vh2kg:is2DbboxOf ?mainObject .
+             }
+             UNION
+             {
+               ?object vh2kg:is2DbboxOf ?targetObject .
+             }`
+          : `?object vh2kg:is2DbboxOf ?mainObject .`
+      }
+      
+      ?object vh2kg:bbox-2d-value ?boundingBoxValue ;
+              rdfs:label ?label .
+      
+      ?mainObject rdfs:label ?mainObjectLabel .
+      ${isTargetObjectSpecified ? `?targetObject rdfs:label ?targetObjectLabel .` : ''}
+      FILTER regex(?mainObjectLabel, ?mainObjectName, "i") .
+      ${isTargetObjectSpecified ? `FILTER regex(?targetObjectLabel, ?targetObjectName, "i") .` : ''}
+    } 
+  `;
+  const result = (await makeClient().query.select(
+    query
+  )) as BoundingBoxQueryType[];
+  return result;
+};
