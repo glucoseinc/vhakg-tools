@@ -1,15 +1,10 @@
-import { Grid, GridItem, Link } from '@chakra-ui/react';
+import { Grid, GridItem } from '@chakra-ui/react';
 import {
   type VideoSegmentQueryType,
   type VideoQueryType,
 } from 'utils/action_object_search/sparql';
 import React from 'react';
-import { Link as ReactRouterLink } from 'react-router-dom';
-import {
-  IRI_KEY,
-  MAIN_OBJECT_KEY,
-  TARGET_OBJECT_KEY,
-} from 'constants/action_object_search/constants';
+import { ImagePageLink } from './ImagePageLink';
 
 function getVideoDurationAsMediaFragment(video: VideoSegmentQueryType) {
   const frameRate = Number(video.frameRate.value);
@@ -48,20 +43,18 @@ export function VideoGrid({
               width="100%"
               height="auto"
             />
-            <Link
-              as={ReactRouterLink}
-              to={`/action-object-search/2d-bbox-image?${new URLSearchParams({
-                [MAIN_OBJECT_KEY]: mainObject,
-                [TARGET_OBJECT_KEY]: targetObject,
-                [IRI_KEY]: hasVideoSegment
-                  ? video.videoSegment.value
-                  : video.camera.value,
-              }).toString()}`}
-            >
-              {hasVideoSegment
-                ? video.videoSegment.value.split('/').pop()
-                : video.camera.value.split('/').pop()}
-            </Link>
+            <ImagePageLink
+              linkText={
+                hasVideoSegment
+                  ? video.videoSegment.value.split('/').pop() || ''
+                  : video.camera.value.split('/').pop() || ''
+              }
+              mainObject={mainObject}
+              targetObject={targetObject}
+              iri={
+                hasVideoSegment ? video.videoSegment.value : video.camera.value
+              }
+            ></ImagePageLink>
           </GridItem>
         );
       })}
