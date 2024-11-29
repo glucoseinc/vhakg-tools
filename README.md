@@ -41,9 +41,29 @@ This repository provides a set of tools for searching and extracting videos from
 - Wait for data to be loaded until the Docker GraphDB container displays the log `[main] INFO com.ontotext.graphdb.importrdf.Preload - Finished`.
 - Open http://localhost:5050
   - Please wait a moment when you open first time, as the back-end system needs to load the activity data.
+- Select the search tool you would like to use
+
+> [!NOTE]
+> You can switch between two types of search tools by clicking the button at the top left of each page.
 
 <p align="center">
-    <img src="img/gui.gif" alt="gif" width="50%">
+  <img src="img/switch-between-search-tools.gif" alt="gif" width="50%">
+</p>
+
+#### Demonstration
+
+- Searching by activities
+  - http://localhost:5050
+
+<p align="center">
+  <img src="img/gui.gif" alt="gif" width="50%">
+</p>
+
+- Searching by actions
+  - http://localhost:5050/action-object-search
+
+<p align="center">
+  <img src="img/gui-2.gif" alt="gif" width="50%">
 </p>
 
 ### CLI
