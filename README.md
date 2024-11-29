@@ -44,6 +44,7 @@ This repository provides a set of tools for searching and extracting videos from
 
 <p align="center">
     <img src="img/gui.gif" alt="gif" width="50%">
+    <img src="img/gui-2.gif" alt="gif" width="50%">
 </p>
 
 ### CLI
