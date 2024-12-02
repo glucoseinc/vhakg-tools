@@ -262,3 +262,49 @@ select DISTINCT ?action ?main_object ?target_object  where {
             annotation_list.append({'action': action, 'main_object': main_object, 'target_object': target_object, 'start_frame': start_frame, 'end_frame': end_frame})
 
     return annotation_list
+
+def get_frames_for_video_segment(action: str, main_object: str, target_object: str | None, camera: str | None):
+    from SPARQLWrapper import SPARQLWrapper, JSON
+
+    query = f"""
+        PREFIX ex: <http://kgrc4si.home.kg/virtualhome2kg/instance/>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX mssn: <http://mssn.sigappfr.org/mssn/>
+        PREFIX vh2kg: <http://kgrc4si.home.kg/virtualhome2kg/ontology/>
+
+        SELECT DISTINCT ?video_segment ?start_frame ?end_frame WHERE {{
+            ?main_object rdfs:label ?main_object_label FILTER regex(?main_object_label, "{main_object}", "i") .
+            {
+                f'?target_object rdfs:label ?target_object_label FILTER regex(?target_object_label, "{target_object}", "i") '
+                if target_object is not None 
+                else ''
+            }
+            ?event vh2kg:mainObject ?main_object ;
+                    {'vh2kg:targetObject ?target_object ;' if target_object is not None else ''}
+                    vh2kg:action ?action ;
+                    vh2kg:hasVideoSegment ?video_segment .
+            ?video_segment vh2kg:hasStartFrame ?start_frame ;
+                        vh2kg:hasEndFrame   ?end_frame .
+            ?camera mssn:hasMediaSegment ?video_segment ;
+                    vh2kg:video ?base64Video ;
+                    vh2kg:frameRate ?frameRate .
+            FILTER regex(STR(?action), "{action}", "i") .
+            {f'FILTER regex(STR(?camera), "camera{camera}", "i") .' if camera is not None else ''}
+        }}
+    """
+
+    sparql = SPARQLWrapper(ENDPOINT)
+    sparql.setQuery(query)
+    sparql.setReturnFormat(JSON)
+    results = sparql.query().convert()
+
+    bindings = results["results"]["bindings"]
+
+    frame_list = {}
+    for binding in bindings:
+        video_segment = binding["video_segment"]["value"].replace(PREFIX_EX, "")
+        start_frame = int(binding["start_frame"]["value"])
+        end_frame = int(binding["end_frame"]["value"])
+        frame_list[video_segment] = {'start_frame': start_frame, 'end_frame': end_frame}
+
+    return frame_list
