@@ -8,7 +8,7 @@ def main():
     action: str = args.action
     main_object: str = args.__getattribute__('main-object')
     target_object: str = args.target_object
-    camera_number: int = args.camera
+    camera: str = args.camera
     is_segment: bool = args.segment
     output_path: str = args.__getattribute__('output-path')
 
