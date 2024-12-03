@@ -41,10 +41,10 @@ def output_video_segment(action: str, main_object: str, target_object: str | Non
     frames = get_frames_for_video_segment(action, main_object, target_object, camera)
     for segment_name in frames.keys():
         split_segment_name = segment_name.split('_') # ['clean', 'sink3', '1', 'scene7', 'video', 'segment10']
-        (*activity_name_word_list, camera, scene, _, _) = split_segment_name
+        (*activity_name_word_list, camera_number, scene, _, _) = split_segment_name
         activity = '_'.join(activity_name_word_list)
 
-        output_video(activity, scene, "camera" + camera, {segment_name: frames[segment_name]}, absolute_output_path)
+        output_video(activity, scene, "camera" + camera_number, {segment_name: frames[segment_name]}, absolute_output_path)
 
 
 if __name__ == '__main__':
