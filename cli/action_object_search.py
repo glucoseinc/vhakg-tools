@@ -2,7 +2,7 @@ import argparse
 from pathlib import Path
 import importlib
 
-from sparql import get_frames_for_video_segment
+from sparql import get_frames_of_video_segment
 
 
 def main():
@@ -41,13 +41,13 @@ def get_args():
 
 def output_video_segment(action: str, main_object: str, target_object: str | None, camera: str | None, absolute_output_path: str):
     output_video = importlib.import_module('mmkg-search').output_video
-    frames = get_frames_for_video_segment(action, main_object, target_object, camera)
-    for segment_name in frames.keys():
-        split_segment_name = segment_name.split('_') # ['clean', 'sink3', '1', 'scene7', 'video', 'segment10']
-        (*activity_name_word_list, camera_number, scene, _, _) = split_segment_name
+    frames = get_frames_of_video_segment(action, main_object, target_object, camera)
+    for video_segment_name in frames.keys():
+        split_video_segment_name = video_segment_name.split('_') # ['clean', 'sink3', '1', 'scene7', 'video', 'segment10']
+        (*activity_name_word_list, camera_number, scene, _, _) = split_video_segment_name
         activity = '_'.join(activity_name_word_list)
 
-        output_video(activity, scene, "camera" + camera_number, {segment_name: frames[segment_name]}, absolute_output_path)
+        output_video(activity, scene, "camera" + camera_number, {video_segment_name: frames[video_segment_name]}, absolute_output_path)
 
 
 if __name__ == '__main__':

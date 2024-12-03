@@ -263,7 +263,7 @@ select DISTINCT ?action ?main_object ?target_object  where {
 
     return annotation_list
 
-def get_frames_for_video_segment(action: str, main_object: str, target_object: str | None, camera: str | None):
+def get_frames_of_video_segment(action: str, main_object: str, target_object: str | None, camera: str | None):
     from SPARQLWrapper import SPARQLWrapper, JSON
 
     query = f"""
