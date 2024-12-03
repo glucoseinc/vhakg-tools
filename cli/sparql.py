@@ -263,6 +263,46 @@ select DISTINCT ?action ?main_object ?target_object  where {
 
     return annotation_list
 
+
+def get_cameras(action: str, main_object: str, target_object: str | None, camera: str | None):
+    from SPARQLWrapper import SPARQLWrapper, JSON
+
+    query = f"""
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX vh2kg: <http://kgrc4si.home.kg/virtualhome2kg/ontology/>
+
+        SELECT DISTINCT ?camera WHERE {{
+            ?main_object rdfs:label ?main_object_label FILTER regex(?main_object_label, "{main_object}", "i") .
+            {
+                f'?target_object rdfs:label ?target_object_label FILTER regex(?target_object_label, "{target_object}", "i") .'
+
+                if target_object is not None else ''
+            }
+            ?event vh2kg:mainObject ?main_object ;
+                 {'vh2kg:targetObject ?target_object ;' if target_object is not None else ''}
+                   vh2kg:action ?action .
+            ?scene vh2kg:hasEvent ?event ;
+                   vh2kg:hasVideo ?camera .
+            FILTER regex(STR(?action), "{action}", "i") .
+            {f'FILTER regex(STR(?camera), "camera{camera}", "i") .' if camera is not None else ''}
+        }}
+    """
+
+    sparql = SPARQLWrapper(ENDPOINT)
+    sparql.setQuery(query)
+    sparql.setReturnFormat(JSON)
+    results = sparql.query().convert()
+
+    bindings = results["results"]["bindings"]
+
+    camera_list = []
+    for binding in bindings:
+        camera = binding["camera"]["value"].replace(PREFIX_EX, "")
+        camera_list.append(camera)
+    
+    return camera_list
+
+
 def get_frames_of_video_segment(action: str, main_object: str, target_object: str | None, camera: str | None):
     from SPARQLWrapper import SPARQLWrapper, JSON
 

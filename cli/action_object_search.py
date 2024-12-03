@@ -2,7 +2,7 @@ import argparse
 from pathlib import Path
 import importlib
 
-from sparql import get_frames_of_video_segment
+from sparql import get_frames_of_video_segment, get_cameras
 
 
 def main():
@@ -20,6 +20,8 @@ def main():
 
     if is_segment:
         output_video_segment(action, main_object, target_object, camera, absolute_output_path)
+    if is_full:
+        output_full_video(action, main_object, target_object, camera, absolute_output_path)
 
 
 def get_args():
@@ -37,6 +39,16 @@ def get_args():
     parser.add_argument("output-path", type=str, help="The directory to save the search results (can be relative or absolute)")
 
     return parser.parse_args()
+
+
+def output_full_video(action: str, main_object: str, target_object: str | None, camera: str | None, absolute_output_path: str):
+    output_video = importlib.import_module('mmkg-search').output_video
+    camera_list = get_cameras(action, main_object, target_object, camera)
+    frame_list = {'all': {'start_frame': None, 'end_frame': None}}
+    for camera in camera_list:
+        [*activity_name_word_list, scene, camera] = camera.split('_')
+        activity = '_'.join(activity_name_word_list)
+        output_video(activity, scene, camera, frame_list,absolute_output_path)
 
 
 def output_video_segment(action: str, main_object: str, target_object: str | None, camera: str | None, absolute_output_path: str):
