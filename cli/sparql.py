@@ -274,7 +274,7 @@ def get_cameras(action: str, main_object: str, target_object: str | None, camera
         SELECT DISTINCT ?camera WHERE {{
             ?main_object rdfs:label ?main_object_label FILTER regex(?main_object_label, "{main_object}", "i") .
             {
-                f'?target_object rdfs:label ?target_object_label FILTER regex(?target_object_label, "${target_object}", "i") .'
+                f'?target_object rdfs:label ?target_object_label FILTER regex(?target_object_label, "{target_object}", "i") .'
 
                 if target_object is not None else ''
             }
