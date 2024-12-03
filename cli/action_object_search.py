@@ -1,11 +1,12 @@
 import argparse
+import os
 from pathlib import Path
 import importlib
 import base64
 import tempfile
 import os
 
-from sparql import get_frames_of_video_segment, get_cameras, get_object_containing_frames, get_video
+from sparql import get_frames_of_video_segment, get_cameras, get_object_containing_frames, get_video, get_annotation_2d_bbox
 import cv2
 
 
@@ -27,7 +28,8 @@ def main():
     if is_full:
         output_full_video(action, main_object, target_object, camera, absolute_output_path)
 
-    output_object_containing_image(action, main_object, target_object, camera, absolute_output_path)
+    # output_object_containing_image(action, main_object, target_object, camera, absolute_output_path)
+    generate_tsv(action, main_object, target_object, camera, absolute_output_path)
 
 
 def get_args():
@@ -144,6 +146,20 @@ class TemporaryVideoFile:
 
     def __exit__(self, *args):
         self.tmp_file.close()
+
+
+def generate_tsv(action: str, main_object: str, target_object: str | None, camera: str | None, absolute_output_path: str):
+    frames = get_frames_of_video_segment(action, main_object, target_object, camera)
+    for video_segment_name in frames:
+        scene = video_segment_name.split('_')[3]
+        bbox_annotations = get_annotation_2d_bbox(scene, {video_segment_name: frames[video_segment_name]})
+
+        object_containing_bbox_annotations = []
+        for bbox_annotation in bbox_annotations:
+            if main_object in bbox_annotation['object']:
+                object_containing_bbox_annotations.append(bbox_annotation)
+            if target_object is not None and target_object in bbox_annotation['object']:
+                object_containing_bbox_annotations.append(bbox_annotation)
 
 
 if __name__ == '__main__':
