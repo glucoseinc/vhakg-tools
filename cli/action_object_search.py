@@ -15,7 +15,6 @@ def main():
 
     absolute_output_path = Path(output_path).resolve()
 
-    print(main_object, target_object, camera, is_full, is_segment, absolute_output_path)
 
 def get_args():
     parser = argparse.ArgumentParser(
