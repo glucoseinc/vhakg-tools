@@ -10,13 +10,16 @@ def main():
 
     action: str = args.action
     main_object: str = args.__getattribute__('main-object')
-    target_object: str = args.target_object
-    camera: str = args.camera
+    target_object: str | None = args.target_object
+    camera: str | None = args.camera
     is_full: bool = args.full
     is_segment: bool = args.segment
     output_path: str = args.__getattribute__('output-path')
 
-    absolute_output_path = Path(output_path).resolve()
+    absolute_output_path = str(Path(output_path).resolve())
+
+    if is_segment:
+        output_video_segment(action, main_object, target_object, camera, absolute_output_path)
 
 
 def get_args():
