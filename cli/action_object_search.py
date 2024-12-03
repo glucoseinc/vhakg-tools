@@ -2,7 +2,7 @@ import argparse
 from pathlib import Path
 import importlib
 
-from sparql import get_frames_of_video_segment, get_cameras
+from sparql import get_frames_of_video_segment, get_cameras, get_object_containing_frames
 
 
 def main():
@@ -23,7 +23,7 @@ def main():
     if is_full:
         output_full_video(action, main_object, target_object, camera, absolute_output_path)
 
-    output_image_by_action_and_object(action, main_object, target_object, camera, absolute_output_path)
+    output_object_containing_image(action, main_object, target_object, camera, absolute_output_path)
 
 
 def get_args():
@@ -62,6 +62,15 @@ def output_video_segment(action: str, main_object: str, target_object: str | Non
         activity = '_'.join(activity_name_word_list)
 
         output_video(activity, scene, "camera" + camera_number, {video_segment_name: frames[video_segment_name]}, absolute_output_path)
+
+
+def output_object_containing_image(action: str, main_object: str, target_object: str | None, camera: str | None, absolute_output_path: str):
+    output_image = importlib.import_module('mmkg-search').output_image
+    video_segment_names = get_frames_of_video_segment(action, main_object, target_object, camera).keys()
+    for video_segment_name in video_segment_names:
+        frame_lists = get_object_containing_frames(video_segment_name, main_object, target_object)
+        for frame_list in frame_lists:
+            output_image(frame_list, absolute_output_path)
 
 
 if __name__ == '__main__':

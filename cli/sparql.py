@@ -350,7 +350,7 @@ def get_frames_of_video_segment(action: str, main_object: str, target_object: st
     return frame_list
 
 
-def get_frames_by_object(video_segment_name: str, main_object: str, target_object:str | None):
+def get_object_containing_frames(video_segment_name: str, main_object: str, target_object:str | None):
     from SPARQLWrapper import SPARQLWrapper, JSON
 
     is_target_object_specified = target_object is not None
