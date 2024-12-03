@@ -23,6 +23,8 @@ def main():
     if is_full:
         output_full_video(action, main_object, target_object, camera, absolute_output_path)
 
+    output_image_by_action_and_object(action, main_object, target_object, camera, absolute_output_path)
+
 
 def get_args():
     parser = argparse.ArgumentParser(
