@@ -2,7 +2,7 @@ import argparse
 from pathlib import Path
 import importlib
 
-from sparql import get_frames_for_video_segment, get_cameras
+from sparql import get_frames_of_video_segment, get_cameras
 
 
 def main():
@@ -20,7 +20,7 @@ def main():
 
     if is_segment:
         output_video_segment(action, main_object, target_object, camera, absolute_output_path)
-    else:
+    if is_full:
         output_full_video(action, main_object, target_object, camera, absolute_output_path)
 
 
