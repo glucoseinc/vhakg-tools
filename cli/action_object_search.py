@@ -9,10 +9,12 @@ def main():
     main_object: str = args.__getattribute__('main-object')
     target_object: str = args.target_object
     camera: str = args.camera
+    is_full: bool = args.full
     is_segment: bool = args.segment
     output_path: str = args.__getattribute__('output-path')
 
     absolute_output_path = Path(output_path).resolve()
+
 
 def get_args():
     parser = argparse.ArgumentParser(
@@ -24,6 +26,7 @@ def get_args():
     parser.add_argument("main-object", type=str, help="The main object of an event (partially matching)")
     parser.add_argument("-t", "--target-object", type=str, help="The target object of an event (partially matching)")
     parser.add_argument("-c",  "--camera",  type=str, help="The camera number to search for (optional)")
+    parser.add_argument("-f", "--full", action='store_true', help="The flag to search for videos")
     parser.add_argument("-s", "--segment", action='store_true', help="The flag to search for the segments of the videos")
     parser.add_argument("output-path", type=str, help="The directory to save the search results (can be relative or absolute)")
 
