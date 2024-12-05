@@ -98,13 +98,13 @@ def output_image_from_video(video_path, frame_list, absolute_output_path):
         frame_gap = 5
 
         cap.set(cv2.CAP_PROP_POS_FRAMES, from_14_5_to_30_fps(start_frame))
-        success = True
         
-        while success:
+        while True:
             if frame_count > end_frame:
                 break
-
             success, image = cap.read()
+            if not success:
+                break
 
             frame_path = image_directory_path + "/" + video_segment_name + "_frame" + str(frame_count).zfill(4) + ".jpg"
             cv2.imwrite(frame_path, image)
