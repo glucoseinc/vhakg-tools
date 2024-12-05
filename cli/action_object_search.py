@@ -149,6 +149,10 @@ class TemporaryVideoFile:
 
 
 def generate_tsv(action: str, main_object: str, target_object: str | None, camera: str | None, absolute_output_path: str):
+    annotation_directory = absolute_output_path + "/annotations"
+    if not os.path.exists(annotation_directory):
+        os.makedirs(annotation_directory)
+
     frames = get_frames_of_video_segment(action, main_object, target_object, camera)
     for video_segment_name in frames:
         scene = video_segment_name.split('_')[3]
@@ -160,7 +164,12 @@ def generate_tsv(action: str, main_object: str, target_object: str | None, camer
                 object_containing_bbox_annotations.append(bbox_annotation)
             if target_object is not None and target_object in bbox_annotation['object']:
                 object_containing_bbox_annotations.append(bbox_annotation)
-
+        
+        tsv_file_path = annotation_directory + "/" + video_segment_name + ".tsv"
+        with open(tsv_file_path, 'w') as tsv_file:
+            for annotation in object_containing_bbox_annotations:
+                tsv_file.write("\t".join([annotation['frame_number'], annotation['object'], annotation['2dbbox']]) + "\n")
+        print("2D Bounding Box Annotation saved to " + tsv_file_path)
 
 if __name__ == '__main__':
     main()
