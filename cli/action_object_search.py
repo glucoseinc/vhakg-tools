@@ -93,27 +93,31 @@ def output_image_from_video(video_path, frame_list, absolute_output_path):
         if video_segment_name == 'all':
             continue
 
-        frame_count = 0
+        start_frame = frame_count = frame_list[video_segment_name]['start_frame']
+        end_frame = frame_list[video_segment_name]['end_frame']
+        frame_gap = 5
+
+        cap.set(cv2.CAP_PROP_POS_FRAMES, from_14_5_to_30_fps(start_frame))
         success = True
         
         while success:
-            success, image = cap.read()
-
-            if frame_count % 5 != 0:
-                frame_count += 1
-                continue
-            if frame_count < frame_list[video_segment_name]['start_frame']:
-                frame_count += 1
-                continue
-            if frame_count > frame_list[video_segment_name]['end_frame']:
+            if frame_count > end_frame:
                 break
+
+            success, image = cap.read()
 
             frame_path = image_directory_path + "/" + video_segment_name + "_frame" + str(frame_count).zfill(4) + ".jpg"
             cv2.imwrite(frame_path, image)
             print("Image saved to " + frame_path)
-            frame_count += 1
+            
+            frame_count += frame_gap
+            cap.set(cv2.CAP_PROP_POS_FRAMES, from_14_5_to_30_fps(frame_count))
 
     cap.release()
+
+
+def from_14_5_to_30_fps(frame_number):
+    return int(frame_number / 14.5 * 30)
 
 
 class TemporaryVideoFile:
