@@ -348,3 +348,56 @@ def get_frames_of_video_segment(action: str, main_object: str, target_object: st
         frame_list[video_segment] = {'start_frame': start_frame, 'end_frame': end_frame}
 
     return frame_list
+
+
+def get_object_containing_frames(video_segment_name: str, main_object: str, target_object:str | None):
+    from SPARQLWrapper import SPARQLWrapper, JSON
+
+    is_target_object_specified = target_object is not None
+    
+    query = f"""
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX mssn: <http://mssn.sigappfr.org/mssn/>
+        PREFIX vh2kg: <http://kgrc4si.home.kg/virtualhome2kg/ontology/>
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+        SELECT DISTINCT ?frame_number WHERE {{ 
+            BIND (<{PREFIX_EX + video_segment_name}> AS ?video_segment) .
+            BIND ("{main_object}" AS ?main_object_name) .
+            {f'BIND ("{target_object}" AS ?target_object_name) .' if is_target_object_specified else ''}
+            
+            ?scene vh2kg:hasVideo ?camera .
+            ?scene vh2kg:hasEvent ?event .
+            ?event vh2kg:mainObject ?main_object .
+            {'?event vh2kg:targetObject ?targetObject .' if is_target_object_specified else ''}
+            
+            ?camera mssn:hasMediaSegment ?video_segment .
+            ?video_segment mssn:hasMediaDescriptor ?frame .
+            ?frame mssn:hasMediaDescriptor ?object .
+            {
+                r'{{?object vh2kg:is2DbboxOf ?main_object} UNION {?object vh2kg:is2DbboxOf ?targetObject}} .'
+                if is_target_object_specified else
+                '?object vh2kg:is2DbboxOf ?main_object .'
+            }
+            ?frame vh2kg:frameNumber ?frame_number .
+            
+            ?main_object rdfs:label ?main_object_label .
+            {'?targetObject rdfs:label ?target_object_label .' if is_target_object_specified else ''}
+            FILTER regex(?main_object_label, ?main_object_name, "i") .
+            {'FILTER regex(?target_object_label, ?target_object_name, "i") .' if is_target_object_specified else ''}
+        }}
+    """
+
+    sparql = SPARQLWrapper(ENDPOINT)
+    sparql.setQuery(query)
+    sparql.setReturnFormat(JSON)
+    results = sparql.query().convert()
+
+    bindings = results["results"]["bindings"]
+
+    frame_lists = []
+    for binding in bindings:
+        frame_number = int(binding["frame_number"]["value"])
+        frame_lists.append({video_segment_name: {'start_frame': frame_number, 'end_frame': frame_number}})
+
+    return frame_lists

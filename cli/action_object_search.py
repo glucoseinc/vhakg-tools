@@ -1,8 +1,12 @@
 import argparse
 from pathlib import Path
 import importlib
+import base64
+import tempfile
+import os
 
-from sparql import get_frames_of_video_segment, get_cameras
+from sparql import get_frames_of_video_segment, get_cameras, get_object_containing_frames, get_video
+import cv2
 
 
 def main():
@@ -22,6 +26,8 @@ def main():
         output_video_segment(action, main_object, target_object, camera, absolute_output_path)
     if is_full:
         output_full_video(action, main_object, target_object, camera, absolute_output_path)
+
+    output_object_containing_image(action, main_object, target_object, camera, absolute_output_path)
 
 
 def get_args():
@@ -60,6 +66,80 @@ def output_video_segment(action: str, main_object: str, target_object: str | Non
         activity = '_'.join(activity_name_word_list)
 
         output_video(activity, scene, "camera" + camera_number, {video_segment_name: frames[video_segment_name]}, absolute_output_path)
+
+
+def output_object_containing_image(action: str, main_object: str, target_object: str | None, camera: str | None, absolute_output_path: str):
+    video_segment_names = get_frames_of_video_segment(action, main_object, target_object, camera).keys()
+    for video_segment_name in video_segment_names:
+        with TemporaryVideoFile(video_segment_name) as tmp_video:
+            if tmp_video is None:
+                continue
+            frame_lists = get_object_containing_frames(video_segment_name, main_object, target_object)
+            for frame_list in frame_lists:
+                output_image_from_video(tmp_video.name, frame_list, absolute_output_path)
+
+
+def output_image_from_video(video_path, frame_list, absolute_output_path):
+    image_directory_path = absolute_output_path + "/images"
+    if not os.path.exists(image_directory_path):
+        os.makedirs(image_directory_path)
+
+    cap = cv2.VideoCapture(video_path)
+    if not cap.isOpened():
+        print("Cannot open video")
+        return
+
+    for video_segment_name in frame_list:
+        if video_segment_name == 'all':
+            continue
+
+        frame_count = 0
+        success = True
+        
+        while success:
+            success, image = cap.read()
+
+            if frame_count % 5 != 0:
+                frame_count += 1
+                continue
+            if frame_count < frame_list[video_segment_name]['start_frame']:
+                frame_count += 1
+                continue
+            if frame_count > frame_list[video_segment_name]['end_frame']:
+                break
+
+            frame_path = image_directory_path + "/" + video_segment_name + "_frame" + str(frame_count).zfill(4) + ".jpg"
+            cv2.imwrite(frame_path, image)
+            print("Image saved to " + frame_path)
+            frame_count += 1
+
+    cap.release()
+
+
+class TemporaryVideoFile:
+    def __init__(self, video_segment_name: str):
+        (*activity_name_word_list, camera_number, scene, _, _) = video_segment_name.split('_')
+        activity = '_'.join(activity_name_word_list)
+
+        results = get_video(activity, scene, "camera" + camera_number)
+
+        bindings = results["results"]["bindings"]
+        if len(bindings) == 0:
+            print("No video found")
+            self.tmp_file = None
+
+        result = bindings[0]
+        video_base64 = result["video"]["value"]
+        video_binary = base64.b64decode(video_base64)
+
+        self.tmp_file = tempfile.NamedTemporaryFile(suffix=".mp4")
+        self.tmp_file.write(video_binary)
+
+    def __enter__(self):
+        return self.tmp_file
+
+    def __exit__(self, *args):
+        self.tmp_file.close()
 
 
 if __name__ == '__main__':
