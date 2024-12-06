@@ -6,7 +6,7 @@ import base64
 import tempfile
 import os
 
-from sparql import get_frames_of_video_segment, get_cameras, get_object_containing_frames, get_video, get_annotation_2d_bbox
+from sparql import get_frames_of_video_segment, get_cameras, get_object_containing_frames, get_video, get_annotation_2d_bbox_from_object
 import cv2
 
 
@@ -28,7 +28,7 @@ def main():
     if is_full:
         output_full_video(action, main_object, target_object, camera, absolute_output_path)
 
-    # output_object_containing_image(action, main_object, target_object, camera, absolute_output_path)
+    output_object_containing_image(action, main_object, target_object, camera, absolute_output_path)
     generate_tsv(action, main_object, target_object, camera, absolute_output_path)
 
 
@@ -153,21 +153,13 @@ def generate_tsv(action: str, main_object: str, target_object: str | None, camer
     if not os.path.exists(annotation_directory):
         os.makedirs(annotation_directory)
 
-    frames = get_frames_of_video_segment(action, main_object, target_object, camera)
-    for video_segment_name in frames:
-        scene = video_segment_name.split('_')[3]
-        bbox_annotations = get_annotation_2d_bbox(scene, {video_segment_name: frames[video_segment_name]})
+    video_segment_names = get_frames_of_video_segment(action, main_object, target_object, camera).keys()
+    for video_segment_name in video_segment_names:
+        bbox_annotations = get_annotation_2d_bbox_from_object(main_object, target_object, video_segment_name)
 
-        object_containing_bbox_annotations = []
-        for bbox_annotation in bbox_annotations:
-            if main_object in bbox_annotation['object']:
-                object_containing_bbox_annotations.append(bbox_annotation)
-            if target_object is not None and target_object in bbox_annotation['object']:
-                object_containing_bbox_annotations.append(bbox_annotation)
-        
         tsv_file_path = annotation_directory + "/" + video_segment_name + ".tsv"
         with open(tsv_file_path, 'w') as tsv_file:
-            for annotation in object_containing_bbox_annotations:
+            for annotation in bbox_annotations:
                 tsv_file.write("\t".join([annotation['frame_number'], annotation['object'], annotation['2dbbox']]) + "\n")
         print("2D Bounding Box Annotation saved to " + tsv_file_path)
 
