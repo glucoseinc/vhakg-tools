@@ -214,3 +214,26 @@ export const fetchVideoByCamera: (
   const result = (await makeClient().query.select(query)) as VideoQueryType[];
   return result.pop() || null;
 };
+
+export const fetchVideoByVideoSegment: (
+  videoSegmentIri: string
+) => Promise<VideoQueryType | null> = async (videoSegmentIri) => {
+  const query = `
+    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+    PREFIX mssn: <http://mssn.sigappfr.org/mssn/>
+    PREFIX vh2kg: <http://kgrc4si.home.kg/virtualhome2kg/ontology/>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+    SELECT DISTINCT ?base64Video ?resolution ?frameRate ?originalFrameRate WHERE { 
+      BIND (<${videoSegmentIri}> AS ?videoSegment) .
+
+      ?camera mssn:hasMediaSegment ?videoSegment ;
+              vh2kg:video ?base64Video ;
+              vh2kg:hasResolution ?resolution ;
+              vh2kg:frameRate ?frameRate ;
+              vh2kg:originalFrameRate ?originalFrameRate .
+    }
+  `;
+  const result = (await makeClient().query.select(query)) as VideoQueryType[];
+  return result.pop() || null;
+};
