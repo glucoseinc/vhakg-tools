@@ -186,3 +186,49 @@ export const fetchBoundingBox: (
   )) as BoundingBoxQueryType[];
   return result;
 };
+
+export type VideoQueryType = {
+  base64Video: NamedNode;
+  resolution: NamedNode;
+  frameRate: NamedNode;
+  originalFrameRate: NamedNode;
+};
+export const fetchVideoByCamera: (
+  cameraIri: string
+) => Promise<VideoQueryType | null> = async (cameraIri) => {
+  const query = `
+    PREFIX vh2kg: <http://kgrc4si.home.kg/virtualhome2kg/ontology/>
+
+    SELECT DISTINCT ?base64Video ?resolution ?frameRate ?originalFrameRate WHERE { 
+      BIND (<${cameraIri}> AS ?camera) .
+
+      ?camera vh2kg:video ?base64Video ;
+              vh2kg:hasResolution ?resolution ;
+              vh2kg:frameRate ?frameRate ;
+              vh2kg:originalFrameRate ?originalFrameRate .
+    }
+  `;
+  const result = (await makeClient().query.select(query)) as VideoQueryType[];
+  return result.pop() || null;
+};
+
+export const fetchVideoByVideoSegment: (
+  videoSegmentIri: string
+) => Promise<VideoQueryType | null> = async (videoSegmentIri) => {
+  const query = `
+    PREFIX mssn: <http://mssn.sigappfr.org/mssn/>
+    PREFIX vh2kg: <http://kgrc4si.home.kg/virtualhome2kg/ontology/>
+
+    SELECT DISTINCT ?base64Video ?resolution ?frameRate ?originalFrameRate WHERE { 
+      BIND (<${videoSegmentIri}> AS ?videoSegment) .
+
+      ?camera mssn:hasMediaSegment ?videoSegment ;
+              vh2kg:video ?base64Video ;
+              vh2kg:hasResolution ?resolution ;
+              vh2kg:frameRate ?frameRate ;
+              vh2kg:originalFrameRate ?originalFrameRate .
+    }
+  `;
+  const result = (await makeClient().query.select(query)) as VideoQueryType[];
+  return result.pop() || null;
+};
