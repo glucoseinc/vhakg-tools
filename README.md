@@ -71,8 +71,13 @@ This repository provides a set of tools for searching and extracting videos from
 - Perform the same steps as in GUI
 - Run `cd cli`
 - Run `pip install -r requirements.txt` only for the first time
-- Run `python mmkg-search.py -h` if you want to know command arguments
-- Run `python mmkg-search.py args`
+- Select the tool you would like to use:
+  - Search by activities
+    - Run `python mmkg-search.py -h` if you want to know command arguments
+    - Run `python mmkg-search.py args`
+  - Search by actions
+    - Run `python action-object-search.py -h` if you want to know command arguments
+    - Run `python action-object-search.py args`
 
 #### Example
 
@@ -80,6 +85,12 @@ Extract the video segment of the "grab" part from the camera4’s video of "clea
 
 ```shell
 python mmkg-search.py clean_kitchentable1 scene1 camera4 . -a grab
+```
+
+Extract videos which contain an event "put" and its main object is "bread" and its target object is "fryingpan".
+
+```shell
+python action-object-search.py put bread -t fryingpan -f .
 ```
 
 ### SPARQL
