@@ -5,7 +5,7 @@ import base64
 import tempfile
 import os
 
-from sparql import get_frames_of_video_segment, get_cameras, get_object_containing_frames, get_video
+from sparql import get_frames_of_video_segment, get_cameras, get_object_containing_frames, get_video, get_annotation_2d_bbox_from_object
 import cv2
 
 
@@ -28,6 +28,7 @@ def main():
         output_full_video(action, main_object, target_object, camera, absolute_output_path)
 
     output_object_containing_image(action, main_object, target_object, camera, absolute_output_path)
+    generate_tsv(action, main_object, target_object, camera, absolute_output_path)
 
 
 def get_args():
@@ -145,6 +146,21 @@ class TemporaryVideoFile:
     def __exit__(self, *args):
         self.tmp_file.close()
 
+
+def generate_tsv(action: str, main_object: str, target_object: str | None, camera: str | None, absolute_output_path: str):
+    annotation_directory = absolute_output_path + "/annotations"
+    if not os.path.exists(annotation_directory):
+        os.makedirs(annotation_directory)
+
+    video_segment_names = get_frames_of_video_segment(action, main_object, target_object, camera).keys()
+    for video_segment_name in video_segment_names:
+        bbox_annotations = get_annotation_2d_bbox_from_object(main_object, target_object, video_segment_name)
+
+        tsv_file_path = annotation_directory + "/" + video_segment_name + ".tsv"
+        with open(tsv_file_path, 'w') as tsv_file:
+            for annotation in bbox_annotations:
+                tsv_file.write("\t".join([annotation['frame_number'], annotation['object'], annotation['2dbbox']]) + "\n")
+        print("2D Bounding Box Annotation saved to " + tsv_file_path)
 
 if __name__ == '__main__':
     main()

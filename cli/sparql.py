@@ -401,3 +401,68 @@ def get_object_containing_frames(video_segment_name: str, main_object: str, targ
         frame_lists.append({video_segment_name: {'start_frame': frame_number, 'end_frame': frame_number}})
 
     return frame_lists
+
+
+def get_annotation_2d_bbox_from_object(main_object: str, target_object: str | None, video_segment_name: str):
+    print("Getting annotation 2D bbox...")
+    from SPARQLWrapper import SPARQLWrapper, JSON
+    annotation_list = []
+
+    query = f"""
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX mssn: <http://mssn.sigappfr.org/mssn/>
+        PREFIX vh2kg: <http://kgrc4si.home.kg/virtualhome2kg/ontology/>
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+        SELECT DISTINCT ?frame_number ?object ?2dbbox WHERE {{
+            BIND (<{PREFIX_EX + video_segment_name}> AS ?video_segment) .
+            BIND ("{main_object}" AS ?main_object_name) .
+            BIND ("{target_object}" AS ?target_object_name) .
+            
+            ?event vh2kg:hasVideoSegment ?video_segment .
+            ?event vh2kg:mainObject ?main_object .
+            {'?event vh2kg:targetObject ?target_object .' if target_object is not None else ''}
+            
+            ?video_segment mssn:hasMediaDescriptor ?frame .
+            ?frame mssn:hasMediaDescriptor ?object ;
+                   vh2kg:frameNumber ?frame_number .
+            
+            {
+                """
+                {
+                    {
+                        ?object vh2kg:is2DbboxOf ?main_object .
+                    }
+                    UNION
+                    {
+                        ?object vh2kg:is2DbboxOf ?target_object .
+                    }
+                }
+                """
+                if target_object is not None else
+                '?object vh2kg:is2DbboxOf ?main_object .'
+            }
+            
+            ?object vh2kg:bbox-2d-value ?2dbbox ;
+                    rdfs:label ?label .
+            
+            ?main_object rdfs:label ?main_object_label .
+            {'?target_object rdfs:label ?target_object_label .' if target_object is not None else ''}
+            FILTER regex(?main_object_label, ?main_object_name, "i") .
+            {'FILTER regex(?target_object_label, ?target_object_name, "i") .' if target_object is not None else ''}
+        }}
+    """
+
+    sparql = SPARQLWrapper(ENDPOINT)
+    sparql.setQuery(query)
+    sparql.setReturnFormat(JSON)
+    results = sparql.query().convert()
+
+    bindings = results["results"]["bindings"]
+    for result in bindings:
+        frame_number = result["frame_number"]["value"]
+        object = result["object"]["value"].replace(PREFIX_EX, "")
+        bbox = result["2dbbox"]["value"]
+        annotation_list.append({'frame_number': frame_number, 'object': object, '2dbbox': bbox})
+
+    return annotation_list
