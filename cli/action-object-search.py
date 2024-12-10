@@ -155,6 +155,8 @@ def generate_tsv(action: str, main_object: str, target_object: str | None, camer
     video_segment_names = get_frames_of_video_segment(action, main_object, target_object, camera).keys()
     for video_segment_name in video_segment_names:
         bbox_annotations = get_annotation_2d_bbox_from_object(main_object, target_object, video_segment_name)
+        if len(bbox_annotations) == 0:
+            continue
 
         tsv_file_path = annotation_directory + "/" + video_segment_name + ".tsv"
         with open(tsv_file_path, 'w') as tsv_file:
