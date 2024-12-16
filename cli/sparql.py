@@ -3,6 +3,15 @@ PREFIX_VH2KG = "http://kgrc4si.home.kg/virtualhome2kg/ontology/"
 ENDPOINT = "http://localhost:7200/repositories/kgrc4si"
 
 
+def check_database_connection():
+    from SPARQLWrapper import SPARQLWrapper, JSON
+    sparql = SPARQLWrapper(ENDPOINT)
+    sparql.setQuery("ASK {}")
+    sparql.setReturnFormat(JSON)
+    results = sparql.query().convert()
+    return results["boolean"]
+
+
 def get_all_frames(activity, scene, camera):
     print("Searching for all frames...")
     from SPARQLWrapper import SPARQLWrapper, JSON

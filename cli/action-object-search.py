@@ -4,8 +4,10 @@ import importlib
 import base64
 import tempfile
 import os
-
-from sparql import get_frames_of_video_segment, get_cameras, get_object_containing_frames, get_video, get_annotation_2d_bbox_from_object
+import time
+import sys
+from urllib.error import URLError, HTTPError
+from sparql import check_database_connection, get_frames_of_video_segment, get_cameras, get_object_containing_frames, get_video, get_annotation_2d_bbox_from_object
 import cv2
 
 
@@ -21,6 +23,22 @@ def main():
     output_path: str = args.__getattribute__('output-path')
 
     absolute_output_path = str(Path(output_path).resolve())
+
+    print("Loading the data from the RDF database...")
+
+    has_printed_waiting_message = False
+    while True:
+        try:
+            check_database_connection()
+            break
+        except (ConnectionRefusedError, URLError):
+            print("Error: Cannot connect to the RDF database. Please check if the database container is running.")
+            sys.exit(1)
+        except ConnectionResetError as e:
+            if not has_printed_waiting_message:
+                print("The RDF database is loading the data. Please wait for a while...")
+                has_printed_waiting_message = True
+            time.sleep(20)
 
     if is_segment:
         output_video_segment(action, main_object, target_object, camera, absolute_output_path)
