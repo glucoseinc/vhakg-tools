@@ -44,6 +44,8 @@ import { useSearchParams } from 'react-router-dom';
 import { SelectScene } from 'components/action_object_search/SelectScene';
 import { SelectCamera } from 'components/action_object_search/SelectCamera';
 import { fetchCamera } from 'utils/action_object_search/sparql';
+import Loading from 'components/common/Loading';
+import { useDatabaseConnectivity } from 'hooks/useDatabaseConnectivity';
 
 function ActionObjectSearch(): React.ReactElement {
   const [actions, setActions] = useState<ActionQueryType[]>([]);
@@ -80,6 +82,8 @@ function ActionObjectSearch(): React.ReactElement {
     searchParams.get(CAMERA_KEY) || ''
   );
 
+  const canDatabaseBeConnected = useDatabaseConnectivity();
+
   const isAnyRequiredParamsEmpty = selectedAction === '' || mainObject === '';
 
   const handleSearchParamsChange = useCallback(
@@ -103,7 +107,9 @@ function ActionObjectSearch(): React.ReactElement {
 
   useEffect(() => {
     (async () => {
-      setActions(await fetchAction());
+      try {
+        setActions(await fetchAction());
+      } catch {}
     })();
   }, []);
 
@@ -212,6 +218,13 @@ function ActionObjectSearch(): React.ReactElement {
     selectedVideoDuration,
   ]);
 
+  if (canDatabaseBeConnected === false) {
+    return (
+      <ChakraProvider>
+        <Loading />
+      </ChakraProvider>
+    );
+  }
   return (
     <ChakraProvider>
       <FloatingNavigationLink linkTo="/" buttonText="Home" />
