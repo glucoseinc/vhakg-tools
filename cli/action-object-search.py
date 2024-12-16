@@ -32,8 +32,7 @@ def main():
             check_database_connection()
             break
         except (ConnectionRefusedError, URLError):
-            print("Error: Cannot connect to the RDF database. Please check if the database container is running.")
-            sys.exit(1)
+            sys.exit("Error: Cannot connect to the RDF database. Please check if the database container is running.")
         except ConnectionResetError as e:
             if not has_printed_waiting_message:
                 print("The RDF database is loading the data. Please wait for a while...")
