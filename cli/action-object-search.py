@@ -6,7 +6,7 @@ import tempfile
 import os
 import time
 import sys
-from urllib.error import URLError, HTTPError
+from urllib.error import URLError
 from sparql import check_database_connection, get_frames_of_video_segment, get_cameras, get_object_containing_frames, get_video, get_annotation_2d_bbox_from_object
 import cv2
 
