@@ -10,16 +10,16 @@ import {
 const Loading = () => {
   return (
     <Center>
-      <HStack>
-        <Spinner />
-        <VStack>
+      <VStack>
+        <HStack>
+          <Spinner />
           <Heading>Loading database...</Heading>
-          <Text>
-            If this process takes too long, please check if the database container
-            is running.
-          </Text>
-        </VStack>
-      </HStack>
+        </HStack>
+        <Text>
+          If this process takes too long, please check if the database container
+          is running.
+        </Text>
+      </VStack>
     </Center>
   );
 };
