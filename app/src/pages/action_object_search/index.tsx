@@ -111,7 +111,7 @@ function ActionObjectSearch(): React.ReactElement {
         setActions(await fetchAction());
       } catch {}
     })();
-  }, []);
+  }, [canDatabaseBeConnected]);
 
   useEffect(() => {
     if (isAnyRequiredParamsEmpty) {
@@ -119,16 +119,18 @@ function ActionObjectSearch(): React.ReactElement {
     }
 
     (async () => {
-      setScenes(
-        await fetchScene(
-          selectedAction,
-          mainObject,
-          targetObject,
-          selectedCamera
-        )
-      );
+      try {
+        setScenes(
+          await fetchScene(
+            selectedAction,
+            mainObject,
+            targetObject,
+            selectedCamera
+          )
+        );
+      } catch {}
     })();
-  }, [selectedAction, mainObject, targetObject, selectedCamera]);
+  }, [canDatabaseBeConnected, selectedAction, mainObject, targetObject, selectedCamera]);
 
   useEffect(() => {
     if (isAnyRequiredParamsEmpty) {
@@ -136,16 +138,18 @@ function ActionObjectSearch(): React.ReactElement {
     }
 
     (async () => {
-      setCameras(
-        await fetchCamera(
-          selectedAction,
-          mainObject,
-          targetObject,
-          selectedScene
-        )
-      );
+      try {
+        setCameras(
+          await fetchCamera(
+            selectedAction,
+            mainObject,
+            targetObject,
+            selectedScene
+          )
+        );
+      } catch {}
     })();
-  }, [selectedAction, mainObject, targetObject, selectedScene]);
+  }, [canDatabaseBeConnected, selectedAction, mainObject, targetObject, selectedScene]);
 
   useEffect(() => {
     if (isAnyRequiredParamsEmpty) {
@@ -153,36 +157,39 @@ function ActionObjectSearch(): React.ReactElement {
     }
 
     (async () => {
-      switch (selectedVideoDuration) {
-        case 'full':
-          setVideos(
-            await fetchVideo(
-              selectedAction,
-              mainObject,
-              targetObject,
-              selectedScene,
-              selectedCamera,
-              TOTAL_VIDEOS_PER_PAGE,
-              searchResultPage
-            )
-          );
-          break;
-        case 'segment':
-          setVideoSegments(
-            await fetchVideoSegment(
-              selectedAction,
-              mainObject,
-              targetObject,
-              selectedScene,
-              selectedCamera,
-              TOTAL_VIDEOS_PER_PAGE,
-              searchResultPage
-            )
-          );
-          break;
-      }
+      try {
+        switch (selectedVideoDuration) {
+          case 'full':
+            setVideos(
+              await fetchVideo(
+                selectedAction,
+                mainObject,
+                targetObject,
+                selectedScene,
+                selectedCamera,
+                TOTAL_VIDEOS_PER_PAGE,
+                searchResultPage
+              )
+            );
+            break;
+          case 'segment':
+            setVideoSegments(
+              await fetchVideoSegment(
+                selectedAction,
+                mainObject,
+                targetObject,
+                selectedScene,
+                selectedCamera,
+                TOTAL_VIDEOS_PER_PAGE,
+                searchResultPage
+              )
+            );
+            break;
+        }
+      } catch {}
     })();
   }, [
+    canDatabaseBeConnected,
     selectedAction,
     mainObject,
     targetObject,
@@ -198,18 +205,21 @@ function ActionObjectSearch(): React.ReactElement {
     }
 
     (async () => {
-      setVideoCount(
-        await fetchVideoCount(
-          selectedAction,
-          mainObject,
-          targetObject,
-          selectedScene,
-          selectedCamera,
-          selectedVideoDuration
-        )
-      );
+      try {
+        setVideoCount(
+          await fetchVideoCount(
+            selectedAction,
+            mainObject,
+            targetObject,
+            selectedScene,
+            selectedCamera,
+            selectedVideoDuration
+          )
+        );
+      } catch {}
     })();
   }, [
+    canDatabaseBeConnected,
     selectedAction,
     mainObject,
     targetObject,
@@ -218,7 +228,7 @@ function ActionObjectSearch(): React.ReactElement {
     selectedVideoDuration,
   ]);
 
-  if (canDatabaseBeConnected === false) {
+  if (!canDatabaseBeConnected) {
     return (
       <ChakraProvider>
         <Loading />
