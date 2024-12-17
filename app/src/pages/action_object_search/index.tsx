@@ -44,6 +44,8 @@ import { useSearchParams } from 'react-router-dom';
 import { SelectScene } from 'components/action_object_search/SelectScene';
 import { SelectCamera } from 'components/action_object_search/SelectCamera';
 import { fetchCamera } from 'utils/action_object_search/sparql';
+import Loading from 'components/common/Loading';
+import { useDatabaseConnectivity } from 'hooks/useDatabaseConnectivity';
 
 function ActionObjectSearch(): React.ReactElement {
   const [actions, setActions] = useState<ActionQueryType[]>([]);
@@ -80,6 +82,8 @@ function ActionObjectSearch(): React.ReactElement {
     searchParams.get(CAMERA_KEY) || ''
   );
 
+  const canDatabaseBeConnected = useDatabaseConnectivity();
+
   const isAnyRequiredParamsEmpty = selectedAction === '' || mainObject === '';
 
   const handleSearchParamsChange = useCallback(
@@ -103,9 +107,13 @@ function ActionObjectSearch(): React.ReactElement {
 
   useEffect(() => {
     (async () => {
-      setActions(await fetchAction());
+      try {
+        setActions(await fetchAction());
+      } catch (e) {
+        console.error(e);
+      }
     })();
-  }, []);
+  }, [canDatabaseBeConnected]);
 
   useEffect(() => {
     if (isAnyRequiredParamsEmpty) {
@@ -113,16 +121,20 @@ function ActionObjectSearch(): React.ReactElement {
     }
 
     (async () => {
-      setScenes(
-        await fetchScene(
-          selectedAction,
-          mainObject,
-          targetObject,
-          selectedCamera
-        )
-      );
+      try {
+        setScenes(
+          await fetchScene(
+            selectedAction,
+            mainObject,
+            targetObject,
+            selectedCamera
+          )
+        );
+      } catch (e) {
+        console.error(e);
+      }
     })();
-  }, [selectedAction, mainObject, targetObject, selectedCamera]);
+  }, [canDatabaseBeConnected, selectedAction, mainObject, targetObject, selectedCamera]);
 
   useEffect(() => {
     if (isAnyRequiredParamsEmpty) {
@@ -130,16 +142,20 @@ function ActionObjectSearch(): React.ReactElement {
     }
 
     (async () => {
-      setCameras(
-        await fetchCamera(
-          selectedAction,
-          mainObject,
-          targetObject,
-          selectedScene
-        )
-      );
+      try {
+        setCameras(
+          await fetchCamera(
+            selectedAction,
+            mainObject,
+            targetObject,
+            selectedScene
+          )
+        );
+      } catch (e) {
+        console.error(e);
+      }
     })();
-  }, [selectedAction, mainObject, targetObject, selectedScene]);
+  }, [canDatabaseBeConnected, selectedAction, mainObject, targetObject, selectedScene]);
 
   useEffect(() => {
     if (isAnyRequiredParamsEmpty) {
@@ -147,36 +163,41 @@ function ActionObjectSearch(): React.ReactElement {
     }
 
     (async () => {
-      switch (selectedVideoDuration) {
-        case 'full':
-          setVideos(
-            await fetchVideo(
-              selectedAction,
-              mainObject,
-              targetObject,
-              selectedScene,
-              selectedCamera,
-              TOTAL_VIDEOS_PER_PAGE,
-              searchResultPage
-            )
-          );
-          break;
-        case 'segment':
-          setVideoSegments(
-            await fetchVideoSegment(
-              selectedAction,
-              mainObject,
-              targetObject,
-              selectedScene,
-              selectedCamera,
-              TOTAL_VIDEOS_PER_PAGE,
-              searchResultPage
-            )
-          );
-          break;
+      try {
+        switch (selectedVideoDuration) {
+          case 'full':
+            setVideos(
+              await fetchVideo(
+                selectedAction,
+                mainObject,
+                targetObject,
+                selectedScene,
+                selectedCamera,
+                TOTAL_VIDEOS_PER_PAGE,
+                searchResultPage
+              )
+            );
+            break;
+          case 'segment':
+            setVideoSegments(
+              await fetchVideoSegment(
+                selectedAction,
+                mainObject,
+                targetObject,
+                selectedScene,
+                selectedCamera,
+                TOTAL_VIDEOS_PER_PAGE,
+                searchResultPage
+              )
+            );
+            break;
+        }
+      } catch (e) {
+        console.error(e);
       }
     })();
   }, [
+    canDatabaseBeConnected,
     selectedAction,
     mainObject,
     targetObject,
@@ -192,18 +213,23 @@ function ActionObjectSearch(): React.ReactElement {
     }
 
     (async () => {
-      setVideoCount(
-        await fetchVideoCount(
-          selectedAction,
-          mainObject,
-          targetObject,
-          selectedScene,
-          selectedCamera,
-          selectedVideoDuration
-        )
-      );
+      try {
+        setVideoCount(
+          await fetchVideoCount(
+            selectedAction,
+            mainObject,
+            targetObject,
+            selectedScene,
+            selectedCamera,
+            selectedVideoDuration
+          )
+        );
+      } catch (e) {
+        console.error(e);
+      }
     })();
   }, [
+    canDatabaseBeConnected,
     selectedAction,
     mainObject,
     targetObject,
@@ -212,6 +238,13 @@ function ActionObjectSearch(): React.ReactElement {
     selectedVideoDuration,
   ]);
 
+  if (!canDatabaseBeConnected) {
+    return (
+      <ChakraProvider>
+        <Loading />
+      </ChakraProvider>
+    );
+  }
   return (
     <ChakraProvider>
       <FloatingNavigationLink linkTo="/" buttonText="Home" />
