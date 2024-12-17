@@ -80,7 +80,9 @@ function BoundingBoxImageViewer(): React.ReactElement {
           .split('x')
           .map((v) => Number(v)); // "1920x1080" -> [1920, 1080]
         setResolution({ width, height });
-      } catch {}
+      } catch (e) {
+        console.error(e);
+      }
     })();
   }, [canDatabaseBeConnected]);
 

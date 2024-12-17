@@ -109,7 +109,9 @@ function ActionObjectSearch(): React.ReactElement {
     (async () => {
       try {
         setActions(await fetchAction());
-      } catch {}
+      } catch (e) {
+        console.error(e);
+      }
     })();
   }, [canDatabaseBeConnected]);
 
@@ -128,7 +130,9 @@ function ActionObjectSearch(): React.ReactElement {
             selectedCamera
           )
         );
-      } catch {}
+      } catch (e) {
+        console.error(e);
+      }
     })();
   }, [canDatabaseBeConnected, selectedAction, mainObject, targetObject, selectedCamera]);
 
@@ -147,7 +151,9 @@ function ActionObjectSearch(): React.ReactElement {
             selectedScene
           )
         );
-      } catch {}
+      } catch (e) {
+        console.error(e);
+      }
     })();
   }, [canDatabaseBeConnected, selectedAction, mainObject, targetObject, selectedScene]);
 
@@ -186,7 +192,9 @@ function ActionObjectSearch(): React.ReactElement {
             );
             break;
         }
-      } catch {}
+      } catch (e) {
+        console.error(e);
+      }
     })();
   }, [
     canDatabaseBeConnected,
@@ -216,7 +224,9 @@ function ActionObjectSearch(): React.ReactElement {
             selectedVideoDuration
           )
         );
-      } catch {}
+      } catch (e) {
+        console.error(e);
+      }
     })();
   }, [
     canDatabaseBeConnected,

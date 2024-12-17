@@ -61,7 +61,9 @@ function App() {
           }
         });
         setActivityList(map);
-      } catch {}
+      } catch (e) {
+        console.error(e);
+      }
     })();
   }, [canDatabaseBeConnected]);
 
