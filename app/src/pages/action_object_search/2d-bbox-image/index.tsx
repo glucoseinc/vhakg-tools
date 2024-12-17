@@ -1,6 +1,7 @@
 import { Box, Center, ChakraProvider } from '@chakra-ui/react';
 import { BackToVideoSearchButton } from 'components/action_object_search/2d-bbox-image/BackToVideoSearchButton';
 import { Pagination } from 'components/action_object_search/Pagination';
+import Loading from 'components/common/Loading';
 import {
   IMAGE_VIEWER_PAGE_KEY,
   IRI_KEY,
@@ -9,6 +10,7 @@ import {
   TARGET_OBJECT_KEY,
   TOTAL_IMAGES_PER_PAGE,
 } from 'constants/action_object_search/constants';
+import { useDatabaseConnectivity } from 'hooks/useDatabaseConnectivity';
 import React, { useCallback, useEffect, useState, createRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
@@ -40,6 +42,8 @@ function BoundingBoxImageViewer(): React.ReactElement {
     height: number;
   }>({ width: 0, height: 0 });
 
+  const canDatabaseBeConnected = useDatabaseConnectivity();
+
   const videoElementRef = createRef<HTMLVideoElement>();
 
   const isAnyRequiredParamEmpty = mainObject === '' || iri === '';
@@ -47,37 +51,38 @@ function BoundingBoxImageViewer(): React.ReactElement {
   const frameCount = frames.length;
 
   useEffect(() => {
-    const canvas = document.getElementById('image') as HTMLCanvasElement;
-    const context = canvas.getContext('2d');
+    const canvas = document.getElementById('image') as HTMLCanvasElement | null;
+    const context = canvas?.getContext('2d') || null;
     setCanvasContext(context);
 
     (async () => {
       if (isAnyRequiredParamEmpty) {
         return;
       }
+      try {
+        let videoQueryResult;
+        if (isVideoSegment) {
+          videoQueryResult = await fetchVideoByVideoSegment(iri);
+          setFrames(
+            await fetchFrameByVideoSegment(iri, mainObject, targetObject)
+          );
+        } else {
+          videoQueryResult = await fetchVideoByCamera(iri);
+          setFrames(await fetchFrameByCamera(iri, mainObject, targetObject));
+        }
+        setVideo(videoQueryResult);
 
-      let videoQueryResult;
-      if (isVideoSegment) {
-        videoQueryResult = await fetchVideoByVideoSegment(iri);
-        setFrames(
-          await fetchFrameByVideoSegment(iri, mainObject, targetObject)
-        );
-      } else {
-        videoQueryResult = await fetchVideoByCamera(iri);
-        setFrames(await fetchFrameByCamera(iri, mainObject, targetObject));
-      }
-      setVideo(videoQueryResult);
+        if (videoQueryResult === null) {
+          return;
+        }
 
-      if (videoQueryResult === null) {
-        return;
-      }
-
-      const [width, height] = videoQueryResult.resolution.value
-        .split('x')
-        .map((v) => Number(v)); // "1920x1080" -> [1920, 1080]
-      setResolution({ width, height });
+        const [width, height] = videoQueryResult.resolution.value
+          .split('x')
+          .map((v) => Number(v)); // "1920x1080" -> [1920, 1080]
+        setResolution({ width, height });
+      } catch {}
     })();
-  }, []);
+  }, [canDatabaseBeConnected]);
 
   useEffect(() => {
     (() => {
@@ -148,6 +153,13 @@ function BoundingBoxImageViewer(): React.ReactElement {
     });
   }, [frames, imageViewerPage, resolution, mainObject, targetObject]);
 
+  if (!canDatabaseBeConnected) {
+    return (
+      <ChakraProvider>
+        <Loading />
+      </ChakraProvider>
+    );
+  }
   return (
     <ChakraProvider>
       <Center>
