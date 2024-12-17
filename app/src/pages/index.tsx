@@ -16,6 +16,8 @@ import { ResultVideo } from 'components/root/ResultVideo';
 import { ResultImage } from 'components/root/ResultImage';
 import FloatingNavigationLink from 'components/common/FloatingNavigationLink';
 import { PREFIXES } from 'utils/common/sparql';
+import { useDatabaseConnectivity } from 'hooks/useDatabaseConnectivity';
+import Loading from 'components/common/Loading';
 
 function App() {
   const [activityList, setActivityList] = useState<Map<string, string[]>>(
@@ -26,6 +28,8 @@ function App() {
   const [selectedCamera, setSelectedCamera] = useState<string>('');
   const [selectedMedia, setSelectedMedia] = useState<string>('');
   const [frame, setFrame] = useState<number>(0);
+
+  const canDatabaseBeConnected = useDatabaseConnectivity();
 
   const onChangeFrame = (frame: number, media: string) => {
     let innerFrame = frame;
@@ -42,23 +46,32 @@ function App() {
 
   useEffect(() => {
     (async () => {
-      const map = new Map<string, string[]>();
-      const data = await fetchActivity();
-      data.forEach((value) => {
-        const activity = value.activity.value.replace(PREFIXES.ex, '');
-        const splitActivity = activity.split('_scene');
-        const activityName = splitActivity[0];
-        const sceneName = 'scene' + splitActivity[1];
-        if (map.has(activityName)) {
-          map.get(activityName)?.push(sceneName);
-        } else {
-          map.set(activityName, [sceneName]);
-        }
-      });
-      setActivityList(map);
+      try {
+        const map = new Map<string, string[]>();
+        const data = await fetchActivity();
+        data.forEach((value) => {
+          const activity = value.activity.value.replace(PREFIXES.ex, '');
+          const splitActivity = activity.split('_scene');
+          const activityName = splitActivity[0];
+          const sceneName = 'scene' + splitActivity[1];
+          if (map.has(activityName)) {
+            map.get(activityName)?.push(sceneName);
+          } else {
+            map.set(activityName, [sceneName]);
+          }
+        });
+        setActivityList(map);
+      } catch {}
     })();
-  }, []);
+  }, [canDatabaseBeConnected]);
 
+  if (!canDatabaseBeConnected) {
+    return (
+      <ChakraProvider>
+        <Loading />
+      </ChakraProvider>
+    );
+  }
   return (
     <ChakraProvider>
       <FloatingNavigationLink
